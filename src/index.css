@@ -35,6 +35,10 @@
 
 
   --adm-card-border-radius: 12px;
+  --active-color:#5cadff;
+  --price-color: #c15400;
+  --warning-color: #e6a23c;
+  --success-color: #67c23a;
 
   @media (max-width: 1024px) {
     font-size: 12px;
@@ -65,7 +69,6 @@
   width: var(--container-width);
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -105,3 +108,21 @@ p {
   margin: 0;
 }
 
+.container{
+  padding: 5px;
+}
+.center-toast .adm-toast-main {
+
+  flex-direction: column;
+
+  align-items: center;
+
+}
+
+.adm-toast-icon{
+  display: flex;
+  justify-content: center;
+}
+.adm-auto-center-content{
+  text-align: center;
+}

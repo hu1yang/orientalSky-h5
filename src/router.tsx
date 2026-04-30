@@ -1,17 +1,29 @@
 import {createBrowserRouter} from "react-router";
 
 import Layout from "@/component/layout";
-import {AgentLoad} from "./routerMenu.ts";
+import {AgentLoad, FoundationBookingLoad, HomeLoad, AgentRechargePaymentLoad} from "./routerMenu.ts";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element:<Layout />,
-    children:[
+    element: <Layout/>,
+    children: [
       {
-        path:'group/agent',
-        element: <AgentLoad />
+        path: '',
+        element: <HomeLoad/>
+      },
+      {
+        path: 'group/agent',
+        element: <AgentLoad/>
+      },
+      {
+        path: 'group/rechargePayment',
+        element: <AgentRechargePaymentLoad/>
+      },
+      {
+        path:'group/foundation/booking',
+        element: <FoundationBookingLoad />
       }
     ]
   }
-],{basename:'/h5'})
+], {basename: '/h5'})

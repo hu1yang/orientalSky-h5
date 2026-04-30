@@ -1,5 +1,7 @@
-import {Button, Card, Dropdown, Form, Input, Popover, SearchBar, Space, Tag} from "antd-mobile";
+import {Button, Card, Divider, Dropdown, Form, Input, Popover, SearchBar, Space, Tag} from "antd-mobile";
 import {FilterOutline, MoreOutline} from 'antd-mobile-icons'
+import CardText from "@/component/card/cardText.tsx";
+import {useEffect} from "react";
 
 const list = [
   {
@@ -5558,11 +5560,21 @@ const list = [
 ]
 
 export default function Index() {
+  const initRef = useRef(false)
+  const loadingRef = useRef(false)
 
+  const getData = () => {
+    loadingRef.value = true
+  }
 
+  useEffect(() => {
+    if (initRef.current) return
+    initRef.current = true
+    getData()
+  }, []);
   return (
-      <div>
-        <div className={'flex items-center py-2 px-5 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+      <section className={'container'}>
+        <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
           <SearchBar className={'flex-1'} placeholder={'Search Agent Name'} style={{'--background': '#e8e9ed' ,'--border-radius':'20px'}} />
           <Dropdown className={'!bg-transparent p-0'} arrowIcon={null}>
             <Dropdown.Item key='sorter' title={
@@ -5588,7 +5600,7 @@ export default function Index() {
             </Dropdown.Item>
           </Dropdown>
         </div>
-        <div className={'p-[10px]'}>
+        <div className={'p-2'}>
           {
             list.map((item) => (
                 <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.name}</span>}
@@ -5597,28 +5609,12 @@ export default function Index() {
                       key={item.id}>
                   <div className={'text-left'}>
                     <p className={'line-clamp-1 font-normal text-[1rem]'}>{item.branchId}</p>
-                    <Space>
-
-                    </Space>
                     <div>
-                      <div className={'flex'}>
-                        <label className={'text-[1rem] w-30 inline-block'}>Balance</label>
-                        <span className={'text-[1.5rem] text-[#67c23a] flex-1'}>
-                          <em className={'text-[1.8rem]'}>$</em>
-                          {item.balance}</span>
-                      </div>
-                      <div className={'flex'}>
-                        <label className={'text-[1rem] w-30 inline-block'}>Agent Code</label>
-                        <span className={'text-[var(--text-h)] flex-1'}>{item.code}</span>
-                      </div>
-                      <div className={'flex'}>
-                        <label className={'text-[1rem] w-30 inline-block'}>Address</label>
-                        <span className={'text-[var(--text-h)] line-clamp-1 flex-1'}>{item.localAddress}</span>
-                      </div>
-                      <div className={'flex'}>
-                        <label className={'text-[1rem] w-30 inline-block'}>Channel</label>
-                        <span className={'text-[var(--text-h)] flex-1'}>{item.channelCodes?.join('、')}</span>
-                      </div>
+                      <CardText label={'Balance'} value={<><em className={'text-[1.8rem]'}>$</em>
+                        {item.balance}</>} valueStyle={'text-[1.5rem] !text-[#67c23a]'} />
+                      <CardText label={'Agent Code'} value={item.code} />
+                      <CardText label={'Address'} value={item.localAddress} valueStyle={'line-clamp-1'} style={'items-start'} />
+                      <CardText label={'Channel'} value={item.channelCodes?.join('、')} style={'items-start'} />
                       <div className={'flex'}>
                         <label className={'text-[1rem] w-30 inline-block'}>Proportion</label>
                         <div className={'flex-1 flex flex-col'}>
@@ -5644,7 +5640,8 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                  <div className={'border-t-1 border-[var(--adm-color-border)] mt-[12px] pt-[12px] flex justify-end'}>
+                  <Divider />
+                  <div className={'flex justify-end'}>
                     <Space justify={'end'}>
                       <Button shape='rounded' size={'small'}>Reset Verification</Button>
                       <Button shape='rounded' color='primary' size={'small'}>Detail</Button>
@@ -5663,6 +5660,6 @@ export default function Index() {
             ))
           }
         </div>
-      </div>
+      </section>
   )
 }

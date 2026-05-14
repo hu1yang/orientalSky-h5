@@ -41,6 +41,7 @@ export const homeZh = {
         totalQuery:'总计查询',
         totalBookings:'总计预订',
         detectionRatio:'查定比例',
+        proportion:'比例',
 
     }
 }
@@ -87,6 +88,7 @@ export const homeEn = {
         totalQuery:'Total Queries',
         totalBookings:'Total Bookings',
         detectionRatio:'Detection %',
+        proportion:'Proportion',
     }
 }
 
@@ -130,5 +132,6 @@ export const homeRu = {
         totalQuery:'Всего запросов',
         totalBookings:'Общее количество бронирований',
         detectionRatio:'Коэффициент обнаружения',
+        proportion:'Доля',
     }
 }

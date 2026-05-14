@@ -1,7 +1,14 @@
 import {createBrowserRouter} from "react-router";
 
 import Layout from "@/component/layout";
-import {AgentLoad, FoundationBookingLoad, HomeLoad, AgentRechargePaymentLoad} from "./routerMenu.ts";
+import {
+  AgentLoad,
+  FoundationBookingLoad,
+  HomeLoad,
+  AgentRechargePaymentLoad,
+  AgentInfoLoad,
+  OrderListLoad, OrderDetailLoad
+} from "./routerMenu.ts";
 
 export const router = createBrowserRouter([
   {
@@ -13,8 +20,12 @@ export const router = createBrowserRouter([
         element: <HomeLoad/>
       },
       {
-        path: 'group/agent',
+        path: 'group/agent/:id?',
         element: <AgentLoad/>
+      },
+      {
+        path: '/group/agent/configuration/:id/:branchId',
+        element: <AgentInfoLoad/>
       },
       {
         path: 'group/rechargePayment',
@@ -23,6 +34,14 @@ export const router = createBrowserRouter([
       {
         path:'group/foundation/booking',
         element: <FoundationBookingLoad />
+      },
+      {
+        path:'ticketOrder/:status?',
+        element: <OrderListLoad />
+      },
+      {
+        path:'ticketDetail/:orderId/:status?',
+        element: <OrderDetailLoad />
       }
     ]
   }

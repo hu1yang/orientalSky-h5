@@ -1,5 +1,6 @@
 import {resolveLocale} from "@/utils/local.ts";
 import {t} from "i18next";
+import copy from 'copy-to-clipboard'
 import {Toast} from "antd-mobile";
 
 export const getLocale = resolveLocale()
@@ -43,3 +44,24 @@ export function result(response: {
     })
   }
 }
+
+export const copyText = async (text:string) => {
+  try {
+    await copy(text)
+    Toast.show({
+      icon: 'success',
+      content: t('common.copySuccess'),
+    })
+  } catch {
+    Toast.show({
+      icon: 'fail',
+      content: t('common.copyError'),
+    })
+  }
+}
+
+export const passengerTypes = {
+  adt: 'Adult',
+  chd: 'Child',
+  inf: 'Infant',
+} as const;

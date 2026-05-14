@@ -1,0 +1,44 @@
+{
+  "id": "5176536",
+  "name": "orientalsky-h5",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4130841",
+      "name": "female",
+      "font_class": "female",
+      "unicode": "e79b",
+      "unicode_decimal": 59291
+    },
+    {
+      "icon_id": "4130842",
+      "name": "male",
+      "font_class": "male",
+      "unicode": "e79c",
+      "unicode_decimal": 59292
+    },
+    {
+      "icon_id": "6802029",
+      "name": "Male-1",
+      "font_class": "Male-",
+      "unicode": "e701",
+      "unicode_decimal": 59137
+    },
+    {
+      "icon_id": "8283478",
+      "name": "空心圆",
+      "font_class": "kongxinyuan",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "11981529",
+      "name": "copy",
+      "font_class": "copy",
+      "unicode": "e94c",
+      "unicode_decimal": 59724
+    }
+  ]
+}

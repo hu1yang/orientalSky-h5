@@ -11,7 +11,7 @@ import type {
 
 type LuggageType =  'carry'| 'hand'| 'checked'|unknown
 type LuggageSizeType =  'pc'| 'kg'| 'lb'|unknown
-type PassengerType =  'adt'| 'chd'| 'inf' |unknown
+type PassengerType =  'adt'| 'chd'| 'inf'
 export type ItineraryType = 'oneWay'| 'round'| 'multi'
 
 export type IPageInfo = {

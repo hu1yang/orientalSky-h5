@@ -4,6 +4,7 @@ import {unstableSetRender} from "antd-mobile";
 import App from './App.tsx'
 import './index.css'
 import './i18n/index'
+import "@/assets/iconfont/iconfont.css"
 
 const rootMap = new WeakMap<Element | DocumentFragment, ReturnType<typeof createRoot>>()
 unstableSetRender((node, container) => {

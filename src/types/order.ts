@@ -11,7 +11,7 @@ import type {
 
 type ISourceType = 'manual'| 'webApi'|'import' | 'invoke' | 'restful' | 'workers' | null | unknown
 export type ITravelerType =  'adt'| 'chd'| 'inf'
-type IPassengerIdType =  'pp'| 'ni'| 'bd' | unknown
+type IPassengerIdType =  'pp'| 'ni'| 'bd'
 export type ITravelerSex = 'm'| 'f'
 export type ITicketStatus =
     'created'

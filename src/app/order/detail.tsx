@@ -1,0 +1,222 @@
+import {type ReactNode, useEffect, useMemo, useRef, useState} from "react";
+import {useSelector} from "react-redux";
+import {selectAgentMap} from "@/store/modules/base.ts";
+import {useParams} from "react-router";
+import {useTranslation} from "react-i18next";
+import {Badge, Button, Divider, Segmented, Tag} from "antd-mobile";
+
+import {copyText} from "@/utils/public.ts";
+import {calculateTotalPriceByPassengers} from "@/utils/order.tsx";
+import {
+  getAppendInfosGroup,
+  getChangeInfosGroup,
+  getOrderInfoGroup,
+  getRefundInfosGroup
+} from "@/utils/request/group.ts";
+import AmountCard from "@/component/order/detail/amountCard.tsx";
+import SegmentCard from "@/component/order/detail/segmentCard.tsx";
+import PassengerCard from "@/component/order/detail/PassengerCard.tsx";
+import type {
+  IChange,
+  IOrderAuxiliary,
+  IOrderManual,
+  IRefund,
+} from "@/types/order.ts";
+import RefundDetail from "@/component/order/detail/refundDetail.tsx";
+import ChangeDetail from "@/component/order/detail/changeDetail.tsx";
+import AuxiliaryDetail from "@/component/order/detail/auxiliaryDetail.tsx";
+
+const badgeStyle = {
+  '--right': '120%',
+  '--top': '50%',
+  width:'5px',
+  height:'5px',
+  minWidth:'5px'
+} as React.CSSProperties
+
+type IOrderManualInfo = IOrderManual & {
+  branchCode: string
+  agentCode:string
+}
+
+const tabs = [
+  {
+    value: 'detail',
+    label: ' 详情',
+  },
+  {
+    value: 'refund',
+    label: ' 退票',
+  },
+  {
+    value: 'change',
+    label: ' 改签',
+  },
+  {
+    value: 'auxiliary',
+    label: '辅营',
+  },
+]
+
+
+export default function OrderDetail(){
+  const {t} = useTranslation()
+  const initRef = useRef(false)
+  const {orderId,status} = useParams()
+  const agentMap = useSelector(selectAgentMap)
+
+  const [activeStatus, setActiveStatus] = useState(status || 'detail')
+
+  const [orderDetail, setOrderDetail] = useState<IOrderManualInfo|null>(null)
+  const [refundList, setRefundList] = useState<IRefund[]>([])
+  const [changeList, setChangeList] = useState<IChange[]>([])
+  const [auxiliaryList, setAuxiliaryList] = useState<IOrderAuxiliary[]>([])
+
+
+  const computedOrderItineraries = useMemo(() => {
+    if (!orderDetail?.itineraries) return [];
+
+    return orderDetail.itineraries
+      .slice() // 避免修改原始数组
+      .sort((a, b) => (a.itineraryNo as number) - (b.itineraryNo as number))
+      .map(itinerary => ({
+        ...itinerary,
+        segments: itinerary.segments?.slice().sort((a, b) => (a.sequenceNo as number) - (b.sequenceNo as number)) || [],
+      }));
+  },[orderDetail])
+
+  const totalPrice = useMemo(() => {
+    if (
+      !orderDetail?.passengers?.length ||
+      !computedOrderItineraries.length
+    ) {
+      return ''
+    }
+    return calculateTotalPriceByPassengers(orderDetail.passengers,computedOrderItineraries.flatMap(it => it.amounts)).toFixed(2)
+  },[orderDetail,computedOrderItineraries])
+
+  const changeTab = (tab:string | number,id:string) => {
+    setActiveStatus(String(tab))
+    switch (tab){
+      case 'refund':
+        getRefund(id)
+        break
+      case 'change':
+        getChange(id)
+        break
+      case 'auxiliary':
+        getAuxiliary(id)
+        break
+    }
+  }
+
+  const getRefund = (id:string) => {
+    getRefundInfosGroup(id).then(res => {
+      if(res.length){
+        setRefundList(res)
+      }
+    })
+  }
+
+  const getChange = (id:string) => {
+    getChangeInfosGroup(id).then(res => {
+      if(res.length){
+        setChangeList(res)
+      }
+    })
+  }
+
+  const getAuxiliary = (id:string) => {
+    getAppendInfosGroup(id).then(res => {
+      if(res.length){
+        setAuxiliaryList(res)
+      }
+    })
+  }
+
+
+
+  const detailMap:Record<'detail'|'refund'|'change'|'auxiliary', ReactNode> = {
+    detail: <>
+      <PassengerCard passengers={orderDetail?.passengers ?? []} />
+      <AmountCard itineraryList={computedOrderItineraries} travelers={orderDetail?.request.travelers ?? []} currency={orderDetail?.currency || ''} totalPrice={totalPrice} policies={orderDetail?.policies ?? []} />
+      <SegmentCard itineraryList={computedOrderItineraries} />
+    </>,
+    refund:<RefundDetail refundList={refundList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+    change: <ChangeDetail changeList={changeList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+    auxiliary: <AuxiliaryDetail auxiliaryList={auxiliaryList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+
+  }
+
+  const getData = () => {
+    getOrderInfoGroup(orderId as string).then(res => {
+      const info = agentMap.get(res.agentId)
+      setOrderDetail({
+        ...res,
+        ...info
+      })
+      if(status && status !== 'detail'){
+        changeTab(status,res.id)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (initRef.current) return
+    initRef.current = true
+    getData()
+  },[])
+
+  return (
+    <section className={'container'}>
+      <div className={'w-full pt-2 px-1'}>
+        {
+          !!orderDetail && (
+            <>
+              <div className={'flex justify-between items-center mb-5'}>
+                <div className={'flex items-center'}>
+                  <Tag round color={orderDetail.resultType === 'normal' ? 'var(--success-color)':'var(--warning-color)'}>
+                    {t('order.'+ orderDetail.resultType)}
+                  </Tag>
+                  <div className={'ml-2 flex items-center'}>
+                    <p className={'text-(--warning-color) text-[1rem] leading-none'}>{orderDetail.id}</p>
+                    <Button fill='none' size={'mini'} onClick={() => copyText(orderDetail.id)} style={{padding: '0 4px'}}>
+                      <i className={'iconfont icon-copy !text-[1rem] text-(--warning-color)'}></i>
+                    </Button>
+                  </div>
+                </div>
+                <span className={'text-(--text) text-[1rem]'}>{orderDetail.branchCode}-{orderDetail.agentCode}</span>
+              </div>
+              <div className={'flex flex-row items-center mb-5'}>
+                <div className={'flex flex-col'}>
+                  <span className={'text-[1rem] text-(--text)'}>TOTAL</span>
+                  <div className={'leading-none'}>
+                    <span className={'font-bold text-[3rem] text-(--price-color)'}>{totalPrice}</span>
+                    <span className={'text-[1rem] text-(--text) ml-1'}>{orderDetail.currency}</span>
+                  </div>
+                </div>
+                <Divider direction='vertical' style={{
+                  borderColor: 'var(--border)',
+                  height: 40,
+                }} />
+                <div className={'flex flex-col'}>
+                  <span className={'text-[1rem] text-(--text)'}>{t('order.orderStatus')}</span>
+                  <div>
+                    <Badge color='#108ee9' content={Badge.dot}
+                           style={badgeStyle}>
+                    </Badge>
+                    <span className={'ml-2'}>{orderDetail.status}</span>
+                  </div>
+                </div>
+              </div>
+              <Segmented options={tabs} block className={'mb-5'} onChange={(val) => changeTab(val,orderDetail?.id)} value={activeStatus} />
+              {
+                detailMap[activeStatus as 'detail'|'refund'|'change'|'auxiliary']
+              }
+            </>
+          )
+        }
+      </div>
+    </section>
+  )
+}

@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
@@ -37,9 +37,8 @@ import type {
 } from "@/types/group.ts";
 import type {IExchangeRateAgent} from "@/types/agent.ts";
 import {useSelector} from "react-redux";
-import type {RootState} from "@/store";
-import {Step} from "antd-mobile/es/components/steps/step";
 import {result} from "@/utils/public.ts";
+import {selectAgentMap} from "@/store/modules/base.ts";
 
 type IAgentPayment = AgentPayment & {
   branchCode: string
@@ -47,10 +46,11 @@ type IAgentPayment = AgentPayment & {
 }
 type IUrUserObj = { accountInfo:IAgentPayment,accountPrice:GroupBalance,totalAmount:number }
 
+const { Step } = Steps
 export default function AgentRechargePayment() {
   const {t} = useTranslation()
   const initRef = useRef(false)
-  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const agentMap = useSelector(selectAgentMap)
 
   const [hasMore, setHasMore] = useState(false)
   const pageRef = useRef(0)
@@ -87,20 +87,6 @@ export default function AgentRechargePayment() {
     await getData(nextPage)
   }
 
-  const agentMap = useMemo(() => {
-    const map = new Map()
-
-    branchAgents.forEach(branch => {
-      branch.agents.forEach(agent => {
-        map.set(agent.id, {
-          agentCode: agent.code,
-          branchCode: branch.branch.code
-        })
-      })
-    })
-
-    return map
-  }, [branchAgents])
 
   const resetData = async () => {
     await getData(0,true)
@@ -109,10 +95,10 @@ export default function AgentRechargePayment() {
   const getData = (nextPage:number,reset:boolean = false) => {
     if (loadingRef.current) return
     loadingRef.current = true
+    setHasMore(false)
     try {
       getAgentPaymentsGroup({pageSize:20,page:nextPage},searchForm).then((res) => {
         if(res){
-          setHasMore(res.length === 20)
           const value = res.map(item => {
             const info = agentMap.get(item.agentId)
 
@@ -127,6 +113,7 @@ export default function AgentRechargePayment() {
           }else{
             setListValue(prev => [...prev, ...value])
           }
+          setHasMore(res.length === 20)
         }
       })
     } finally {

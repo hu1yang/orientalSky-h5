@@ -39,6 +39,7 @@
   --price-color: #c15400;
   --warning-color: #e6a23c;
   --success-color: #67c23a;
+  --rounder-radius: 8px;
 
   @media (max-width: 1024px) {
     font-size: 12px;
@@ -48,10 +49,10 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
+    /*--text-h: #f3f4f6;*/
+    /*--bg: #16171d;*/
+    /*--border: #2e303a;*/
+    /*--code-bg: #1f2028;*/
     --accent: #c084fc;
     --accent-bg: rgba(192, 132, 252, 0.15);
     --accent-border: rgba(192, 132, 252, 0.5);
@@ -112,11 +113,8 @@ p {
   padding: 5px;
 }
 .center-toast .adm-toast-main {
-
   flex-direction: column;
-
   align-items: center;
-
 }
 
 .adm-toast-icon{
@@ -125,4 +123,11 @@ p {
 }
 .adm-auto-center-content{
   text-align: center;
+}
+.segmentBox .adm-step-content{
+  padding-bottom: 10px !important;
+}
+
+.segmentBox .adm-step:last-child .adm-step-content{
+  padding-bottom: 0 !important;
 }

@@ -1,18 +1,15 @@
-import React, {memo, useMemo} from "react";
+import React, {memo} from "react";
 import {Card, Divider, Grid} from "antd-mobile";
 import CardText from "@/component/card/cardText.tsx";
 import type {IConfirmed} from "@/types/order.ts";
 
-export default memo(function PriceConfirmation({confirmed, currency}: { confirmed: IConfirmed, currency: string }) {
+export default memo(function PriceConfirmation({confirmed, currency, type, totalPrice}: {
+  confirmed: IConfirmed
+  currency: string
+  type: 'refund' | 'change'
+  totalPrice: string | number
+}) {
 
-  const totalPrice = useMemo(() => {
-    const total = confirmed.amounts.reduce((sum, amount) => {
-      const netRefundAmount = Number(amount.netRefundAmount) || 0
-      return sum + netRefundAmount;
-    }, 0);
-
-    return Math.round(total * 100) / 100; // 最终总价再处理一遍
-  },[confirmed])
 
   return (
     <Card title={'价格确认表'}>
@@ -27,7 +24,8 @@ export default memo(function PriceConfirmation({confirmed, currency}: { confirme
                 </Grid.Item>
                 <Grid.Item span={2}>
                   <CardText label={'实际退回金额'} value={<div>
-                    <span className={'font-bold !text-[1.7rem] mr-2'}>{amount.netRefundAmount}</span>
+                    <span
+                      className={'font-bold !text-[1.7rem] mr-2'}>{type === 'refund' ? amount.netRefundAmount : amount.netChangeAmount}</span>
                     <span className={'!text-[1.2rem] text-(--text)'}>{currency}</span>
                   </div>} labelStyle={'!w-30'}/>
                 </Grid.Item>
@@ -43,27 +41,27 @@ export default memo(function PriceConfirmation({confirmed, currency}: { confirme
                 </Grid.Item>
                 <Grid.Item span={2}>
                   <CardText label={'其他规定'}
-                            value={amount.othersNotes.length ? (amount.othersNotes as string[])?.join(','):'--'}
-                            labelStyle={'!w-30'} style={'!items-start'} valueStyle={'!text-(--text)'} />
+                            value={amount.othersNotes.length ? (amount.othersNotes as string[])?.join(',') : '--'}
+                            labelStyle={'!w-30'} style={'!items-start'} valueStyle={'!text-(--text)'}/>
                 </Grid.Item>
               </Grid>
               {
-                (confirmed.amounts.length -1 !== amountIndex ) && (
+                (confirmed.amounts.length - 1 !== amountIndex) && (
                   <Divider style={{
                     borderStyle: 'dashed',
                     margin: '8px 0'
-                  }} />
+                  }}/>
                 )
               }
             </React.Fragment>
           ))
         )
       }
-      <Divider />
+      <Divider/>
       <CardText label={'Settlement total'} value={<div>
         <span className={'font-bold !text-[1.7rem] mr-2 text-(--price-color)'}>{totalPrice}</span>
         <span className={'!text-[1.2rem] text-(--text)'}>{currency}</span>
-      </div>} valueStyle={'text-right'} labelStyle={'font-bold !w-auto !text-[1.2rem]'} />
+      </div>} valueStyle={'text-right'} labelStyle={'font-bold !w-auto !text-[1.2rem]'}/>
     </Card>
   )
 })

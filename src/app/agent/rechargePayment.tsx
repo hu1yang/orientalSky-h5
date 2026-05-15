@@ -14,7 +14,7 @@ import {
   Input,
   Popup, PullToRefresh,
   Space, Steps,
-  Tag,
+  Tag, TextArea,
   Toast
 } from "antd-mobile";
 import {BillOutline} from "antd-mobile-icons";
@@ -139,8 +139,11 @@ export default function AgentRechargePayment() {
     Dialog.confirm({
       content: (
         <div className={'w-full flex flex-col justify-start'}>
-          <span className={'mb-2'}>{t('common.cancelPaymentTips')}</span>
-          <Input
+          <span className={'mb-2 font-bold text-[1.3rem] mb-2'}>{t('common.cancelPaymentTips')}</span>
+          <TextArea
+            style={{
+              '--font-size': '1.2rem'
+            }}
             placeholder={t('order.messageShow')}
             onChange={val => {
               remarks = val

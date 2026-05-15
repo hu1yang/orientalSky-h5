@@ -1,9 +1,12 @@
-import {type ReactNode, useEffect, useMemo, useRef, useState} from "react";
+import {type ReactNode, useEffect, useMemo, useState} from "react";
 import {useSelector} from "react-redux";
 import {selectAgentMap} from "@/store/modules/base.ts";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Badge, Button, Divider, Segmented, Tag} from "antd-mobile";
+
+import {useDetailData} from "@/context/order/detailContext.tsx";
+import DetailListProvider from "@/context/order/detailProvider.tsx";
 
 import {copyText} from "@/utils/public.ts";
 import {calculateTotalPriceByPassengers} from "@/utils/order.tsx";
@@ -13,18 +16,14 @@ import {
   getOrderInfoGroup,
   getRefundInfosGroup
 } from "@/utils/request/group.ts";
+
 import AmountCard from "@/component/order/detail/amountCard.tsx";
 import SegmentCard from "@/component/order/detail/segmentCard.tsx";
 import PassengerCard from "@/component/order/detail/PassengerCard.tsx";
-import type {
-  IChange,
-  IOrderAuxiliary,
-  IOrderManual,
-  IRefund,
-} from "@/types/order.ts";
 import RefundDetail from "@/component/order/detail/refundDetail.tsx";
 import ChangeDetail from "@/component/order/detail/changeDetail.tsx";
 import AuxiliaryDetail from "@/component/order/detail/auxiliaryDetail.tsx";
+
 
 const badgeStyle = {
   '--right': '120%',
@@ -33,11 +32,6 @@ const badgeStyle = {
   height:'5px',
   minWidth:'5px'
 } as React.CSSProperties
-
-type IOrderManualInfo = IOrderManual & {
-  branchCode: string
-  agentCode:string
-}
 
 const tabs = [
   {
@@ -58,19 +52,24 @@ const tabs = [
   },
 ]
 
-
-export default function OrderDetail(){
+function DetailInfo(){
   const {t} = useTranslation()
-  const initRef = useRef(false)
   const {orderId,status} = useParams()
   const agentMap = useSelector(selectAgentMap)
 
-  const [activeStatus, setActiveStatus] = useState(status || 'detail')
+  const [activeStatus, setActiveStatus] = useState('detail')
 
-  const [orderDetail, setOrderDetail] = useState<IOrderManualInfo|null>(null)
-  const [refundList, setRefundList] = useState<IRefund[]>([])
-  const [changeList, setChangeList] = useState<IChange[]>([])
-  const [auxiliaryList, setAuxiliaryList] = useState<IOrderAuxiliary[]>([])
+
+  const {
+    orderDetail,
+    setOrderDetail,
+    auxiliaryList,
+    setAuxiliaryList,
+    changeList,
+    setChangeList,
+    refundList,
+    setRefundList
+  } = useDetailData()
 
 
   const computedOrderItineraries = useMemo(() => {
@@ -134,8 +133,6 @@ export default function OrderDetail(){
     })
   }
 
-
-
   const detailMap:Record<'detail'|'refund'|'change'|'auxiliary', ReactNode> = {
     detail: <>
       <PassengerCard passengers={orderDetail?.passengers ?? []} />
@@ -155,68 +152,79 @@ export default function OrderDetail(){
         ...res,
         ...info
       })
-      if(status && status !== 'detail'){
-        changeTab(status,res.id)
+      const type = tabs.map(a => a.value).includes(status ?? '') ? status! : 'detail'
+      if(type && type !== 'detail'){
+        changeTab(type,res.id)
       }
     })
   }
 
   useEffect(() => {
-    if (initRef.current) return
-    initRef.current = true
     getData()
   },[])
 
   return (
+    <>
+      {
+        !!orderDetail && (
+          <>
+            <div className={'flex justify-between items-center mb-5'}>
+              <div className={'flex items-center'}>
+                <Tag round color={orderDetail.resultType === 'normal' ? 'var(--success-color)':'var(--warning-color)'}>
+                  {t('order.'+ orderDetail.resultType)}
+                </Tag>
+                <div className={'ml-2 flex items-center'}>
+                  <p className={'text-(--warning-color) text-[1rem] leading-none'}>{orderDetail.id}</p>
+                  <Button fill='none' size={'mini'} onClick={() => copyText(orderDetail.id)} style={{padding: '0 4px'}}>
+                    <i className={'iconfont icon-copy !text-[1rem] text-(--warning-color)'}></i>
+                  </Button>
+                </div>
+              </div>
+              <span className={'text-(--text) text-[1rem]'}>{orderDetail.branchCode}-{orderDetail.agentCode}</span>
+            </div>
+            <div className={'flex flex-row items-center mb-5'}>
+              <div className={'flex flex-col'}>
+                <span className={'text-[1rem] text-(--text)'}>TOTAL</span>
+                <div className={'leading-none'}>
+                  <span className={'font-bold text-[3rem] text-(--price-color)'}>{totalPrice}</span>
+                  <span className={'text-[1rem] text-(--text) ml-1'}>{orderDetail.currency}</span>
+                </div>
+              </div>
+              <Divider direction='vertical' style={{
+                borderColor: 'var(--border)',
+                height: 40,
+              }} />
+              <div className={'flex flex-col'}>
+                <span className={'text-[1rem] text-(--text)'}>{t('order.orderStatus')}</span>
+                <div>
+                  <Badge color='#108ee9' content={Badge.dot}
+                         style={badgeStyle}>
+                  </Badge>
+                  <span className={'ml-2'}>{orderDetail.status}</span>
+                </div>
+              </div>
+            </div>
+            <Segmented options={tabs} block className={'mb-5'} onChange={(val) => changeTab(val,orderDetail?.id)} defaultValue={activeStatus} />
+            {
+              detailMap[activeStatus as 'detail'|'refund'|'change'|'auxiliary']
+            }
+          </>
+        )
+      }
+    </>
+
+  )
+}
+
+export default function OrderDetail(){
+  return (
     <section className={'container'}>
       <div className={'w-full pt-2 px-1'}>
-        {
-          !!orderDetail && (
-            <>
-              <div className={'flex justify-between items-center mb-5'}>
-                <div className={'flex items-center'}>
-                  <Tag round color={orderDetail.resultType === 'normal' ? 'var(--success-color)':'var(--warning-color)'}>
-                    {t('order.'+ orderDetail.resultType)}
-                  </Tag>
-                  <div className={'ml-2 flex items-center'}>
-                    <p className={'text-(--warning-color) text-[1rem] leading-none'}>{orderDetail.id}</p>
-                    <Button fill='none' size={'mini'} onClick={() => copyText(orderDetail.id)} style={{padding: '0 4px'}}>
-                      <i className={'iconfont icon-copy !text-[1rem] text-(--warning-color)'}></i>
-                    </Button>
-                  </div>
-                </div>
-                <span className={'text-(--text) text-[1rem]'}>{orderDetail.branchCode}-{orderDetail.agentCode}</span>
-              </div>
-              <div className={'flex flex-row items-center mb-5'}>
-                <div className={'flex flex-col'}>
-                  <span className={'text-[1rem] text-(--text)'}>TOTAL</span>
-                  <div className={'leading-none'}>
-                    <span className={'font-bold text-[3rem] text-(--price-color)'}>{totalPrice}</span>
-                    <span className={'text-[1rem] text-(--text) ml-1'}>{orderDetail.currency}</span>
-                  </div>
-                </div>
-                <Divider direction='vertical' style={{
-                  borderColor: 'var(--border)',
-                  height: 40,
-                }} />
-                <div className={'flex flex-col'}>
-                  <span className={'text-[1rem] text-(--text)'}>{t('order.orderStatus')}</span>
-                  <div>
-                    <Badge color='#108ee9' content={Badge.dot}
-                           style={badgeStyle}>
-                    </Badge>
-                    <span className={'ml-2'}>{orderDetail.status}</span>
-                  </div>
-                </div>
-              </div>
-              <Segmented options={tabs} block className={'mb-5'} onChange={(val) => changeTab(val,orderDetail?.id)} value={activeStatus} />
-              {
-                detailMap[activeStatus as 'detail'|'refund'|'change'|'auxiliary']
-              }
-            </>
-          )
-        }
+        <DetailListProvider>
+          <DetailInfo />
+        </DetailListProvider>
       </div>
     </section>
+
   )
 }

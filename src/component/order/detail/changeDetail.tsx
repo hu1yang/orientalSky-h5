@@ -1,11 +1,17 @@
-import { memo, useEffect, useMemo, useState} from "react";
+import {memo, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Tabs} from "antd-mobile";
+import {useDetailData} from "@/context/order/detailContext.tsx";
+
+import {Button, Grid, Tabs} from "antd-mobile";
+import {getChangeInfoGroup} from "@/utils/request/group.ts";
+
 import type {IChange, Itinerary, Passenger} from "@/types/order.ts";
+
 import PassengerCard from "@/component/order/detail/PassengerCard.tsx";
 import SegmentCard from "@/component/order/detail/segmentCard.tsx";
 import PriceConfirmation from "@/component/order/detail/priceConfirmation.tsx";
 import {statusChangeArs} from "@/utils/common.ts";
+import RCAmount from "@/component/order/form/rcAmount.tsx";
 
 export default memo(function ChangeDetail({changeList, passengers, itineraries}: {
   changeList: IChange[]
@@ -14,6 +20,11 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries}:
 }) {
   const {t} = useTranslation()
   const [changeTab, setChangeTab] = useState('')
+  const amountRef = useRef<{
+    openSurePop:(passengers: Passenger[],id: string) => void
+  }>(null);
+
+  const {setChangeList} = useDetailData()
 
   const changeDetail = useMemo(() => {
     return changeList.find(change => change.id === changeTab)
@@ -49,11 +60,37 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries}:
       });
   }, [itineraries, changeDetail]);
 
+  const totalPrice = useMemo(() => {
+    if(!changeDetail?.confirmed) return 0
+    const total = changeDetail?.confirmed.amounts.reduce((sum, amount) => {
+      const netRefundAmount = Number(amount.netChangeAmount) || 0
+      return sum + netRefundAmount;
+    }, 0);
+
+    return Math.round(total * 100) / 100; // 最终总价再处理一遍
+  }, [changeDetail])
+
+  const sureAmount = () => {
+    if(amountRef.current){
+      amountRef.current.openSurePop(changePassenger,changeTab as string)
+    }
+  }
+
+  const getDetail = useCallback(async () => {
+    const response = await getChangeInfoGroup(changeTab as string)
+    const newChangeList = changeList.map(item =>
+      item.id === response.id ? {...response}:item
+    )
+
+    setChangeList(newChangeList)
+  },[changeTab,changeList])
+
+
   useEffect(() => {
-    if(changeList.length){
+    if(changeList.length && !changeTab){
       setChangeTab(changeList[0].id)
     }
-  },[changeList])
+  },[changeList,changeTab])
 
   return (
     <div>
@@ -70,15 +107,26 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries}:
                   <SegmentCard itineraryList={changeItineraries} status={'change'} />
                   {
                     !!change.confirmed && (
-                      <PriceConfirmation confirmed={change.confirmed} currency={change.order?.currency || ''} />
+                      <PriceConfirmation confirmed={change.confirmed} currency={change.order?.currency || ''} type={'change'} totalPrice={totalPrice} />
                     )
                   }
+                  <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5'}>
+                    <Grid.Item>
+                      <Button block style={{
+                        '--background-color':'var(--success-color)'
+                      }} onClick={sureAmount}>金额确认</Button>
+                    </Grid.Item>
+                    <Grid.Item>
+                      <Button block>金额驳回</Button>
+                    </Grid.Item>
+                  </Grid>
                 </Tabs.Tab>
               ))
             }
           </Tabs>
         )
       }
+      <RCAmount ref={amountRef} resetDetailFnc={getDetail} type={'change'} />
     </div>
   )
 })

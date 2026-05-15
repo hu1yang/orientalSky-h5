@@ -545,6 +545,11 @@ export const orderZh = {
         suspended:'挂起',
         noshow:'未到场',
         expired:'过期',
+
+        refundTips: '实际退回金额 {{tc}} ,确认执行退款？',
+        refundRejectTips: '是否驳回此退款申请？',
+        amountRejectTips: '是否驳回此金额？',
+
     }
 }
 
@@ -888,7 +893,7 @@ export const orderEn = {
         restful:'Service Add',
         workers:'Add Task',
         isSure: 'Confirm?',
-        isSureStatusChange: 'Update status to {status}',
+        isSureStatusChange: 'Update status to {{status}}',
         passport: 'Passport',
         nationalID: 'National ID',
         birthCertificate: 'Birth Cert.',
@@ -989,7 +994,7 @@ export const orderEn = {
         rechargeRecords: 'Channel Top-up',
         transferIn: 'Transfer In',
         differentTerminal: 'Different Terminal',
-        locakNameTips: 'Lock order held by {name}?',
+        locakNameTips: 'Lock order held by {{name}}?',
 
         createTicket:'Issue Ticket',
         refundTicket:'Refund Ticket',
@@ -1091,6 +1096,11 @@ export const orderEn = {
         suspended:'Suspended',
         noshow:'NoShow',
         expired:'Expired',
+
+        refundTips: 'The actual refund amount is {{tc}}, are you sure to proceed with the refund?',
+        refundRejectTips: 'Should this refund application be rejected?',
+        amountRejectTips: 'Should this amount be rejected?',
+
     },
 }
 
@@ -1431,7 +1441,7 @@ export const orderRu = {
         restful: 'Добавление сервиса',
         workers: 'Добавление задачи',
         isSure: 'Вы уверены?',
-        isSureStatusChange: 'Обновить статус до {status}',
+        isSureStatusChange: 'Обновить статус до {{status}}',
         passport: 'Паспорт',
         nationalID: 'Национальный ID',
         birthCertificate: 'Свидетельство о рождении',
@@ -1531,7 +1541,7 @@ export const orderRu = {
         rechargeRecords: 'Пополнение канала',
         transferIn: 'Перевести',
         differentTerminal: 'Другой терминал',
-        locakNameTips: 'Заблокировать заказ, который уже заблокирован {name}?',
+        locakNameTips: 'Заблокировать заказ, который уже заблокирован {{name}}?',
 
         createTicket: 'Создать номер билета',
         refundTicket: 'Номер возврата билета',
@@ -1632,5 +1642,9 @@ export const orderRu = {
         suspended:'Приостановленный',
         noshow:'Неявка',
         expired:'Истекший',
+        refundTips: 'Фактическая сумма возврата {{tc}}, подтверждаете выполнение возврата?',
+        refundRejectTips: 'Отклонить ли данное заявление на возврат средств?',
+        amountRejectTips: 'Отклонить ли эту сумму?',
+
     }
 }

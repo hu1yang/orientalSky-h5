@@ -86,7 +86,7 @@ export default function Index() {
                 </Space>
               }>
                 <Form.Item name={'group'} label={t('order.company_name')}>
-                  <Input onChange={console.log} placeholder='' />
+                  <Input placeholder='' />
                 </Form.Item>
               </Form>
             </Dropdown.Item>

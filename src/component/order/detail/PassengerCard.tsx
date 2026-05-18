@@ -32,7 +32,7 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
                     </span>
                   </div>
                   <div className={'flex flex-col ml-4'}>
-                    <span className={'font-bold text-[1.2rem]'}>{passenger.fullName}</span>
+                    <span className={`font-bold text-[1.2rem] ${passenger.passengerType !== 'adt' ? 'text-(--warning-color)' : 'text-(--text-h)' }`}>{passenger.fullName}</span>
                     <p className={'text-(--text) text-[1rem]'}>{t('order.'+passengerTypes[passenger.passengerType as 'adt'| 'chd'| 'inf'].toLocaleLowerCase())} · {t('order.' + passengerSexTypeArr[passenger.passengerSexType])} · {passenger.trCountry}</p>
                   </div>
                 </div>

@@ -19,6 +19,7 @@ import RCAmount from "@/component/order/form/rcAmount.tsx";
 
 import type {IRefund, Itinerary, Passenger} from "@/types/order.ts";
 import {result} from "@/utils/public.ts";
+import NoData from "@/component/default/noData.tsx";
 
 export default memo(function RefundDetail({refundList, passengers, itineraries}: {
   refundList: IRefund[]
@@ -190,7 +191,7 @@ export default memo(function RefundDetail({refundList, passengers, itineraries}:
   return (
     <div>
       {
-        !!refundList.length && (
+        refundList.length ? (
           <Tabs activeKey={refundTab} style={{
             '--title-font-size':'1rem',
             '--content-padding':'12px 0'
@@ -245,7 +246,9 @@ export default memo(function RefundDetail({refundList, passengers, itineraries}:
               ))
             }
           </Tabs>
-        )
+        ):
+          <NoData />
+
       }
       <RCAmount ref={amountRef} resetDetailFnc={getDetail} type={'refund'} />
     </div>

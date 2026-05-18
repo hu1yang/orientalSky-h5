@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {selectAgentMap} from "@/store/modules/base.ts";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
-import {Badge, Button, Divider, Segmented, Tag} from "antd-mobile";
+import {Badge, Button, Divider, PullToRefresh, Segmented, SpinLoading, Tag} from "antd-mobile";
 
 import {useDetailData} from "@/context/order/detailContext.tsx";
 import DetailListProvider from "@/context/order/detailProvider.tsx";
@@ -23,6 +23,7 @@ import PassengerCard from "@/component/order/detail/PassengerCard.tsx";
 import RefundDetail from "@/component/order/detail/refundDetail.tsx";
 import ChangeDetail from "@/component/order/detail/changeDetail.tsx";
 import AuxiliaryDetail from "@/component/order/detail/auxiliaryDetail.tsx";
+import NoData from "@/component/default/noData.tsx";
 
 
 const badgeStyle = {
@@ -54,10 +55,11 @@ const tabs = [
 
 function DetailInfo(){
   const {t} = useTranslation()
+  const [loading, setLoading] = useState(true)
   const {orderId,status} = useParams()
   const agentMap = useSelector(selectAgentMap)
 
-  const [activeStatus, setActiveStatus] = useState('detail')
+  const [activeStatus, setActiveStatus] = useState(tabs.map(a => a.value).includes(status ?? '') ? status! : 'detail')
 
 
   const {
@@ -145,18 +147,18 @@ function DetailInfo(){
 
   }
 
-  const getData = () => {
-    getOrderInfoGroup(orderId as string).then(res => {
-      const info = agentMap.get(res.agentId)
+  const getData = async () => {
+    try {
+      const response = await getOrderInfoGroup(orderId as string)
+      const info = agentMap.get(response.agentId)
       setOrderDetail({
-        ...res,
+        ...response,
         ...info
       })
-      const type = tabs.map(a => a.value).includes(status ?? '') ? status! : 'detail'
-      if(type && type !== 'detail'){
-        changeTab(type,res.id)
-      }
-    })
+      changeTab(activeStatus,response.id)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -164,55 +166,61 @@ function DetailInfo(){
   },[])
 
   return (
-    <>
+    <PullToRefresh onRefresh={getData}>
       {
-        !!orderDetail && (
-          <>
-            <div className={'flex justify-between items-center mb-5'}>
-              <div className={'flex items-center'}>
-                <Tag round color={orderDetail.resultType === 'normal' ? 'var(--success-color)':'var(--warning-color)'}>
-                  {t('order.'+ orderDetail.resultType)}
-                </Tag>
-                <div className={'ml-2 flex items-center'}>
-                  <p className={'text-(--warning-color) text-[1rem] leading-none'}>{orderDetail.id}</p>
-                  <Button fill='none' size={'mini'} onClick={() => copyText(orderDetail.id)} style={{padding: '0 4px'}}>
-                    <i className={'iconfont icon-copy !text-[1rem] text-(--warning-color)'}></i>
-                  </Button>
-                </div>
-              </div>
-              <span className={'text-(--text) text-[1rem]'}>{orderDetail.branchCode}-{orderDetail.agentCode}</span>
-            </div>
-            <div className={'flex flex-row items-center mb-5'}>
-              <div className={'flex flex-col'}>
-                <span className={'text-[1rem] text-(--text)'}>TOTAL</span>
-                <div className={'leading-none'}>
-                  <span className={'font-bold text-[3rem] text-(--price-color)'}>{totalPrice}</span>
-                  <span className={'text-[1rem] text-(--text) ml-1'}>{orderDetail.currency}</span>
-                </div>
-              </div>
-              <Divider direction='vertical' style={{
-                borderColor: 'var(--border)',
-                height: 40,
-              }} />
-              <div className={'flex flex-col'}>
-                <span className={'text-[1rem] text-(--text)'}>{t('order.orderStatus')}</span>
-                <div>
-                  <Badge color='#108ee9' content={Badge.dot}
-                         style={badgeStyle}>
-                  </Badge>
-                  <span className={'ml-2'}>{orderDetail.status}</span>
-                </div>
-              </div>
-            </div>
-            <Segmented options={tabs} block className={'mb-5'} onChange={(val) => changeTab(val,orderDetail?.id)} defaultValue={activeStatus} />
-            {
-              detailMap[activeStatus as 'detail'|'refund'|'change'|'auxiliary']
-            }
-          </>
-        )
+        loading ?
+          <SpinLoading color='primary' />
+          :
+          (
+            orderDetail ? (
+                <>
+                  <div className={'flex justify-between items-center mb-5'}>
+                    <div className={'flex items-center'}>
+                      <Tag round color={orderDetail.resultType === 'normal' ? 'var(--success-color)':'var(--warning-color)'}>
+                        {t('order.'+ orderDetail.resultType)}
+                      </Tag>
+                      <div className={'ml-2 flex items-center'}>
+                        <p className={'text-(--warning-color) text-[1rem] leading-none'}>{orderDetail.id}</p>
+                        <Button fill='none' size={'mini'} onClick={() => copyText(orderDetail.id)} style={{padding: '0 4px'}}>
+                          <i className={'iconfont icon-copy !text-[1rem] text-(--warning-color)'}></i>
+                        </Button>
+                      </div>
+                    </div>
+                    <span className={'text-(--text) text-[1rem]'}>{orderDetail.branchCode}-{orderDetail.agentCode}</span>
+                  </div>
+                  <div className={'flex flex-row items-center mb-5'}>
+                    <div className={'flex flex-col'}>
+                      <span className={'text-[1rem] text-(--text)'}>TOTAL</span>
+                      <div className={'leading-none'}>
+                        <span className={'font-bold text-[3rem] text-(--price-color)'}>{totalPrice}</span>
+                        <span className={'text-[1rem] text-(--text) ml-1'}>{orderDetail.currency}</span>
+                      </div>
+                    </div>
+                    <Divider direction='vertical' style={{
+                      borderColor: 'var(--border)',
+                      height: 40,
+                    }} />
+                    <div className={'flex flex-col'}>
+                      <span className={'text-[1rem] text-(--text)'}>{t('order.orderStatus')}</span>
+                      <div>
+                        <Badge color='#108ee9' content={Badge.dot}
+                               style={badgeStyle}>
+                        </Badge>
+                        <span className={'ml-2'}>{orderDetail.status}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <Segmented options={tabs} block className={'mb-5'} onChange={(val) => changeTab(val,orderDetail?.id)} value={activeStatus} />
+                  {
+                    detailMap[activeStatus as 'detail'|'refund'|'change'|'auxiliary']
+                  }
+                </>
+              ):
+              <NoData />
+          )
       }
-    </>
 
+    </PullToRefresh>
   )
 }
 

@@ -1,4 +1,4 @@
-import {forwardRef, useImperativeHandle, useState} from "react";
+import {forwardRef, memo, useImperativeHandle, useState} from "react";
 import {Button, Form, Input, Popup, Radio, Space, TextArea} from "antd-mobile";
 import {useTranslation} from "react-i18next";
 import type {Passenger, UpOrderRCAmounts} from "@/types/order.ts";
@@ -6,7 +6,7 @@ import {upsertChangeAmountsGroup, upsertRefundAmountsGroup} from "@/utils/reques
 import {result} from "@/utils/public.ts";
 
 
-export default forwardRef(function RCAmount({resetDetailFnc,type}: {
+export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
   resetDetailFnc: () => void
   type: 'change'|'refund'
 }, ref) {
@@ -153,4 +153,4 @@ export default forwardRef(function RCAmount({resetDetailFnc,type}: {
       </div>
     </Popup>
   )
-})
+}))

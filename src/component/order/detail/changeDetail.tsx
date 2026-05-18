@@ -12,6 +12,7 @@ import SegmentCard from "@/component/order/detail/segmentCard.tsx";
 import PriceConfirmation from "@/component/order/detail/priceConfirmation.tsx";
 import {statusChangeArs} from "@/utils/common.ts";
 import RCAmount from "@/component/order/form/rcAmount.tsx";
+import NoData from "@/component/default/noData.tsx";
 
 export default memo(function ChangeDetail({changeList, passengers, itineraries}: {
   changeList: IChange[]
@@ -95,7 +96,7 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries}:
   return (
     <div>
       {
-        !!changeList.length && (
+        changeList.length ? (
           <Tabs activeKey={changeTab} style={{
             '--title-font-size':'1rem',
             '--content-padding':'12px 0'
@@ -125,6 +126,8 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries}:
             }
           </Tabs>
         )
+        :
+        <NoData />
       }
       <RCAmount ref={amountRef} resetDetailFnc={getDetail} type={'change'} />
     </div>

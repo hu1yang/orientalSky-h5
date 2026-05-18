@@ -547,9 +547,10 @@ export const orderZh = {
         expired:'过期',
 
         refundTips: '实际退回金额 {{tc}} ,确认执行退款？',
+        auxiliaryTips: '实际辅营金额 {{tc}} ,确认执行辅营？',
         refundRejectTips: '是否驳回此退款申请？',
+        auxiliaryRejectTips: '是否驳回此辅营申请？',
         amountRejectTips: '是否驳回此金额？',
-
     }
 }
 
@@ -1098,7 +1099,9 @@ export const orderEn = {
         expired:'Expired',
 
         refundTips: 'The actual refund amount is {{tc}}, are you sure to proceed with the refund?',
+        auxiliaryTips: 'Actual auxiliary business amount {{tc}}, confirm to execute auxiliary business?',
         refundRejectTips: 'Should this refund application be rejected?',
+        auxiliaryRejectTips: 'Should this auxiliary business application be rejected?',
         amountRejectTips: 'Should this amount be rejected?',
 
     },
@@ -1643,7 +1646,9 @@ export const orderRu = {
         noshow:'Неявка',
         expired:'Истекший',
         refundTips: 'Фактическая сумма возврата {{tc}}, подтверждаете выполнение возврата?',
+        auxiliaryTips: 'Фактическая сумма дополнительного дохода {{tc}}, подтвердить выполнение дополнительного дохода?',
         refundRejectTips: 'Отклонить ли данное заявление на возврат средств?',
+        auxiliaryRejectTips: 'Отклонить ли данное вспомогательное предложение?',
         amountRejectTips: 'Отклонить ли эту сумму?',
 
     }

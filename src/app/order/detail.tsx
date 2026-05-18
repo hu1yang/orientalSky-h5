@@ -34,33 +34,33 @@ const badgeStyle = {
   minWidth:'5px'
 } as React.CSSProperties
 
-const tabs = [
-  {
-    value: 'detail',
-    label: ' 详情',
-  },
-  {
-    value: 'refund',
-    label: ' 退票',
-  },
-  {
-    value: 'change',
-    label: ' 改签',
-  },
-  {
-    value: 'auxiliary',
-    label: '辅营',
-  },
-]
-
 function DetailInfo(){
   const {t} = useTranslation()
   const [loading, setLoading] = useState(true)
+  const [loadingCom, setLoadingCom] = useState(true)
   const {orderId,status} = useParams()
   const agentMap = useSelector(selectAgentMap)
 
-  const [activeStatus, setActiveStatus] = useState(tabs.map(a => a.value).includes(status ?? '') ? status! : 'detail')
+  const tabs = [
+    {
+      value: 'detail',
+      label: t('order.orderDetail'),
+    },
+    {
+      value: 'refund',
+      label: t('order.refundDetail'),
+    },
+    {
+      value: 'change',
+      label: t('order.changeDetail'),
+    },
+    {
+      value: 'auxiliary',
+      label: t('order.auxiliaryDetail'),
+    },
+  ]
 
+  const [activeStatus, setActiveStatus] = useState(tabs.map(a => a.value).includes(status ?? '') ? status! : 'detail')
 
   const {
     orderDetail,
@@ -97,7 +97,9 @@ function DetailInfo(){
   },[orderDetail,computedOrderItineraries])
 
   const changeTab = (tab:string | number,id:string) => {
+    setLoadingCom(true)
     setActiveStatus(String(tab))
+
     switch (tab){
       case 'refund':
         getRefund(id)
@@ -115,6 +117,7 @@ function DetailInfo(){
     getRefundInfosGroup(id).then(res => {
       if(res.length){
         setRefundList(res)
+        setLoadingCom(false)
       }
     })
   }
@@ -123,6 +126,7 @@ function DetailInfo(){
     getChangeInfosGroup(id).then(res => {
       if(res.length){
         setChangeList(res)
+        setLoadingCom(false)
       }
     })
   }
@@ -131,6 +135,7 @@ function DetailInfo(){
     getAppendInfosGroup(id).then(res => {
       if(res.length){
         setAuxiliaryList(res)
+        setLoadingCom(false)
       }
     })
   }
@@ -141,9 +146,9 @@ function DetailInfo(){
       <AmountCard itineraryList={computedOrderItineraries} travelers={orderDetail?.request.travelers ?? []} currency={orderDetail?.currency || ''} totalPrice={totalPrice} policies={orderDetail?.policies ?? []} />
       <SegmentCard itineraryList={computedOrderItineraries} />
     </>,
-    refund:<RefundDetail refundList={refundList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
-    change: <ChangeDetail changeList={changeList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
-    auxiliary: <AuxiliaryDetail auxiliaryList={auxiliaryList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+    refund: loadingCom ? <SpinLoading color='primary' /> : <RefundDetail refundList={refundList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+    change: loadingCom ? <SpinLoading color='primary' /> :  <ChangeDetail changeList={changeList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+    auxiliary: loadingCom ? <SpinLoading color='primary' /> : <AuxiliaryDetail auxiliaryList={auxiliaryList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
 
   }
 

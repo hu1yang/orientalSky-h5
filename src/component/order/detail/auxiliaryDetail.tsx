@@ -163,15 +163,14 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
     const newAuxiliaryList = auxiliaryList.map(item =>
       item.id === response.id ? {...response}:item
     )
-
     setAuxiliaryList(newAuxiliaryList)
   },[auxiliaryTab,auxiliaryList])
 
   useEffect(() => {
-    if(auxiliaryList.length){
+    if(auxiliaryList.length && !auxiliaryTab){
       setAuxiliaryTab(auxiliaryList[0].id)
     }
-  },[auxiliaryList])
+  },[auxiliaryList,auxiliaryTab])
 
   return (
     <div>

@@ -186,7 +186,7 @@ export default memo(function RefundDetail({refundList, passengers, itineraries}:
     if(refundList.length && !refundTab){
       setRefundTab(refundList[0].id)
     }
-  },[refundList])
+  },[refundList,refundTab])
 
   return (
     <div>

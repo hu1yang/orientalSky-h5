@@ -1,6 +1,9 @@
 import {lazy} from "react";
 
 export const HomeLoad = lazy(() => import('@/app/dashboard/index'));
+export const RetrievalLoad = lazy(() => import('@/app/dashboard/retrieval.tsx'));
+
+
 export const AgentLoad = lazy(() => import('@/app/agent/index'));
 export const AgentRechargePaymentLoad = lazy(() => import('@/app/agent/rechargePayment.tsx'));
 export const AgentInfoLoad = lazy(() => import('@/app/agent/info.tsx'));

@@ -6,6 +6,8 @@ import {setBranchAgents, setBranchMore, setChannel} from "@/store/modules/base.t
 import Cookie from 'js-cookie'
 import {SafeArea} from "antd-mobile";
 import Header from "./header.tsx";
+import TabBarComponent from "./tabbar.tsx";
+
 import {getBranchAgents, getGroupBranchs} from "@/utils/request/identity.ts";
 import {getChannelSettingsGroup} from "@/utils/request/group.ts";
 
@@ -44,7 +46,7 @@ export default function Layout(){
   }, [])
 
   return (
-      <div className={'pt-(--header-height)'}>
+      <div className={'py-(--header-height)'}>
         <div style={{ background: '#ace0ff' }}>
           <SafeArea position='top' />
         </div>
@@ -57,6 +59,7 @@ export default function Layout(){
             }
           </Suspense>
         </main>
+        <TabBarComponent />
         <div style={{ background: '#ffcfac' }}>
           <SafeArea position='bottom' />
         </div>

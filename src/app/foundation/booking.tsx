@@ -1311,7 +1311,7 @@ const list = [
 ]
 export default function FoundationBooking() {
     return (
-        <section className={'container'}>
+        <section className={'containerMain'}>
           <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
             <SearchBar className={'flex-1'} placeholder={'渠道'} style={{'--background': '#e8e9ed' ,'--border-radius':'20px'}} />
           </div>

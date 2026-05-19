@@ -231,7 +231,7 @@ function DetailInfo(){
 
 export default function OrderDetail(){
   return (
-    <section className={'container'}>
+    <section className={'containerMain'}>
       <div className={'w-full pt-2 px-1'}>
         <DetailListProvider>
           <DetailInfo />

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --container-width: 1126px;
+  --container-width: 1024px;
   --layout-padding: 10px;
   --header-height: 50px;
 
@@ -100,7 +100,6 @@ h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
-  margin: 0 0 8px;
   @media (max-width: 1024px) {
     font-size: 20px;
   }
@@ -109,7 +108,7 @@ p {
   margin: 0;
 }
 
-.container{
+.containerMain{
   padding: 5px;
 }
 .center-toast .adm-toast-main {

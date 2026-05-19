@@ -293,7 +293,7 @@ export default function AgentRechargePayment() {
     getData(pageRef.current,true)
   }, []);
   return (
-    <section className={'container'}>
+    <section className={'containerMain'}>
       <div className={'p-2'}>
         <PullToRefresh onRefresh={resetData}>
           {

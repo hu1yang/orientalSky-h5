@@ -517,7 +517,7 @@ export default function AgentInfo() {
   }, []);
 
   return (
-    <section className={'container'}>
+    <section className={'containerMain'}>
       <div className={'p-2'}>
         <PullToRefresh onRefresh={getData}>
           <Card className={'mb-2'} style={{ borderRadius: '4px' }}

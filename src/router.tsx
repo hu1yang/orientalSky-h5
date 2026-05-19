@@ -7,7 +7,7 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad
 } from "./routerMenu.ts";
 
 export const router = createBrowserRouter([
@@ -16,8 +16,21 @@ export const router = createBrowserRouter([
     element: <Layout/>,
     children: [
       {
-        path: '',
-        element: <HomeLoad/>
+        path:'/',
+        children:[
+          {
+            path: '/',
+            element: <HomeLoad/>
+          },
+          {
+            path: 'data/sale',
+            element: <HomeLoad/>
+          },
+          {
+            path:'/data/retrieval',
+            element: <RetrievalLoad />
+          }
+        ]
       },
       {
         path: 'group/agent/:id?',

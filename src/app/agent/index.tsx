@@ -65,7 +65,7 @@ export default function Index() {
   }, []);
 
   return (
-      <section className={'container'}>
+      <section className={'containerMain'}>
         <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
           <SearchBar className={'flex-1'} placeholder={'Search Agent Name'} style={{'--background': '#e8e9ed' ,'--border-radius':'20px'}} />
           <Dropdown className={'!bg-transparent p-0'} arrowIcon={null}>

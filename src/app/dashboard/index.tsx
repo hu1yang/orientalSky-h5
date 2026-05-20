@@ -1,39 +1,34 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useLocation, useNavigate} from "react-router";
+import {useLocation} from "react-router";
 import dayjs from "dayjs";
 import DatePicker from "@/component/Date/datePicker.tsx"
 import {useTranslation} from "react-i18next";
 
-import {Button, Card, Grid, Loading, Radio, Segmented, Selector, Space} from "antd-mobile";
+import {Button, Card, Grid, Loading, Radio, Selector, Space} from "antd-mobile";
 import {UndoOutline} from "antd-mobile-icons"
-
-import * as echarts from 'echarts/core';
-import {BarChart, LineChart, PieChart} from 'echarts/charts';
-import {TitleComponent, TooltipComponent, GridComponent, DataZoomComponent, LegendComponent} from 'echarts/components';
-import type {ECharts} from 'echarts/core';
-import {CanvasRenderer} from "echarts/renderers";
 
 import {getDashboardTodayGroup, getDashboardTotalGroup} from "@/utils/request/group.ts";
 import {getCssVar} from "@/utils/public.ts";
 import type {DashboardTotal} from "@/types/group.ts";
 
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  DataZoomComponent,
-  LegendComponent,
-  BarChart,
-  LineChart,
-  CanvasRenderer,
-  PieChart
-]);
+import Charts from "@/component/dashboard/chart.tsx"
 
 interface ICounts {
   totalSegments:number
   totalOrders:number
   totalAmount:number
   totalProfit:number
+}
+
+interface IBaseOption {
+  titleTips: string[]
+  title: string
+  xData: string[],
+  barData: number[],
+  lineData: number[],
+  barColor: { offset: number, color: string }[],
+  lineColor: string,
+  type?: 'default'|'branch'
 }
 
 const topArr = [
@@ -65,117 +60,11 @@ function pluckFields<T extends Record<string, any>>(arr: T[], fields: string[]) 
 const primaryColor = getCssVar('--active-color')
 const priceColor = getCssVar('--price-color')
 
-const getBaseOption = (
-  title: string,
-  xData: string[],
-  barData: number[],
-  lineData: number[],
-  barColor: {offset:number ,color:string}[],
-  lineColor: string,
-  types:'total'|'default'|'agent'|'seg'='default'
-) => {
-  const titleTips =
-    types === 'total'
-      ? [
-        `销售金额 ($ 26,619)`,
-        `航段量 (102)`
-      ] : ['销售金额', '航段量'];
-
-  return {
-    title: {
-      text: title,
-      left: 'center',
-      top: 10,
-      textStyle: { fontSize: 16, fontWeight: 'bold', color: '#333' }
-    },
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    legend: {
-      top: 50,
-      textStyle: { color: '#555' },
-      itemGap: 30,
-      data: titleTips
-    },
-    grid: { left: 5, right: 5, bottom: 60, top: 80, containLabel: true },
-    xAxis: {
-      type: 'category',
-      data: xData,
-      axisTick: { alignWithLabel: true },
-      axisLabel:{
-        rich: {
-          left: {
-            align: 'right'
-          },
-          right: {
-            align: 'left'
-          }
-        }
-      }
-    },
-    yAxis: [
-      {
-        type: 'value',
-        position: 'left',
-        axisLabel: {
-          width: 0,
-          inside: true,
-          overflow: 'truncate',
-          formatter: (val: number) => `$${val.toLocaleString()}`
-        }
-      },
-      {
-        type: 'value',
-        position: 'right',
-        axisLabel: {
-          width: 0,
-          inside: true,
-          overflow: 'truncate',
-          formatter: '{value} segs'
-        }
-      }
-    ],
-    series: [
-      {
-        name: titleTips[0],
-        type: 'bar',
-        yAxisIndex: 0,
-        data: barData,
-        barMaxWidth: 40,
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, barColor)
-        }
-      },
-      {
-        name: titleTips[1],
-        type: 'line',
-        yAxisIndex: 1,
-        data: lineData,
-        smooth: true,
-        symbol: 'circle',
-        symbolSize: 8,
-        lineStyle: { width: 3, color: lineColor },
-        itemStyle: { color: lineColor },
-      }
-    ],
-    dataZoom: [
-      // {
-      //     type: 'inside',
-      // }
-      {
-        type: 'slider',
-        bottom: 25,
-        height: 26,
-        handleSize: 18,
-        showDetail: false,
-      }
-    ]
-  }
-}
-
 export default function Home(){
   const location = useLocation()
-  const navigate = useNavigate()
-  const {t} = useTranslation()
   const {pathname} = location
+
+  const {t} = useTranslation()
 
   const [loading, setLoading] = useState(true)
   const [dataValue, setDataValue] = useState<DashboardTotal>({
@@ -196,171 +85,141 @@ export default function Home(){
   const [tops, setTops] = useState<string>('10')
   const [typesModel, setTypesModel] = useState<'totalAmount'|'totalSegments'>('totalAmount')
 
-  const hourAirlineRef = useRef<HTMLDivElement | null>(null);
-  const hourAirlineInstance = useRef<ECharts | null>(null);
-  const dateAirlineRef = useRef<HTMLDivElement | null>(null)
-  const dateAirlineInstance = useRef<ECharts | null>(null)
-  const airlineCompanyAmtRef = useRef<HTMLDivElement | null>(null)
-  const airlineCompanyAmtInstance = useRef<ECharts | null>(null)
-  const agentRef = useRef<HTMLDivElement | null>(null)
-  const agentInstance = useRef<ECharts | null>(null)
-  const dateSegmentRef = useRef<HTMLDivElement | null>(null)
-  const segmentInstance = useRef<ECharts | null>(null)
-
-  const updateCharts = () => {
-    const { hour, 'counts.totalAmount': amountTotalAmountHour, 'counts.totalSegments': amountTotalSegmentsHour } = pluckFields<{
-      hour:string
-      counts:ICounts
-    }>(dataValue.hours || [], [
-      'hour',
-      'counts.totalAmount',
-      'counts.totalSegments',
-    ])
-    if(hourAirlineInstance.current) {
-      const newHour = hour.map(h => `${String(h).padStart(2, '0')}:00`)
-      hourAirlineInstance.current.setOption(
-        getBaseOption(
-          t('home.todayTotalTurnover'),
-          newHour,
-          amountTotalAmountHour,
-          amountTotalSegmentsHour,
-          [{offset: 0, color: '#4F208B'},{offset: 1, color: '#9E99C7'}],
-          primaryColor,'total'
-        )
-      )
-    }
-
-    const daysArr:{
-      date:string
-      counts:ICounts
-    }[] = dataValue.dates ?? []
-
-    const { date:amountData, 'counts.totalAmount': amountTotalAmount, 'counts.totalSegments': amountTotalSegments } = pluckFields<{
-      date:string
-      counts:ICounts
-    }>(daysArr, [
-      'date',
-      'counts.totalAmount',
-      'counts.totalSegments',
-    ])
-
-    if(dateAirlineInstance.current) {
-      dateAirlineInstance.current.setOption(
-        getBaseOption(
-          t('home.todayTotalTurnover'),
-          amountData,
-          amountTotalAmount,
-          amountTotalSegments,
-          [{offset: 0, color: '#4F208B'},{offset: 1, color: '#9E99C7'}],
-          primaryColor,'total'
-        )
-      )
-    }
-
-    const { channelName, 'counts.totalAmount': channelTotalAmount, 'counts.totalSegments': channelTotalSegments } = pluckFields<{
-      channelCode:string
-      counts:ICounts
-    }>(dataValue.channels, [
-      'channelName',
-      'counts.totalAmount',
-      'counts.totalSegments',
-    ])
-    if (airlineCompanyAmtInstance.current) {
-      // airlineCompanyAmtInstance.value.setOption(
-      //     getDoubleRingOption(
-      //         channelName,
-      //         channelTotalAmount,
-      //         channelTotalSegments
-      //     )
-      // )
-
-      airlineCompanyAmtInstance.current.setOption(
-        getBaseOption(
-          t('home.airline'),
-          channelName,
-          channelTotalAmount,
-          channelTotalSegments,
-          [{offset: 0, color: '#1B6428'},{offset: 1, color: '#73C476'}],
-          primaryColor,'default'
-        )
-      )
-
-    }
-
-    const { agentCode, 'counts.totalAmount': agentTotalAmount, 'counts.totalSegments': agentTotalSegments } = pluckFields<{
-      agentId:string
-      counts:ICounts
-    }>(dataValue.agents!, [
-      'agentCode',
-      'counts.totalAmount',
-      'counts.totalSegments',
-    ])
-    if (agentInstance.current) {
-      agentInstance.current.setOption(
-        getBaseOption(
-          t('home.agent'),
-          agentCode,
-          agentTotalAmount,
-          agentTotalSegments,
-          [{offset: 0, color: priceColor}],
-          primaryColor,'agent'
-        )
-      )
-    }
-
-  }
+  const dateChartsRef = useRef<{
+    setChart: (data: IBaseOption,type: 'default'|'retrieval') => void
+    removeChart: () => void
+  } | null>(null);
+  const hourChartsRef = useRef<{
+    setChart: (data: IBaseOption,type: 'default'|'retrieval') => void
+    removeChart: () => void
+  } | null>(null);
+  const agentChartsRef = useRef<{
+    setChart: (data: IBaseOption,type: 'default'|'retrieval') => void
+    removeChart: () => void
+  } | null>(null)
+  const airlineChartsRef = useRef<{
+    setChart: (data: IBaseOption,type: 'default'|'retrieval') => void
+    removeChart: () => void
+  } | null>(null)
+  const segmentChartsRef = useRef<{
+    setChart: (data: IBaseOption,type: 'default'|'retrieval') => void
+    removeChart: () => void
+  } | null>(null)
 
   const setCanvas = () => {
-    removeCanvas()
-    if(hourAirlineRef.current){
-      hourAirlineInstance.current =
-        echarts.getInstanceByDom(hourAirlineRef.current) || echarts.init(hourAirlineRef.current)
+    if(hourChartsRef.current){
+      const { hour, 'counts.totalAmount': amountTotalAmountHour, 'counts.totalSegments': amountTotalSegmentsHour } = pluckFields<{
+        hour:string
+        counts:ICounts
+      }>(dataValue.hours || [], [
+        'hour',
+        'counts.totalAmount',
+        'counts.totalSegments',
+      ])
+      const newHour = hour.map(h => `${String(h).padStart(2, '0')}:00`)
+      hourChartsRef.current.setChart({
+        titleTips:[
+          `${t('home.salesAmount')} ($ ${dataValue.counts.totalAmount.toLocaleString()})`,
+          `${t('home.flightSegmentsnumber')} (${dataValue.counts.totalSegments.toLocaleString()})`
+        ],
+        title:t('home.todayTotalTurnover'),
+        xData:newHour,
+        barData:amountTotalAmountHour,
+        lineData:amountTotalSegmentsHour,
+        barColor: [{offset: 0, color: '#4F208B'},{offset: 1, color: '#9E99C7'}],
+        lineColor:primaryColor
+      },'default')
     }
-    if(dateAirlineRef.current){
-      dateAirlineInstance.current =
-        echarts.getInstanceByDom(dateAirlineRef.current) || echarts.init(dateAirlineRef.current)
+    if(dateChartsRef.current){
+      const daysArr:{
+        date:string
+        counts:ICounts
+      }[] = dataValue.dates ?? []
+      const { date:amountData, 'counts.totalAmount': amountTotalAmount, 'counts.totalSegments': amountTotalSegments } = pluckFields<{
+        date:string
+        counts:ICounts
+      }>(daysArr, [
+        'date',
+        'counts.totalAmount',
+        'counts.totalSegments',
+      ])
+      dateChartsRef.current.setChart({
+        titleTips:[t('home.salesAmount'), t('home.flightSegmentsnumber')],
+        title:t('home.todayTotalTurnover'),
+        xData:amountData,
+        barData:amountTotalAmount,
+        lineData:amountTotalSegments,
+        barColor:[{offset: 0, color: '#4F208B'},{offset: 1, color: '#9E99C7'}],
+        lineColor:primaryColor
+      },'default')
     }
-    if (airlineCompanyAmtRef.current) {
-      airlineCompanyAmtInstance.current =
-        echarts.getInstanceByDom(airlineCompanyAmtRef.current) || echarts.init(airlineCompanyAmtRef.current)
+    if(airlineChartsRef.current){
+      const { channelName, 'counts.totalAmount': channelTotalAmount, 'counts.totalSegments': channelTotalSegments } = pluckFields<{
+        channelCode:string
+        counts:ICounts
+      }>(dataValue.channels, [
+        'channelName',
+        'counts.totalAmount',
+        'counts.totalSegments',
+      ])
+      airlineChartsRef.current.setChart({
+        titleTips:[t('home.salesAmount'), t('home.flightSegmentsnumber')],
+        title:t('home.airline'),
+        xData:channelName,
+        barData:channelTotalAmount,
+        lineData:channelTotalSegments,
+        barColor:[{offset: 0, color: '#1B6428'},{offset: 1, color: '#73C476'}],
+        lineColor:primaryColor
+      },'default')
     }
-    if (agentRef.current) {
-      agentInstance.current =
-        echarts.getInstanceByDom(agentRef.current) || echarts.init(agentRef.current)
+    if(agentChartsRef.current){
+      const { agentCode, 'counts.totalAmount': agentTotalAmount, 'counts.totalSegments': agentTotalSegments } = pluckFields<{
+        agentId:string
+        counts:ICounts
+      }>(dataValue.agents!, [
+        'agentCode',
+        'counts.totalAmount',
+        'counts.totalSegments',
+      ])
+
+      agentChartsRef.current.setChart({
+        titleTips:[t('home.salesAmount'), t('home.flightSegmentsnumber')],
+        title:t('home.agent'),
+        xData:agentCode,
+        barData:agentTotalAmount,
+        lineData:agentTotalSegments,
+        barColor: [{offset: 0, color: priceColor}],
+        lineColor:primaryColor
+      },'default')
     }
-    if(dateSegmentRef.current){
-      segmentInstance.current =
-        echarts.getInstanceByDom(dateSegmentRef.current) || echarts.init(dateSegmentRef.current)
-    }
-    updateCharts()
   }
 
   const changeCanvas = () => {
-    const sorted = [...dataValue.flights].sort(
-      (a, b) => b.counts[typesModel] - a.counts[typesModel]
-    )
-
-    const data = tops !== 'all' ? sorted.slice(0, Number(tops)) : sorted
-
-    const { flightCode, 'counts.totalAmount': flightTotalAmount, 'counts.totalSegments': flightTotalSegments } = pluckFields<{
-      flightCode:string
-      counts:ICounts
-    }>(data, [
-      'flightCode',
-      'counts.totalAmount',
-      'counts.totalSegments',
-    ])
-    if (segmentInstance.current) {
-      segmentInstance.current.setOption(
-        getBaseOption(
-          t('order.sequence'),
-          flightCode,
-          flightTotalAmount,
-          flightTotalSegments,
-          [{offset: 0, color: '#174A91'},{offset: 1, color: '#68ADD6'}],
-          primaryColor,'seg'
-        )
+    if(segmentChartsRef.current){
+      const sorted = [...dataValue.flights].sort(
+        (a, b) => b.counts[typesModel] - a.counts[typesModel]
       )
+
+      const data = tops !== 'all' ? sorted.slice(0, Number(tops)) : sorted
+
+      const { flightCode, 'counts.totalAmount': flightTotalAmount, 'counts.totalSegments': flightTotalSegments } = pluckFields<{
+        flightCode:string
+        counts:ICounts
+      }>(data, [
+        'flightCode',
+        'counts.totalAmount',
+        'counts.totalSegments',
+      ])
+
+      segmentChartsRef.current.setChart({
+        titleTips:[t('home.salesAmount'), t('home.flightSegmentsnumber')],
+        title:t('order.sequence'),
+        xData:flightCode,
+        barData:flightTotalAmount,
+        lineData:flightTotalSegments,
+        barColor:[{offset: 0, color: '#174A91'},{offset: 1, color: '#68ADD6'}],
+        lineColor:primaryColor
+      },'default')
     }
   }
 
@@ -372,30 +231,6 @@ export default function Home(){
 
 
   const removeCanvas = () => {
-    if(hourAirlineInstance.current){
-      hourAirlineInstance.current.dispose()
-      hourAirlineInstance.current = null
-    }
-
-    if(dateAirlineInstance.current){
-      dateAirlineInstance.current.dispose()
-      dateAirlineInstance.current = null
-    }
-
-    if(airlineCompanyAmtInstance.current){
-      airlineCompanyAmtInstance.current.dispose()
-      airlineCompanyAmtInstance.current = null
-    }
-
-    if(agentInstance.current){
-      agentInstance.current.dispose()
-      agentInstance.current = null
-    }
-
-    if(segmentInstance.current){
-      segmentInstance.current.dispose()
-      segmentInstance.current = null
-    }
     console.log('Uninstall canvas')
   }
 
@@ -422,10 +257,6 @@ export default function Home(){
     }
   }
 
-  const changeSegmented = (val:string|number) => {
-    navigate(String(val))
-  }
-
   useEffect(() => {
     const initData = async () => {
       const local = pathname === '/'
@@ -438,50 +269,69 @@ export default function Home(){
 
   useEffect(() => {
     if(!localTime) return
-    getData()
+    const initData = async () => {
+      getData()
+    }
+    initData()
   },[localTime])
 
   useEffect(() => {
     setCanvas()
+    return () => {
+      removeCanvas()
+    }
   }, [dataValue]);
 
   useEffect(() => {
     changeCanvas()
-  }, [tops,typesModel,dataValue]);
+  }, [tops,typesModel,dataValue.flights]);
 
   return (
-    <section className={'containerMain'}>
-      <div className={'w-full mb-5 bg-(--bg)'}>
-        <Segmented block options={[{label:'当日数据',value:'/'}, {label:'销售数据',value:'/data/sale'}, {label:'查定数据',value:'/data/retrieval'}]} value={pathname} onChange={changeSegmented} />
-      </div>
+    <div>
       {
         !loading ?
           <Grid columns={2} gap={8}>
             <Grid.Item span={2}>
               <Card title={t('home.totalTransaction')} extra={<Button fill='none'><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
                 <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$23,108</span>
+                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
+                    {(() => {
+                      const totalAmount = dataValue.counts.totalAmount ?? 0;
+                      const [intPart] = totalAmount.toLocaleString().split('.');
+                      return intPart
+                    })()}
+                  </span>
                 </div>
               </Card>
             </Grid.Item>
             <Grid.Item span={2}>
               <Card title={t('home.discountAmount')}>
                 <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$1,318</span>
+                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
+                    {(() => {
+                      const totalProfit = dataValue.counts.totalProfit ?? 0;
+                      const [intPart] = totalProfit.toLocaleString().split('.');
+                      return intPart
+                    })()}
+                  </span>
                 </div>
               </Card>
             </Grid.Item>
             <Grid.Item span={1}>
               <Card title={t('home.ticketing')}>
                 <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>61</span>
+                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>
+                    {dataValue.counts.totalOrders.toLocaleString()}
+                  </span>
                 </div>
               </Card>
             </Grid.Item>
             <Grid.Item span={1}>
               <Card title={t('home.segment')}>
                 <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>86</span>
+                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>{
+                    dataValue.counts.totalSegments.toLocaleString()
+                  }</span>
                 </div>
               </Card>
             </Grid.Item>
@@ -491,21 +341,23 @@ export default function Home(){
                   ? t('home.todayTotalTurnover')
                   : t('home.totalTurnover')
               } extra={
-                  <DatePicker value={localTime as Date | [Date, Date]} changeDate={changeLocalTime} selectionModeValue={pathname === '/' ? 'single':'range'} />
+                pathname === '/' ?
+                <DatePicker value={localTime as Date} changeDate={changeLocalTime} selectionModeValue={'single'} />:
+                <DatePicker value={localTime as[Date, Date]} changeDate={changeLocalTime} selectionModeValue={'range'} />
               }>
-                <div ref={  pathname === '/'
-                  ? hourAirlineRef
-                  : dateAirlineRef} className={'h-[600px]'}></div>
+                <Charts ref={pathname === '/'
+                  ? hourChartsRef
+                  : dateChartsRef} />
               </Card>
             </Grid.Item>
             <Grid.Item span={2}>
               <Card title={t('home.agent')}>
-                <div ref={agentRef} className={'h-[600px]'}></div>
+                <Charts ref={agentChartsRef} />
               </Card>
             </Grid.Item>
             <Grid.Item span={2}>
               <Card title={t('home.airline')}>
-                <div ref={airlineCompanyAmtRef} className={'h-[600px]'}></div>
+                <Charts ref={airlineChartsRef} />
               </Card>
             </Grid.Item>
             <Grid.Item span={2}>
@@ -537,13 +389,13 @@ export default function Home(){
                   }}
                 />
 
-                <div ref={dateSegmentRef} className={'h-[600px]'}></div>
+                <Charts ref={segmentChartsRef} />
               </Card>
             </Grid.Item>
           </Grid>
           :
           <Loading />
       }
-    </section>
+    </div>
   )
 }

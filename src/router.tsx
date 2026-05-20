@@ -1,6 +1,7 @@
 import {createBrowserRouter} from "react-router";
 
 import Layout from "@/component/layout";
+import SegmentedTab from "@/component/dashboard/segmentedTab.tsx";
 import {
   AgentLoad,
   FoundationBookingLoad,
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path:'/',
+        element: <SegmentedTab />,
         children:[
           {
             path: '/',
@@ -31,6 +33,19 @@ export const router = createBrowserRouter([
             element: <RetrievalLoad />
           }
         ]
+      },
+      {
+        path:'/order/',
+        children:[
+          {
+            path:'ticket/:status?',
+            element: <OrderListLoad />
+          },
+        ]
+      },
+      {
+        path:'ticketDetail/:orderId/:status?',
+        element: <OrderDetailLoad />
       },
       {
         path: 'group/agent/:id?',
@@ -48,14 +63,6 @@ export const router = createBrowserRouter([
         path:'group/foundation/booking',
         element: <FoundationBookingLoad />
       },
-      {
-        path:'ticketOrder/:status?',
-        element: <OrderListLoad />
-      },
-      {
-        path:'ticketDetail/:orderId/:status?',
-        element: <OrderDetailLoad />
-      }
     ]
   }
 ], {basename: '/h5'})

@@ -212,7 +212,7 @@ export type IAppendForAttachTypes = {
     result:string|null
 }
 
-export type IOrderAuxiliary = Pick<IOrderRefund, 'id'|'orderId'|'shuttleNumber'|'remarks'|'message'|'lockedBy'|'operator'|'creator'|'sourceType'|'updatedTime'|'createdTime'|'expandSettings'|'order'|'replenishLogs'> & {
+export type IOrderAuxiliary = Pick<IOrderRefund, 'agentCode'|'branchCode'|'id'|'orderId'|'shuttleNumber'|'remarks'|'message'|'lockedBy'|'operator'|'creator'|'sourceType'|'updatedTime'|'createdTime'|'expandSettings'|'order'|'replenishLogs'> & {
     isConfirmed:boolean
     aLimit:string
     status:IAuxiliaryStatus
@@ -326,6 +326,8 @@ export interface ReplenishLogs {
 }
 
 export interface IOrderManual {
+    branchCode?: string
+    agentCode?:string
     agentId: string
     branchId: string
     id: string
@@ -409,6 +411,7 @@ export type IOrderRefund = Omit<IOrderManual, 'agentId'|'branchId'|'linkedNumber
     }[]
     status: IRefundStatus
     order?: IOrderManual & {
+        passengers: Passenger[]
         expandSettings?: (ExpandsSetting & {
             time: string|Date
         })[];

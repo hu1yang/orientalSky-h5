@@ -18,10 +18,11 @@ import {
 import {useDetailData} from "@/context/order/detailContext.tsx";
 import {result} from "@/utils/public.ts";
 
-export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itineraries}: {
+export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itineraries, statusId}: {
   auxiliaryList: IOrderAuxiliary[]
   passengers: Passenger[]
   itineraries: Itinerary[]
+  statusId: string|undefined
 }) {
   const {t} = useTranslation()
   const [auxiliaryTab, setAuxiliaryTab] = useState('')
@@ -167,10 +168,14 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
   },[auxiliaryTab,auxiliaryList])
 
   useEffect(() => {
-    if(auxiliaryList.length && !auxiliaryTab){
-      setAuxiliaryTab(auxiliaryList[0].id)
+    if(auxiliaryList.length && !auxiliaryTab) {
+      if(auxiliaryList.some(a => a.id === statusId)){
+        setAuxiliaryTab(statusId as string)
+      }else{
+        setAuxiliaryTab(auxiliaryList[0].id)
+      }
     }
-  },[auxiliaryList,auxiliaryTab])
+  }, [statusId,auxiliaryList,auxiliaryTab]);
 
   return (
     <div>

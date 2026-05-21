@@ -36,7 +36,7 @@ export default function TabBarComponent(){
     switch (true){
       case (['/' , '/data/sale' , '/data/retrieval'].includes(pathname)):
         return 'home'
-      case !!pathname.indexOf('order'):
+      case pathname.includes('order'):
         return 'order'
       default:
         return 'home'

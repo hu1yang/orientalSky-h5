@@ -11,4 +11,5 @@ export const FoundationBookingLoad = lazy(() => import('@/app/foundation/booking
 
 
 export const OrderListLoad = lazy(() => import('@/app/order/orderList.tsx'));
+
 export const OrderDetailLoad = lazy(() => import('@/app/order/detail.tsx'));

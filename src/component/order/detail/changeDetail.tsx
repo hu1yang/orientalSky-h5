@@ -14,10 +14,11 @@ import {statusChangeArs} from "@/utils/common.ts";
 import RCAmount from "@/component/order/form/rcAmount.tsx";
 import NoData from "@/component/default/noData.tsx";
 
-export default memo(function ChangeDetail({changeList, passengers, itineraries}: {
+export default memo(function ChangeDetail({changeList, passengers, itineraries, statusId}: {
   changeList: IChange[]
   passengers: Passenger[]
   itineraries: Itinerary[]
+  statusId: string|undefined
 }) {
   const {t} = useTranslation()
   const [changeTab, setChangeTab] = useState('')
@@ -88,10 +89,14 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries}:
 
 
   useEffect(() => {
-    if(changeList.length && !changeTab){
-      setChangeTab(changeList[0].id)
+    if(changeList.length && !changeTab) {
+      if(changeList.some(a => a.id === statusId)){
+        setChangeTab(statusId as string)
+      }else{
+        setChangeTab(changeList[0].id)
+      }
     }
-  },[changeList,changeTab])
+  }, [statusId,changeList,changeTab]);
 
   return (
     <div>

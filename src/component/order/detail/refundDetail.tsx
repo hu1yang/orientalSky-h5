@@ -21,10 +21,11 @@ import type {IRefund, Itinerary, Passenger} from "@/types/order.ts";
 import {result} from "@/utils/public.ts";
 import NoData from "@/component/default/noData.tsx";
 
-export default memo(function RefundDetail({refundList, passengers, itineraries}: {
+export default memo(function RefundDetail({refundList, passengers, itineraries, statusId}: {
   refundList: IRefund[]
   passengers: Passenger[]
   itineraries: Itinerary[]
+  statusId: string|undefined
 }) {
   const {t} = useTranslation()
   const [refundTab, setRefundTab] = useState('')
@@ -182,11 +183,16 @@ export default memo(function RefundDetail({refundList, passengers, itineraries}:
     setRefundList(newChangeList)
   },[refundTab,refundList])
 
+
   useEffect(() => {
-    if(refundList.length && !refundTab){
-      setRefundTab(refundList[0].id)
+    if(refundList.length && !refundTab) {
+      if(refundList.some(a => a.id === statusId)){
+        setRefundTab(statusId as string)
+      }else{
+        setRefundTab(refundList[0].id)
+      }
     }
-  },[refundList,refundTab])
+  }, [statusId,refundList,refundTab]);
 
   return (
     <div>

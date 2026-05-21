@@ -9,13 +9,15 @@ import {useDetailData} from "@/context/order/detailContext.tsx";
 import DetailListProvider from "@/context/order/detailProvider.tsx";
 
 import {copyText} from "@/utils/public.ts";
-import {calculateTotalPriceByPassengers} from "@/utils/order.tsx";
+import {calculateTotalPriceByPassengers, statusArs} from "@/utils/order.ts";
 import {
   getAppendInfosGroup,
   getChangeInfosGroup,
   getOrderInfoGroup,
   getRefundInfosGroup
 } from "@/utils/request/group.ts";
+import type { ITicketStatus } from "@/types/order.ts";
+
 
 import AmountCard from "@/component/order/detail/amountCard.tsx";
 import SegmentCard from "@/component/order/detail/segmentCard.tsx";
@@ -38,7 +40,7 @@ function DetailInfo(){
   const {t} = useTranslation()
   const [loading, setLoading] = useState(true)
   const [loadingCom, setLoadingCom] = useState(true)
-  const {orderId,status} = useParams()
+  const {orderId,status,statusId} = useParams()
   const agentMap = useSelector(selectAgentMap)
 
   const tabs = [
@@ -117,8 +119,8 @@ function DetailInfo(){
     getRefundInfosGroup(id).then(res => {
       if(res.length){
         setRefundList(res)
-        setLoadingCom(false)
       }
+      setLoadingCom(false)
     })
   }
 
@@ -126,8 +128,8 @@ function DetailInfo(){
     getChangeInfosGroup(id).then(res => {
       if(res.length){
         setChangeList(res)
-        setLoadingCom(false)
       }
+      setLoadingCom(false)
     })
   }
 
@@ -135,8 +137,8 @@ function DetailInfo(){
     getAppendInfosGroup(id).then(res => {
       if(res.length){
         setAuxiliaryList(res)
-        setLoadingCom(false)
       }
+      setLoadingCom(false)
     })
   }
 
@@ -146,9 +148,9 @@ function DetailInfo(){
       <AmountCard itineraryList={computedOrderItineraries} travelers={orderDetail?.request.travelers ?? []} currency={orderDetail?.currency || ''} totalPrice={totalPrice} policies={orderDetail?.policies ?? []} />
       <SegmentCard itineraryList={computedOrderItineraries} />
     </>,
-    refund: loadingCom ? <SpinLoading color='primary' /> : <RefundDetail refundList={refundList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
-    change: loadingCom ? <SpinLoading color='primary' /> :  <ChangeDetail changeList={changeList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
-    auxiliary: loadingCom ? <SpinLoading color='primary' /> : <AuxiliaryDetail auxiliaryList={auxiliaryList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} />,
+    refund: loadingCom ? <SpinLoading color='primary' /> : <RefundDetail refundList={refundList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} statusId={statusId} />,
+    change: loadingCom ? <SpinLoading color='primary' /> :  <ChangeDetail changeList={changeList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} statusId={statusId} />,
+    auxiliary: loadingCom ? <SpinLoading color='primary' /> : <AuxiliaryDetail auxiliaryList={auxiliaryList} passengers={orderDetail?.passengers ?? []} itineraries={computedOrderItineraries} statusId={statusId} />,
 
   }
 
@@ -195,7 +197,7 @@ function DetailInfo(){
                   </div>
                   <div className={'flex flex-row items-center mb-5'}>
                     <div className={'flex flex-col'}>
-                      <span className={'text-[1rem] text-(--text)'}>TOTAL</span>
+                      <span className={'text-[1rem] text-(--text)'}>{t('order.totalPrice')}</span>
                       <div className={'leading-none'}>
                         <span className={'font-bold text-[3rem] text-(--price-color)'}>{totalPrice}</span>
                         <span className={'text-[1rem] text-(--text) ml-1'}>{orderDetail.currency}</span>
@@ -211,7 +213,7 @@ function DetailInfo(){
                         <Badge color='#108ee9' content={Badge.dot}
                                style={badgeStyle}>
                         </Badge>
-                        <span className={'ml-2'}>{orderDetail.status}</span>
+                        <span className={'ml-2'}>{t('common.' + statusArs[(orderDetail.status as ITicketStatus)])}</span>
                       </div>
                     </div>
                   </div>

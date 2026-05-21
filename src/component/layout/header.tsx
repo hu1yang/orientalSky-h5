@@ -3,7 +3,7 @@ import {BellOutline, SearchOutline} from "antd-mobile-icons";
 
 export default function Header(){
   return (
-      <div className={'lg:w-(--container-width) w-full px-(--layout-padding) h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-99999999'}>
+      <div className={'lg:w-(--container-width) w-full px-(--layout-padding) h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-99'}>
         <div className={'w-full flex items-center h-full'}>
           <div className={'flex justify-between w-full items-center'}>
             <div className={'flex items-center'}>

@@ -7,6 +7,8 @@ import axios, {
 import Cookie from 'js-cookie'
 import {normalizeParams} from "@/utils/public.ts";
 import {Toast} from "antd-mobile";
+import {store} from "@/store";
+import {removeLogin} from "@/store/modules/tool.ts";
 
 
 
@@ -101,6 +103,7 @@ instance.interceptors.response.use(
                     })
                     break
                 case 401:
+                    store.dispatch(removeLogin())
                     Toast.show({
                         icon: 'fail',
                         content: '401',

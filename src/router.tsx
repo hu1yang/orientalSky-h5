@@ -8,7 +8,7 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad, RetrievalLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad
 } from "./routerMenu.ts";
 
 export const router = createBrowserRouter([
@@ -54,19 +54,24 @@ export const router = createBrowserRouter([
             path:'auxiliary/:status?',
             element: <OrderListLoad />
           },
+          {
+            path:'detail/:orderId/:status?/:statusId?',
+            element: <OrderDetailLoad />
+          },
         ]
       },
       {
-        path:'ticketDetail/:orderId/:status?/:statusId?',
-        element: <OrderDetailLoad />
-      },
-      {
-        path: 'group/agent/:id?',
-        element: <AgentLoad/>
-      },
-      {
-        path: '/group/agent/configuration/:id/:branchId',
-        element: <AgentInfoLoad/>
+        path:'/group/',
+        children:[
+          {
+            path: 'agent/:id?',
+            element: <AgentLoad/>
+          },
+          {
+            path: 'agent/configuration/:id',
+            element: <AgentInfoLoad/>
+          },
+        ]
       },
       {
         path: 'group/rechargePayment',
@@ -77,5 +82,9 @@ export const router = createBrowserRouter([
         element: <FoundationBookingLoad />
       },
     ]
+  },
+  {
+    path:'/login',
+    element: <LoginLoad />
   }
 ], {basename: '/h5'})

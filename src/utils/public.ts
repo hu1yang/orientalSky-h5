@@ -5,6 +5,14 @@ import {Toast} from "antd-mobile";
 
 export const getLocale = resolveLocale()
 
+export function generateCompanyCode(): string {
+  const prefix = 'CMP'
+  const datePart = new Date().toISOString().split('T')[0].replace(/-/g, '')
+  const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase()
+
+  return `${prefix}-${datePart}-${randomPart}`
+}
+
 export function getCssVar(name: string) {
   return getComputedStyle(document.documentElement)
     .getPropertyValue(name)

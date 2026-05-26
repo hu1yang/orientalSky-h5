@@ -11,7 +11,7 @@ import {
   Grid,
   ImageViewer,
   InfiniteScroll,
-  Input,
+  Input, Loading,
   Popup, PullToRefresh,
   Space, Steps,
   Tag, TextArea,
@@ -49,12 +49,11 @@ type IUrUserObj = { accountInfo:IAgentPayment,accountPrice:GroupBalance,totalAmo
 const { Step } = Steps
 export default function AgentRechargePayment() {
   const {t} = useTranslation()
-  const initRef = useRef(false)
+  const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
 
   const [hasMore, setHasMore] = useState(false)
   const pageRef = useRef(0)
-  const loadingRef = useRef(false)
   const [searchForm, setSearchForm] = useState<ISearchRechargeForm>({
     transactionId:'',
     id:'',
@@ -89,13 +88,12 @@ export default function AgentRechargePayment() {
 
 
   const resetData = async () => {
+    pageRef.current = 0
     await getData(0,true)
   }
 
   const getData = (nextPage:number,reset:boolean = false) => {
-    if (loadingRef.current) return
-    loadingRef.current = true
-    setHasMore(false)
+    setLoading(reset)
     try {
       getAgentPaymentsGroup({pageSize:20,page:nextPage},searchForm).then((res) => {
         if(res){
@@ -117,7 +115,7 @@ export default function AgentRechargePayment() {
         }
       })
     } finally {
-      loadingRef.current = false
+      setLoading(false)
     }
   }
 
@@ -287,127 +285,131 @@ export default function AgentRechargePayment() {
   }
 
   useEffect(() => {
-    if (initRef.current) return
-    initRef.current = true
     getExchange()
-    getData(pageRef.current,true)
+    getData(0,true)
   }, []);
   return (
     <section className={'containerMain'}>
       <div className={'p-2'}>
-        <PullToRefresh onRefresh={resetData}>
-          {
-            listValue.map((item) => (
-              <Card className={'mb-2'}
-                    title={
-                      <div className={'flex items-center'}>
-                        <BillOutline fontSize={20} color={'var(--warning-color)'} />
-                        <span className={'text-[1.1rem] ml-2 font-normal'}>
+        {
+          !loading? <>
+              <PullToRefresh onRefresh={resetData}>
+                {
+                  listValue.map((item) => (
+                    <Card className={'mb-2'}
+                          title={
+                            <div className={'flex items-center'}>
+                              <BillOutline fontSize={20} color={'var(--warning-color)'} />
+                              <span className={'text-[1.1rem] ml-2 font-normal'}>
                         {item.agentCode}
                       </span>
-                      </div>
-                    }
-                    extra={
-                      <Tag round color={item.status === 'pending' ? 'warning' : item.status === 'reviewed' ? 'success' : 'primary'}>{t('order.'+item.status)}</Tag>
-                    }
-                    key={item.id}>
-                <div></div>
-                <div className={'text-left'}>
-                  <div>
-                    <div className={'mb-2'}>
+                            </div>
+                          }
+                          extra={
+                            <Tag round color={item.status === 'pending' ? 'warning' : item.status === 'reviewed' ? 'success' : 'primary'}>{t('order.'+item.status)}</Tag>
+                          }
+                          key={item.id}>
+                      <div></div>
+                      <div className={'text-left'}>
+                        <div>
+                          <div className={'mb-2'}>
                     <span className={'text-[1.6rem] text-(--success-color)'}>
                       {item.totalAmount.toLocaleString()}
                     </span>
-                      <span className={'text-(--price-color) text-[1.8rem] ml-2'}>{item.currency}/<span className={'text-[1.2rem]'}>{item.exchangeRate}</span></span>
-                    </div>
-                    {
-                      !!item.agentHistory && (
-                        <>
-                          <div className={'flex'}>
-                            <div>
+                            <span className={'text-(--price-color) text-[1.8rem] ml-2'}>{item.currency}/<span className={'text-[1.2rem]'}>{item.exchangeRate}</span></span>
+                          </div>
+                          {
+                            !!item.agentHistory && (
+                              <>
+                                <div className={'flex'}>
+                                  <div>
                             <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.beforeBalance.toLocaleString()}
                               <em className={'text-[1rem] ml-1'}>USD</em>
                             </span>
-                            </div>
-                            <span className={'text-[1rem] ml-3'}>{t('order.beforeBalance')}</span>
-                          </div>
-                          <div className={'flex'}>
-                            <div>
+                                  </div>
+                                  <span className={'text-[1rem] ml-3'}>{t('order.beforeBalance')}</span>
+                                </div>
+                                <div className={'flex'}>
+                                  <div>
                             <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.currentBalance.toLocaleString()}
                               <em className={'text-[1rem] ml-1'}>USD</em>
                             </span>
-                            </div>
-                            <span className={'text-[1rem] ml-3'}>{t('order.currentBalance')}</span>
-                          </div>
-                        </>
-                      )
-                    }
-                  </div>
-                  <Divider />
-                  <div>
-                    <CardText label={t('group.company')} value={item.branchCode} valueStyle={'!text-(--warning-color) text-[1.2rem]'} />
-                    <CardText label={t('group.transactionId')} value={item.transactionId} />
-                    <CardText label={t('group.creationTime')} value={dayjs(item.createdTime).format('YYYY-MM-DD HH:MM')} />
-                    <CardText label={t('group.updatedTime')} value={dayjs(item.createdTime).format('YYYY-MM-DD HH:MM')} />
-                    <CardText label={t('order.notes')} value={item.remarks} style={'items-start'} valueStyle={'!text-(--warning-color)'} />
-                  </div>
-                  <Divider contentPosition='left'>{t('order.paymentBank')}</Divider>
-                  <div>
-                    <CardText value={item.bankAccountName} />
-                    <CardText value={item.bankSwiftOrName} />
-                    <CardText value={item.bankAccountCode} />
-                  </div>
-                  {
-                    !!(item.agentReceipts && item.agentReceipts.length) && (
-                      <>
-                        <Divider contentPosition='left'>{t('common.viewRecharge')}</Divider>
-                        <Space direction='vertical'>
-                          {
-                            item.agentReceipts.map((agentReceipt) => (
-                              <div key={agentReceipt.id} onClick={() => previewFile(agentReceipt.id,agentReceipt.fileType)}>
-                                <span className={'break-all text-(--active-color)'}>{agentReceipt.fileName}</span>
-                              </div>
-                            ))
+                                  </div>
+                                  <span className={'text-[1rem] ml-3'}>{t('order.currentBalance')}</span>
+                                </div>
+                              </>
+                            )
                           }
-                        </Space>
-                      </>
-                    )
-                  }
-                  {
-                    (item.changedType === 'outlay' || (item.changedType === 'income' && !!item.agentReceipts.length)) && (
-                      <>
-                        <Divider/>
-                        <div className={'flex justify-end'}>
-                          <Space justify={'end'}>
-                            <Button shape='rounded' size={'small'} color={'danger'}
-                                    onClick={() => cancelRechargePayment(item.id)}>{t('common.rejectRecharge')}</Button>
-                            {
-                              item.status === 'pending' && (
-                                <Button shape='rounded' size={'small'} color={'primary'}
-                                        onClick={() => reviewPayment(item)}>{t('common.reviewAgentBalance')}</Button>
-                              )
-                            }
-                            {
-                              item.status === 'reviewed' && (
-                                <Button shape='rounded' size={'small'} color={'success'}
-                                        onClick={() => openPaymentSure(item)}>{t('common.surePayment')}</Button>
-                              )
-                            }
-                          </Space>
                         </div>
-                      </>
-                    )
-                  }
-                </div>
-              </Card>
-            ))
-          }
-        </PullToRefresh>
-        {
-          !!listValue.length && (
-            <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
-          )
+                        <Divider />
+                        <div>
+                          <CardText label={t('group.company')} value={item.branchCode} valueStyle={'!text-(--warning-color) text-[1.2rem]'} />
+                          <CardText label={t('group.transactionId')} value={item.transactionId} />
+                          <CardText label={t('group.creationTime')} value={dayjs(item.createdTime).format('YYYY-MM-DD HH:MM')} />
+                          <CardText label={t('group.updatedTime')} value={dayjs(item.createdTime).format('YYYY-MM-DD HH:MM')} />
+                          <CardText label={t('order.notes')} value={item.remarks} style={'items-start'} valueStyle={'!text-(--warning-color)'} />
+                        </div>
+                        <Divider contentPosition='left'>{t('order.paymentBank')}</Divider>
+                        <div>
+                          <CardText value={item.bankAccountName} />
+                          <CardText value={item.bankSwiftOrName} />
+                          <CardText value={item.bankAccountCode} />
+                        </div>
+                        {
+                          !!(item.agentReceipts && item.agentReceipts.length) && (
+                            <>
+                              <Divider contentPosition='left'>{t('common.viewRecharge')}</Divider>
+                              <Space direction='vertical'>
+                                {
+                                  item.agentReceipts.map((agentReceipt) => (
+                                    <div key={agentReceipt.id} onClick={() => previewFile(agentReceipt.id,agentReceipt.fileType)}>
+                                      <span className={'break-all text-(--active-color)'}>{agentReceipt.fileName}</span>
+                                    </div>
+                                  ))
+                                }
+                              </Space>
+                            </>
+                          )
+                        }
+                        {
+                          (item.changedType === 'outlay' || (item.changedType === 'income' && !!item.agentReceipts.length)) && (
+                            <>
+                              <Divider/>
+                              <div className={'flex justify-end'}>
+                                <Space justify={'end'}>
+                                  <Button shape='rounded' size={'small'} color={'danger'}
+                                          onClick={() => cancelRechargePayment(item.id)}>{t('common.rejectRecharge')}</Button>
+                                  {
+                                    item.status === 'pending' && (
+                                      <Button shape='rounded' size={'small'} color={'primary'}
+                                              onClick={() => reviewPayment(item)}>{t('common.reviewAgentBalance')}</Button>
+                                    )
+                                  }
+                                  {
+                                    item.status === 'reviewed' && (
+                                      <Button shape='rounded' size={'small'} color={'success'}
+                                              onClick={() => openPaymentSure(item)}>{t('common.surePayment')}</Button>
+                                    )
+                                  }
+                                </Space>
+                              </div>
+                            </>
+                          )
+                        }
+                      </div>
+                    </Card>
+                  ))
+                }
+              </PullToRefresh>
+              {
+                !!listValue.length && (
+                  <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+                )
+              }
+            </>:
+            <Loading />
         }
+
       </div>
       <ImageViewer
         classNames={{

@@ -1,19 +1,27 @@
 import {Suspense, useEffect, useState} from "react";
-import {Outlet} from "react-router";
+import {Outlet, useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {setBranchAgents, setBranchMore, setChannel} from "@/store/modules/base.ts";
+import {setIdentity} from "@/store/modules/tool.ts";
 
 import Cookie from 'js-cookie'
 import {SafeArea} from "antd-mobile";
 import Header from "./header.tsx";
 import TabBarComponent from "./tabbar.tsx";
 
-import {getBranchAgents, getGroupBranchs} from "@/utils/request/identity.ts";
+import {getBranchAgents, getGroupBranchs, getIdentity} from "@/utils/request/identity.ts";
 import {getChannelSettingsGroup} from "@/utils/request/group.ts";
 
 export default function Layout(){
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(true)
   const dispatch = useDispatch()
+
+  const setIdentityFnc = async () => {
+    const response = await getIdentity()
+    dispatch(setIdentity(response))
+  }
 
   const getBranchAgent = async () => {
     const [agents, more] = await Promise.all([
@@ -33,15 +41,14 @@ export default function Layout(){
 
   useEffect(() => {
     const init = async () => {
-      if (!Cookie.get('token')) return
-
-      // await getBranchAgent()
-      // await getChannel()
-
-      // 需删除
-      setLoading(false)
+      if (!Cookie.get('token')) {
+        navigate('/login')
+      } else {
+        await setIdentityFnc()
+        await getBranchAgent()
+        await getChannel()
+      }
     }
-
     init()
   }, [])
 

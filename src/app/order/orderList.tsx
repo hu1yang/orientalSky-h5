@@ -4,8 +4,21 @@ import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
 
-import {Button, Card, Divider, Grid, InfiniteScroll, Loading, PullToRefresh, Space, Tag, Toast} from "antd-mobile";
-import {CouponOutline, LockOutline, UnlockOutline} from "antd-mobile-icons";
+import {
+  Button,
+  Card,
+  Divider, Form,
+  Grid,
+  InfiniteScroll, Input,
+  Loading, Popup,
+  PullToRefresh,
+  Radio,
+  SearchBar,
+  Space,
+  Tag,
+  Toast
+} from "antd-mobile";
+import {CouponOutline, FilterOutline, LockOutline, UnlockOutline} from "antd-mobile-icons";
 
 import CardText from "@/component/card/cardText.tsx";
 import SegmentBox from "@/component/order/segment.tsx";
@@ -39,6 +52,7 @@ import {
 import {selectAgentMap} from "@/store/modules/base.ts";
 import Log from "@/component/default/log.tsx";
 import type {OrderInfo} from "@/types/group.ts";
+import AgentSearch from "@/component/default/agentSearch.tsx";
 
 
 
@@ -54,6 +68,89 @@ const statusMap: StatusMap = {
   refund: statusArsRefund,
   change: statusArsChange,
   auxiliary: statusArsAuxiliary,
+}
+
+const ticketSearch = {
+  searchKey:'',
+  branchId:'',
+  agentId:'',
+  bookingOrderId:'',
+  bookingNumber:'',
+  flightNumber:'',
+  shuttleNumber: '',
+  id: '',
+  linkedNumber: '',
+  travelerName: '',
+  travelerIdNo: '',
+  travelerType: null,
+  travelerSex: null,
+  travelerCountry: '',
+  isLockedBy: null,
+  minTime: '',
+  maxTime: '',
+  minTLimit: '',
+  maxTLimit: '',
+  status: '',
+  sourceType: '',
+  carrier:'',
+  teamedKey:'',
+  ticketNumber:'',
+  minTravelTime:'',
+  maxTravelTime:'',
+  resultType:'',
+  departureAirport:'',
+  arrivalAirport:''
+}
+const refundSearch = {
+  shuttleNumber: '',
+  orderId: '',
+  id: '',
+  operator: '',
+  creator: '',
+  minRLimit: '',
+  maxRLimit: '',
+  minTime: '',
+  maxTime: '',
+  sourceType: '',
+  status: '',
+  agentId:'',
+  branchId:'',
+  lockedBy:'',
+  isLockedBy:'',
+  carrier:'',
+  bookingNumber:''
+}
+const changeSearch = {
+  shuttleNumber: '',
+  orderId: '',
+  id: '',
+  minTime: '',
+  maxTime: '',
+  minCLimit: '',
+  maxCLimit: '',
+  status: '',
+  sourceType: '',
+  carrier:'',
+  ticketNumber:'',
+  bookingNumber:''
+}
+const auxiliarySearch = {
+  shuttleNumber: '',
+    agentId:'',
+    orderId: '',
+    branchId:'',
+    id: '',
+    channelCode:'',
+    operator: '',
+    creator: '',
+    minTime: '',
+    maxTime: '',
+    sourceType: '',
+    status: '',
+    lockedBy:'',
+    isLockedBy:'',
+    attachType:null,
+    bookingNumber:''
 }
 
 const ListCard = memo(({listValue, getlogFnc, pathType}: {
@@ -79,9 +176,9 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
 
   const toDetail = () => {
     if(pathType === 'ticket'){
-      navigate(`/ticketDetail/${orderInfo?.id}`)
+      navigate(`/order/detail/${orderInfo?.id}`)
     }else{
-      navigate(`/ticketDetail/${orderInfo?.id}/${pathType}/${listValue.id}`)
+      navigate(`order/detail/${orderInfo?.id}/${pathType}/${listValue.id}`)
     }
   }
 
@@ -135,7 +232,7 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
       <div className={'w-full mb-5'}>
         <CardText label={t('foundation.agent')} value={`${listValue?.branchCode} ${listValue?.agentCode}`} labelStyle={'!w-20'} />
         <CardText label={t('order.passenger')} value={
-          <Space style={{ '--gap': '4px' }} direction='vertical' wrap>
+          <Space style={{ '--gap': '4px' }} direction='vertical' wrap className={'w-full'}>
             {
               passengers && passengers.map((passenger:Passenger) => (
                 <div key={passenger.id} className={'break-all'}>
@@ -186,43 +283,19 @@ export default function OrderList(){
   const location = useLocation()
   const {pathname} = location
   const {status} = useParams()
+  const {t} = useTranslation()
   const agentMap = useSelector(selectAgentMap)
 
   const [hasMore, setHasMore] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const pageRef = useRef(1)
-  const [searchForm, setSearchForm] = useState<IOrderManualSearchForm|IOrderRefundSearchForm|IOrderChangeSearchForm|IOrderAuxiliarySearchForm>({
-    // searchKey:'',
-    // branchId:'',
-    // agentId:'',
-    // bookingOrderId:'',
-    // bookingNumber:'',
-    // flightNumber:'',
-    // shuttleNumber: '',
-    // id: '',
-    // linkedNumber: '',
-    // travelerName: '',
-    // travelerIdNo: '',
-    // travelerType: null,
-    // travelerSex: null,
-    // travelerCountry: '',
-    // isLockedBy: null,
-    // minTime: '',
-    // maxTime: '',
-    // minTLimit: '',
-    // maxTLimit: '',
-    // status: status ? status as ITicketStatus : null,
-    // sourceType: '',
-    // carrier:'',
-    // teamedKey:'',
-    // ticketNumber:'',
-    // minTravelTime:'',
-    // maxTravelTime:'',
-    // resultType:'',
-    // departureAirport:'',
-    // arrivalAirport:''
-  })
+
+  const [keyword, setKeyword] = useState('')
+  const [visiblePopSearch, setVisiblePopSearch] = useState(false)
+  const [searchForm] = Form.useForm()
+
+  const [searchFormData, setSearchFormData] = useState<IOrderManualSearchForm | IOrderRefundSearchForm | IOrderChangeSearchForm | IOrderAuxiliarySearchForm | null>(null)
   const [listValue, setListValue] = useState<(IOrderManual | IOrderRefund | IOrderChange | IOrderAuxiliary)[]>([])
 
   const pathType = useMemo(()=>{
@@ -267,17 +340,17 @@ export default function OrderList(){
   }
 
   const getData = async (nextPage:number,reset:boolean = false) => {
-    if(reset) setLoading(true)
+    setLoading(reset)
     try {
       let response
       if(pathType === 'ticket'){
-        response = await getOrdersListGroup({pageSize:20,page:nextPage},searchForm as IOrderManualSearchForm)
+        response = await getOrdersListGroup({pageSize:20,page:nextPage},searchFormData as IOrderManualSearchForm)
       } else if(pathType === 'refund'){
-        response = await getRefundsListGroup({pageSize:20,page:nextPage},searchForm as IOrderRefundSearchForm)
+        response = await getRefundsListGroup({pageSize:20,page:nextPage},searchFormData as IOrderRefundSearchForm)
       } else if(pathType === 'change'){
-        response = await getChangesListGroup({pageSize:20,page:nextPage},searchForm as IOrderChangeSearchForm)
+        response = await getChangesListGroup({pageSize:20,page:nextPage},searchFormData as IOrderChangeSearchForm)
       } else {
-        response = await getAppendsListGroup({pageSize:20,page:nextPage},searchForm as IOrderAuxiliarySearchForm)
+        response = await getAppendsListGroup({pageSize:20,page:nextPage},searchFormData as IOrderAuxiliarySearchForm)
       }
       if(response){
         const value = response.items.map(item => {
@@ -301,14 +374,61 @@ export default function OrderList(){
     }
   }
 
+  const onSearchFinish = (val) => {
+    setSearchFormData(prevState => ({
+      ...prevState,
+      ...val,
+    }))
+    closeFilter()
+  }
+
+  const resetSearchFilter = () => {
+    searchForm.resetFields()
+    setKeyword('')
+    switch (pathType){
+      case 'ticket':
+        setSearchFormData(ticketSearch as IOrderManualSearchForm)
+        break
+      case 'refund':
+        setSearchFormData(refundSearch as IOrderRefundSearchForm)
+        break
+      case 'change':
+        setSearchFormData(changeSearch as IOrderChangeSearchForm)
+        break
+      case 'auxiliary':
+        setSearchFormData(auxiliarySearch as IOrderAuxiliarySearchForm)
+        break
+    }
+
+    closeFilter()
+  }
+
+  const closeFilter = () => {
+    setVisiblePopSearch(false)
+  }
+
+  const searchFilter = (val: string) => {
+    setSearchFormData(prev => ({
+      ...prev,
+      id:val
+    }) as IOrderManualSearchForm | IOrderRefundSearchForm | IOrderChangeSearchForm | IOrderAuxiliarySearchForm)
+  }
 
   useEffect(() => {
     resetData()
-  }, [pathType]);
+  }, [pathType,searchFormData]);
 
 
   return (
     <div className="p-2">
+      <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('order.orderNo')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
+                   onSearch={searchFilter} onClear={() => searchFilter('')}/>
+        <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+          <FilterOutline fontSize={18} color={'var(--active-color)'} />
+        </Button>
+      </div>
       {
         !loading ? <>
             <PullToRefresh onRefresh={resetData}>
@@ -326,8 +446,50 @@ export default function OrderList(){
           </>:
           <Loading />
       }
-
       <Log ref={logRef} />
+      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+             bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
+        <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
+          <Grid columns={2} gap={8}>
+            <Grid.Item>
+              <Button block size='small' onClick={resetSearchFilter}>
+                {t('group.reset')}
+              </Button>
+            </Grid.Item>
+            <Grid.Item>
+              <Button block type='submit' color='primary' size='small'>
+                {t('common.search')}
+              </Button>
+            </Grid.Item>
+          </Grid>
+        }>
+          <Form.Item label={t('foundation.agent')} name={'agentId'}>
+            <AgentSearch />
+          </Form.Item>
+          <Form.Item label={t('order.ticketNumber')} name={'ticketNumber'}>
+            <Input placeholder={t('order.ticketNumber')} />
+          </Form.Item>
+          {
+            pathType === 'ticket' &&
+              <Form.Item label={t('group.bookingNumber')} name={'bookingNumber'}>
+                  <Input placeholder={t('group.bookingNumber')} />
+              </Form.Item>
+          }
+
+          <Form.Item label={t('order.orderStatus')} name={'status'}>
+            <Radio.Group>
+              <Space direction='vertical' wrap>
+                <Radio value={''}>{t('common.routerTicketingAll')}</Radio>
+                {
+                  Object.entries(statusMap[pathType]).map(([key, value]) => (
+                    <Radio key={key} value={key}>{t('common.'+value)}</Radio>
+                  ))
+                }
+              </Space>
+            </Radio.Group>
+          </Form.Item>
+        </Form>
+      </Popup>
     </div>
     )
 }

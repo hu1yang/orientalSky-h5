@@ -15,16 +15,16 @@ const tabs = [
     title: '订单',
     icon: <AppOutline />,
   },
-  // {
-  //   key: 'home',
-  //   title: '首页',
-  //   icon: <AppOutline />,
-  // },
-  // {
-  //   key: 'home',
-  //   title: '首页',
-  //   icon: <AppOutline />,
-  // },
+  {
+    key: 'agent',
+    title: '代理',
+    icon: <AppOutline />,
+  },
+  {
+    key: 'rechargePayment',
+    title: '充值',
+    icon: <AppOutline />,
+  },
 ]
 
 export default function TabBarComponent(){
@@ -40,6 +40,10 @@ export default function TabBarComponent(){
         return 'order'
       default:
         return 'home'
+      case pathname.includes('/group/agent'):
+        return 'agent'
+      case pathname.includes('/group/rechargePayment'):
+        return 'rechargePayment'
     }
   },[pathname])
 
@@ -50,6 +54,13 @@ export default function TabBarComponent(){
         break
       case 'order':
         navigate('/order/ticket')
+        break
+      case 'agent':
+        navigate('/group/agent')
+        break
+      case 'rechargePayment':
+        navigate('/group/rechargePayment')
+        break
     }
   }
   return (

@@ -1,5 +1,7 @@
 import {lazy} from "react";
 
+export const LoginLoad = lazy(() => import('@/app/login/index.tsx'));
+
 export const HomeLoad = lazy(() => import('@/app/dashboard/index'));
 export const RetrievalLoad = lazy(() => import('@/app/dashboard/retrieval.tsx'));
 

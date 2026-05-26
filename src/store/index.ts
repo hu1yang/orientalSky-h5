@@ -1,10 +1,12 @@
 import {configureStore} from "@reduxjs/toolkit"
 
-import baseSlice from './modules/base.ts'
+import baseSlice from './modules/base.ts';
+import toolSlice from './modules/tool.ts';
 
 export const store = configureStore({
   reducer: {
-    baseInfo: baseSlice
+    baseInfo: baseSlice,
+    toolInfo: toolSlice,
   }
 })
 

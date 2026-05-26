@@ -53,19 +53,18 @@ export default function Index() {
   const [agents, setAgents] = useState<IAgent[]>([])
 
   const getData = async () => {
-    setLoading(true)
+    // setLoading(true)
     try {
-      getAgentsCount(searchForm).then((res) => {
-        const data = res.items.map(item => {
-          const info = agentMap.get(item.branchId)
-          return {
-            branchCode: info?.branchCode,
-            agentCode: info?.agentCode,
-            ...item
-          }
-        })
-        setAgents(data)
+      const response = await getAgentsCount(searchForm)
+      const data = response.items.map(item => {
+        const info = agentMap.get(item.branchId)
+        return {
+          branchCode: info?.branchCode,
+          agentCode: info?.agentCode,
+          ...item
+        }
       })
+      setAgents(data)
     } finally {
       setLoading(false)
     }
@@ -82,29 +81,6 @@ export default function Index() {
       <section className={'containerMain'}>
         <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
           <SearchBar className={'flex-1'} placeholder={'Search Agent Name'} style={{'--background': '#e8e9ed' ,'--border-radius':'20px'}} />
-          <Dropdown className={'!bg-transparent p-0'} arrowIcon={null}>
-            <Dropdown.Item key='sorter' title={
-              <div className={'flex items-center'}>
-                <FilterOutline fontSize={'1.4rem'} />
-                <span className={'text-[1.1rem] ml-1'}>Filters</span>
-              </div>
-            }>
-              <Form layout='horizontal' footer={
-                <Space wrap className={'w-full'}>
-                  <Button block type='submit' color='primary' size='small'>
-                    重置
-                  </Button>
-                  <Button block type='submit' color='primary' size='small'>
-                    提交
-                  </Button>
-                </Space>
-              }>
-                <Form.Item name={'group'} label={t('order.company_name')}>
-                  <Input placeholder='' />
-                </Form.Item>
-              </Form>
-            </Dropdown.Item>
-          </Dropdown>
         </div>
         <div className={'p-2'}>
           {
@@ -112,7 +88,7 @@ export default function Index() {
               <PullToRefresh onRefresh={getData}>
                 {
                   agents.map((item) => (
-                    <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.name}</span>}
+                    <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.code}</span>}
                           extra={<Tag round
                                       color={item.isLocked ? 'danger' : 'success'}>{item.isLocked?t('group.locking'):t('foundation.normal')}</Tag>}
                           key={item.id}>
@@ -159,16 +135,16 @@ export default function Index() {
                       <div className={'flex justify-end'}>
                         <Space justify={'end'}>
                           <Button shape='rounded' size={'small'}>{t('quote.resetVerificationHistory')}</Button>
-                          <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/group/agent/configuration/${item.id}`)}>{t('foundation.detail')}</Button>
-                          <Popover.Menu trigger='click' placement='bottom-start' actions={[{ key: 'scan', icon: null, text: '扫一扫' }].map(action => ({
-                            ...action,
-                            icon: null,
-                          }))}
-                          >
-                            <div className={'w-[29px] h-[29px] border-1 border-[var(--adm-color-border)] rounded-[50%] flex items-center justify-center '}>
-                              <MoreOutline fontSize={'1.8rem'} />
-                            </div>
-                          </Popover.Menu>
+                          <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
+                          {/*<Popover.Menu trigger='click' placement='bottom-start' actions={[{ key: 'scan', icon: null, text: '扫一扫' }].map(action => ({*/}
+                          {/*  ...action,*/}
+                          {/*  icon: null,*/}
+                          {/*}))}*/}
+                          {/*>*/}
+                          {/*  <div className={'w-[29px] h-[29px] border-1 border-[var(--adm-color-border)] rounded-[50%] flex items-center justify-center '}>*/}
+                          {/*    <MoreOutline fontSize={'1.8rem'} />*/}
+                          {/*  </div>*/}
+                          {/*</Popover.Menu>*/}
                         </Space>
                       </div>
                     </Card>

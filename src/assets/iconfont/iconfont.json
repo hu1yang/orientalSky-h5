@@ -6,6 +6,160 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "286948",
+      "name": "person",
+      "font_class": "person",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "1199332",
+      "name": "person",
+      "font_class": "person1",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "1463643",
+      "name": "自己",
+      "font_class": "personal",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "577335",
+      "name": "订单",
+      "font_class": "dingdan",
+      "unicode": "e737",
+      "unicode_decimal": 59191
+    },
+    {
+      "icon_id": "629333",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "741925",
+      "name": "设置-)",
+      "font_class": "shezhi1",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "1029984",
+      "name": "dashboard",
+      "font_class": "dashboard",
+      "unicode": "e764",
+      "unicode_decimal": 59236
+    },
+    {
+      "icon_id": "1167155",
+      "name": "订单",
+      "font_class": "dingdan1",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "1680682",
+      "name": "设置",
+      "font_class": "shezhi2",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "2076282",
+      "name": " 订单",
+      "font_class": "dingdan2",
+      "unicode": "e897",
+      "unicode_decimal": 59543
+    },
+    {
+      "icon_id": "4765881",
+      "name": "dashboard",
+      "font_class": "dashboard1",
+      "unicode": "e78b",
+      "unicode_decimal": 59275
+    },
+    {
+      "icon_id": "5978784",
+      "name": "person",
+      "font_class": "renyuan",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "6527115",
+      "name": "人员",
+      "font_class": "renyuan1",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "7275350",
+      "name": "Dashboard",
+      "font_class": "Dashboard",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "8288873",
+      "name": "设置",
+      "font_class": "shezhi3",
+      "unicode": "e851",
+      "unicode_decimal": 59473
+    },
+    {
+      "icon_id": "8821276",
+      "name": "人员-01",
+      "font_class": "renyuan-",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "8827146",
+      "name": "dashboard",
+      "font_class": "dashboard2",
+      "unicode": "e93c",
+      "unicode_decimal": 59708
+    },
+    {
+      "icon_id": "11239046",
+      "name": "设置",
+      "font_class": "shezhi4",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "11372658",
+      "name": "订单",
+      "font_class": "dingdan3",
+      "unicode": "e8ae",
+      "unicode_decimal": 59566
+    },
+    {
+      "icon_id": "16921558",
+      "name": "设置",
+      "font_class": "shezhi5",
+      "unicode": "e7eb",
+      "unicode_decimal": 59371
+    },
+    {
+      "icon_id": "17605494",
+      "name": "订单",
+      "font_class": "dingdan4",
+      "unicode": "e818",
+      "unicode_decimal": 59416
+    },
+    {
+      "icon_id": "20406446",
+      "name": "订单_订单列表",
+      "font_class": "dingdan_dingdanliebiao",
+      "unicode": "e787",
+      "unicode_decimal": 59271
+    },
+    {
       "icon_id": "4130841",
       "name": "female",
       "font_class": "female",

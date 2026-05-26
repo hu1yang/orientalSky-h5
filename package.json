@@ -8,8 +8,6 @@
     "dev:groupPro": "cross-env VITE_APP_TYPE=group_scheme vite --mode production",
     "build:group": "cross-env VITE_APP_TYPE=group_scheme vite build",
     "build:groupTest": "cross-env VITE_APP_TYPE=group_scheme vite build --mode test",
-    "build": "npm-run-all build:group",
-    "build:test": "npm-run-all build:groupTest",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5176536 */
-  src: url('iconfont.woff2?t=1778585455727') format('woff2'),
-       url('iconfont.woff?t=1778585455727') format('woff'),
-       url('iconfont.ttf?t=1778585455727') format('truetype');
+  src: url('iconfont.woff2?t=1779791120819') format('woff2'),
+       url('iconfont.woff?t=1779791120819') format('woff'),
+       url('iconfont.ttf?t=1779791120819') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,94 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-person:before {
+  content: "\e64e";
+}
+
+.icon-person1:before {
+  content: "\e612";
+}
+
+.icon-personal:before {
+  content: "\e618";
+}
+
+.icon-dingdan:before {
+  content: "\e737";
+}
+
+.icon-shezhi:before {
+  content: "\e64b";
+}
+
+.icon-shezhi1:before {
+  content: "\e63b";
+}
+
+.icon-dashboard:before {
+  content: "\e764";
+}
+
+.icon-dingdan1:before {
+  content: "\e62a";
+}
+
+.icon-shezhi2:before {
+  content: "\e65f";
+}
+
+.icon-dingdan2:before {
+  content: "\e897";
+}
+
+.icon-dashboard1:before {
+  content: "\e78b";
+}
+
+.icon-renyuan:before {
+  content: "\e61a";
+}
+
+.icon-renyuan1:before {
+  content: "\e645";
+}
+
+.icon-Dashboard:before {
+  content: "\e68b";
+}
+
+.icon-shezhi3:before {
+  content: "\e851";
+}
+
+.icon-renyuan-:before {
+  content: "\e611";
+}
+
+.icon-dashboard2:before {
+  content: "\e93c";
+}
+
+.icon-shezhi4:before {
+  content: "\e646";
+}
+
+.icon-dingdan3:before {
+  content: "\e8ae";
+}
+
+.icon-shezhi5:before {
+  content: "\e7eb";
+}
+
+.icon-dingdan4:before {
+  content: "\e818";
+}
+
+.icon-dingdan_dingdanliebiao:before {
+  content: "\e787";
 }
 
 .icon-female:before {

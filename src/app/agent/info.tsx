@@ -495,16 +495,15 @@ export default function AgentInfo() {
     if (loadingRef.current) return
     loadingRef.current = true
     try{
-      getAgentSettingGroup(id || '').then(res => {
-        if(Object.keys(res).length){
-          const info = agentMap.get(res.agentId)
-          setAgentDetail({
-            ...res,
-            branchCode: info?.branchCode,
-            agentCode: info?.agentCode
-          })
-        }
-      })
+      const response = await getAgentSettingGroup(id || '')
+      if(Object.keys(response).length){
+        const info = agentMap.get(response.agentId)
+        setAgentDetail({
+          ...response,
+          branchCode: info?.branchCode,
+          agentCode: info?.agentCode
+        })
+      }
     } finally {
       loadingRef.current = false
     }

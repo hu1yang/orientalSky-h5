@@ -1,55 +1,40 @@
-import {useMemo} from "react";
-import {useLocation, useNavigate} from "react-router";
+import {useMatches, useNavigate} from "react-router";
 
 import {TabBar} from "antd-mobile";
-import {AppOutline} from "antd-mobile-icons";
 
 const tabs = [
   {
-    key: 'home',
+    key: 'dashboard',
     title: '首页',
-    icon: <AppOutline />,
+    icon: <i className={'iconfont icon-Dashboard text-[1.8rem]!'} />,
   },
   {
     key: 'order',
     title: '订单',
-    icon: <AppOutline />,
+    icon: <i className={'iconfont icon-dingdan1 text-[1.8rem]!'} />,
   },
   {
     key: 'agent',
     title: '代理',
-    icon: <AppOutline />,
+    icon: <i className={'iconfont icon-personal text-[1.8rem]!'} />,
   },
   {
-    key: 'rechargePayment',
-    title: '充值',
-    icon: <AppOutline />,
+    key: 'setting',
+    title: '设置',
+    icon: <i className={'iconfont icon-shezhi text-[1.8rem]!'} />,
   },
 ]
 
 export default function TabBarComponent(){
-  const location = useLocation();
+  const matches = useMatches()
   const navigate = useNavigate()
-  const {pathname} = location
+  const currentRoute = matches[matches.length - 1]
+  const routerType = currentRoute?.handle?.routerType || ''
 
-  const activeTab = useMemo(() => {
-    switch (true){
-      case (['/' , '/data/sale' , '/data/retrieval'].includes(pathname)):
-        return 'home'
-      case pathname.includes('order'):
-        return 'order'
-      default:
-        return 'home'
-      case pathname.includes('/group/agent'):
-        return 'agent'
-      case pathname.includes('/group/rechargePayment'):
-        return 'rechargePayment'
-    }
-  },[pathname])
 
   const changeTab = (val: string) => {
     switch (val){
-      case 'home':
+      case 'dashboard':
         navigate('/')
         break
       case 'order':
@@ -58,14 +43,14 @@ export default function TabBarComponent(){
       case 'agent':
         navigate('/group/agent')
         break
-      case 'rechargePayment':
-        navigate('/group/rechargePayment')
+      case 'setting':
+        navigate('/setting')
         break
     }
   }
   return (
     <div className={'lg:w-(--container-width) w-full fixed left-[50%] transform-[translateX(-50%)] bottom-0 h-(--header-height) bg-(--bg)'}>
-      <TabBar activeKey={activeTab} onChange={changeTab}>
+      <TabBar activeKey={routerType} onChange={changeTab}>
         {
           tabs.map(item => (
             <TabBar.Item key={item.key}

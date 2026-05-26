@@ -1,19 +1,27 @@
 import {Suspense, useEffect, useState} from "react";
-import {Outlet, useNavigate} from "react-router";
+import {Outlet, useMatches, useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {setBranchAgents, setBranchMore, setChannel} from "@/store/modules/base.ts";
 import {setIdentity} from "@/store/modules/tool.ts";
+import {useTranslation} from "react-i18next";
 
 import Cookie from 'js-cookie'
-import {SafeArea} from "antd-mobile";
+import {NavBar, SafeArea} from "antd-mobile";
 import Header from "./header.tsx";
 import TabBarComponent from "./tabbar.tsx";
 
 import {getBranchAgents, getGroupBranchs, getIdentity} from "@/utils/request/identity.ts";
 import {getChannelSettingsGroup} from "@/utils/request/group.ts";
 
-export default function Layout(){
+export default function Layout({noDefault}:{
+  noDefault?: boolean
+}){
   const navigate = useNavigate();
+  const matches = useMatches()
+  const currentRoute = matches[matches.length - 1]
+  const title = currentRoute?.handle?.title || ''
+
+  const {t} = useTranslation()
 
   const [loading, setLoading] = useState<boolean>(true)
   const dispatch = useDispatch()
@@ -38,6 +46,9 @@ export default function Layout(){
     dispatch(setChannel(response))
   }
 
+  const onBack = () => {
+    navigate(-1)
+  }
 
   useEffect(() => {
     const init = async () => {
@@ -53,11 +64,17 @@ export default function Layout(){
   }, [])
 
   return (
-      <div className={'py-(--header-height)'}>
+      <div className={`${!noDefault ? 'pt-(--header-height)':'py-(--header-height)'}`}>
         <div style={{ background: '#ace0ff' }}>
           <SafeArea position='top' />
         </div>
-        <Header />
+        {
+          noDefault ?
+            <Header />:
+            <div className={'lg:w-(--container-width) w-full h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-99'}>
+              <NavBar onBack={onBack}>{t(title)}</NavBar>
+            </div>
+        }
         <main>
           <Suspense fallback={<div>loading...</div>}>
             {
@@ -66,7 +83,10 @@ export default function Layout(){
             }
           </Suspense>
         </main>
-        <TabBarComponent />
+        {
+          noDefault &&
+            <TabBarComponent />
+        }
         <div style={{ background: '#ffcfac' }}>
           <SafeArea position='bottom' />
         </div>

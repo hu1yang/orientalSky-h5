@@ -92,28 +92,27 @@ export default function AgentRechargePayment() {
     await getData(0,true)
   }
 
-  const getData = (nextPage:number,reset:boolean = false) => {
+  const getData = async (nextPage:number,reset:boolean = false) => {
     setLoading(reset)
     try {
-      getAgentPaymentsGroup({pageSize:20,page:nextPage},searchForm).then((res) => {
-        if(res){
-          const value = res.map(item => {
-            const info = agentMap.get(item.agentId)
+      const response = await getAgentPaymentsGroup({pageSize:20,page:nextPage},searchForm)
+      if(response){
+        const value = response.map(item => {
+          const info = agentMap.get(item.agentId)
 
-            return {
-              ...item,
-              branchCode: info?.branchCode,
-              agentCode: info?.agentCode
-            }
-          })
-          if(reset){
-            setListValue(value)
-          }else{
-            setListValue(prev => [...prev, ...value])
+          return {
+            ...item,
+            branchCode: info?.branchCode,
+            agentCode: info?.agentCode
           }
-          setHasMore(res.length === 20)
+        })
+        if(reset){
+          setListValue(value)
+        }else{
+          setListValue(prev => [...prev, ...value])
         }
-      })
+        setHasMore(response.length === 20)
+      }
     } finally {
       setLoading(false)
     }

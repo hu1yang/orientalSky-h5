@@ -8,13 +8,14 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad
 } from "./routerMenu.ts";
+
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout/>,
+    element: <Layout noDefault={true} />,
     children: [
       {
         path:'/',
@@ -22,15 +23,24 @@ export const router = createBrowserRouter([
         children:[
           {
             path: '/',
-            element: <HomeLoad/>
+            element: <HomeLoad/>,
+            handle:{
+              routerType: 'dashboard'
+            }
           },
           {
             path: 'data/sale',
-            element: <HomeLoad/>
+            element: <HomeLoad/>,
+            handle:{
+              routerType: 'dashboard'
+            }
           },
           {
             path:'/data/retrieval',
-            element: <RetrievalLoad />
+            element: <RetrievalLoad />,
+            handle:{
+              routerType: 'dashboard'
+            }
           }
         ]
       },
@@ -40,46 +50,82 @@ export const router = createBrowserRouter([
         children:[
           {
             path:'ticket/:status?',
-            element: <OrderListLoad />
+            element: <OrderListLoad />,
+            handle:{
+              routerType: 'order'
+            }
           },
           {
             path:'refund/:status?',
-            element: <OrderListLoad />
+            element: <OrderListLoad />,
+            handle:{
+              routerType: 'order'
+            }
           },
           {
             path:'change/:status?',
-            element: <OrderListLoad />
+            element: <OrderListLoad />,
+            handle:{
+              routerType: 'order'
+            }
           },
           {
             path:'auxiliary/:status?',
-            element: <OrderListLoad />
-          },
-          {
-            path:'detail/:orderId/:status?/:statusId?',
-            element: <OrderDetailLoad />
-          },
+            element: <OrderListLoad />,
+            handle:{
+              routerType: 'order'
+            }
+          }
         ]
       },
+
       {
-        path:'/group/',
-        children:[
-          {
-            path: 'agent/:id?',
-            element: <AgentLoad/>
-          },
-          {
-            path: 'agent/configuration/:id',
-            element: <AgentInfoLoad/>
-          },
-        ]
+        path:'/group/agent/:id?',
+        element: <AgentLoad/>,
+        handle:{
+          routerType: 'agent'
+        }
+      },
+      {
+        path:'/setting',
+        element: <SettingLoad />,
+        handle:{
+          routerType: 'setting'
+        }
+      }
+    ]
+  },
+  {
+    path: "/",
+    element: <Layout noDefault={false} />,
+    children: [
+      {
+        path:'orderDetail/:orderId/:status?/:statusId?',
+        element: <OrderDetailLoad />,
+        handle: {
+          title: 'common.routerOrderDetail'
+        }
       },
       {
         path: 'group/rechargePayment',
-        element: <AgentRechargePaymentLoad/>
+        element: <AgentRechargePaymentLoad/>,
+        handle: {
+          title: 'common.routerRechargePaymentRecord'
+        }
       },
       {
         path:'group/foundation/booking',
-        element: <FoundationBookingLoad />
+        element: <FoundationBookingLoad />,
+        handle: {
+          title: 'common.routerBookingAccountConfiguration'
+        }
+      },
+      {
+        path: 'agentDetail/:id',
+        element: <AgentInfoLoad/>,
+        handle: {
+          title: 'common.routerAgency'
+        }
       },
     ]
   },

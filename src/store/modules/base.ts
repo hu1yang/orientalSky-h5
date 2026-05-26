@@ -50,9 +50,9 @@ export const selectAgentMap = createSelector(
 
 export const selectGroupMap = createSelector(
   [selectBranchAgents],
-  (branchAgents) => {
+  (branchMore) => {
     const map = new Map()
-    branchAgents.forEach(branch => {
+    branchMore.forEach(branch => {
       map.set(branch.branch.id, {
         branchCode: branch.branch.code
       })

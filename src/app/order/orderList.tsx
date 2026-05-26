@@ -176,9 +176,9 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
 
   const toDetail = () => {
     if(pathType === 'ticket'){
-      navigate(`/order/detail/${orderInfo?.id}`)
+      navigate(`/orderDetail/${orderInfo?.id}`)
     }else{
-      navigate(`order/detail/${orderInfo?.id}/${pathType}/${listValue.id}`)
+      navigate(`/orderDetail/${orderInfo?.id}/${pathType}/${listValue.id}`)
     }
   }
 
@@ -340,7 +340,7 @@ export default function OrderList(){
   }
 
   const getData = async (nextPage:number,reset:boolean = false) => {
-    setLoading(reset)
+    // setLoading(reset)
     try {
       let response
       if(pathType === 'ticket'){

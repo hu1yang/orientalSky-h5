@@ -52,7 +52,6 @@ const providerTypeValue = ['notifyEvents', 'issuedTicket', 'rejectTicket', 'refu
 
 export default function AgentInfo() {
   const {t} = useTranslation()
-  const initRef = useRef(false)
   const loadingRef = useRef(false)
   const {id} = useParams()
 
@@ -510,8 +509,6 @@ export default function AgentInfo() {
   }
 
   useEffect(() => {
-    if (initRef.current) return
-    initRef.current = true
     getData()
   }, []);
 
@@ -688,7 +685,7 @@ export default function AgentInfo() {
           <span className={'text-[1.4rem] mb-20'}>{popupTitle}</span>
         </div>
         <Form form={infoForm} layout='vertical' onFinish={finishForm} footer={
-          <Button block type='submit' color='primary' size='large' loading={buttonLoading}>
+          <Button block type='submit' color='primary' size='middle' loading={buttonLoading}>
             {t('common.submit')}
           </Button>
         }>

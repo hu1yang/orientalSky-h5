@@ -93,7 +93,7 @@ export default function AgentRechargePayment() {
   }
 
   const getData = async (nextPage:number,reset:boolean = false) => {
-    setLoading(reset)
+    // setLoading(reset)
     try {
       const response = await getAgentPaymentsGroup({pageSize:20,page:nextPage},searchForm)
       if(response){
@@ -487,7 +487,7 @@ export default function AgentRechargePayment() {
               </Steps>
             </Card>
           </div>
-          <Button block color='primary' size='large' loading={loadingSubmit} onClick={() => urSureForm.submit()}>
+          <Button block color='primary' size='middle' loading={loadingSubmit} onClick={() => urSureForm.submit()}>
             确认充值
           </Button>
         </div>

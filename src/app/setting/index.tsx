@@ -38,8 +38,8 @@ export default function Setting() {
     <section className={'containerMain'}>
       <div className={'p-2'}>
         <div className={'mb-5'}>
-          <Card>
-            <div className={'flex flex-row items-center justify-between'}>
+          <List mode={'card'} className={'m-auto!'}>
+            <List.Item onClick={() => {navigate('/group/personal')}}>
               <div className={'flex items-start'}>
                 <Avatar src='' style={{'--border-radius': '10px', '--size': '45px'}}/>
                 <div className={'ml-4 flex-1'}>
@@ -58,9 +58,8 @@ export default function Setting() {
                   </Space>
                 </div>
               </div>
-              <RightOutline className={'ml-5'} fontSize={22} />
-            </div>
-          </Card>
+            </List.Item>
+          </List>
         </div>
         <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerFinance')}</h3>

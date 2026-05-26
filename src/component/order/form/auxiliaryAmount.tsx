@@ -60,7 +60,7 @@ export default memo(forwardRef(function AuxiliaryAmount({resetDetailFnc}:{
         <div className={'overflow-auto'}>
           <Form form={form} mode='card' onFinish={onFinish}
                 footer={
-                  <Button block type='submit' color='primary' size='large' loading={loadingBtn}>
+                  <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
                     {t('common.submit')}
                   </Button>
                 }>

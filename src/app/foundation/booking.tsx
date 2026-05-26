@@ -157,7 +157,7 @@ export default function FoundationBooking() {
   }
 
   const getData = async (nextPage:number,reset:boolean = false) => {
-    setLoading(reset)
+    // setLoading(reset)
     try {
       const response = await getChannelAccountsGroup({pageSize:20,page:nextPage},searchFormData)
       const data = response.map(item => {
@@ -315,7 +315,7 @@ export default function FoundationBooking() {
         <div className={'py-20 px-1 h-full flex flex-col'}>
           <div className={'overflow-auto'}>
             <Form form={form} mode={'card'} onFinish={onFinish} footer={
-              <Button block type='submit' color='primary' size='large' loading={loadingBtn}>
+              <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
                 {t('common.submit')}
               </Button>
             }>

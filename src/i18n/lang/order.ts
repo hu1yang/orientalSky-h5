@@ -551,6 +551,10 @@ export const orderZh = {
         refundRejectTips: '是否驳回此退款申请？',
         auxiliaryRejectTips: '是否驳回此辅营申请？',
         amountRejectTips: '是否驳回此金额？',
+
+
+        rawData: '原始数据',
+        newData: '新数据',
     }
 }
 
@@ -1104,6 +1108,8 @@ export const orderEn = {
         auxiliaryRejectTips: 'Should this auxiliary business application be rejected?',
         amountRejectTips: 'Should this amount be rejected?',
 
+        rawData: 'raw data',
+        newData: 'new data',
     },
 }
 

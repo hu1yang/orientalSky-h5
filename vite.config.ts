@@ -38,6 +38,9 @@ export default defineConfig((config) => {
           rewrite: path => path.replace(/^\/transferApi/, '')
         },
       }
+    },
+    build: {
+      outDir: `build/h5`,
     }
   }
 })

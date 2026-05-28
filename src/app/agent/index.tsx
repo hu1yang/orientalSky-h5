@@ -7,19 +7,14 @@ import {selectAgentMap} from "@/store/modules/base.ts";
 
 import {
   Button,
-  Card,
+  Card, Dialog,
   Divider,
-  Dropdown,
-  Form,
-  Input,
   Loading,
-  Popover,
   PullToRefresh,
   SearchBar,
   Space,
   Tag
 } from "antd-mobile";
-import {FilterOutline, MoreOutline} from 'antd-mobile-icons'
 
 import CardText from "@/component/card/cardText.tsx";
 
@@ -27,6 +22,9 @@ import {getAgentsCount} from "@/utils/request/identity.ts";
 import {useSelector} from "react-redux";
 
 import type {Agents, AgentsSearchForm} from "@/types/identity.ts";
+import {resetAgentHistoryGroup} from "@/utils/request/group.ts";
+import {result} from "@/utils/public.ts";
+import NoData from "@/component/default/noData.tsx";
 
 
 type IAgent = Agents & {
@@ -52,6 +50,28 @@ export default function Index() {
   })
   const [agents, setAgents] = useState<IAgent[]>([])
 
+  const resetHistory = (id: string) => {
+    Dialog.confirm({
+      content: t('quote.resetVerificationHistorytips'),
+      onConfirm: async () => {
+        const resposne = await resetAgentHistoryGroup(id)
+        result(resposne)
+        if(resposne.succeed){
+          getData()
+        }else{
+          throw new Error()
+        }
+      }
+    })
+  }
+
+  const searchFilter = (val: string) => {
+    setSearchForm(prev => ({
+      ...prev,
+      name:val
+    }))
+  }
+
   const getData = async () => {
     // setLoading(true)
     try {
@@ -75,19 +95,21 @@ export default function Index() {
       getData()
     }
     initData()
-  }, []);
+  }, [searchForm]);
 
   return (
       <section className={'containerMain'}>
         <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
-          <SearchBar className={'flex-1'} placeholder={'Search Agent Name'} style={{'--background': '#e8e9ed' ,'--border-radius':'20px'}} />
+          <SearchBar className={'flex-1'} placeholder={t('order.agent')}
+                     style={{'--background': '#e8e9ed', '--border-radius': '20px'}} onSearch={searchFilter}
+                     onClear={() => searchFilter('')}/>
         </div>
         <div className={'p-2'}>
           {
             !loading ?
               <PullToRefresh onRefresh={getData}>
                 {
-                  agents.map((item) => (
+                  agents.length?agents.map((item) => (
                     <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.code}</span>}
                           extra={<Tag round
                                       color={item.isLocked ? 'danger' : 'success'}>{item.isLocked?t('group.locking'):t('foundation.normal')}</Tag>}
@@ -134,21 +156,12 @@ export default function Index() {
                       <Divider />
                       <div className={'flex justify-end'}>
                         <Space justify={'end'}>
-                          <Button shape='rounded' size={'small'}>{t('quote.resetVerificationHistory')}</Button>
+                          <Button shape='rounded' size={'small'} onClick={() => resetHistory(item.id)}>{t('quote.resetVerificationHistory')}</Button>
                           <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
-                          {/*<Popover.Menu trigger='click' placement='bottom-start' actions={[{ key: 'scan', icon: null, text: '扫一扫' }].map(action => ({*/}
-                          {/*  ...action,*/}
-                          {/*  icon: null,*/}
-                          {/*}))}*/}
-                          {/*>*/}
-                          {/*  <div className={'w-[29px] h-[29px] border-1 border-[var(--adm-color-border)] rounded-[50%] flex items-center justify-center '}>*/}
-                          {/*    <MoreOutline fontSize={'1.8rem'} />*/}
-                          {/*  </div>*/}
-                          {/*</Popover.Menu>*/}
                         </Space>
                       </div>
                     </Card>
-                  ))
+                  )) : <NoData />
                 }
               </PullToRefresh>
               :

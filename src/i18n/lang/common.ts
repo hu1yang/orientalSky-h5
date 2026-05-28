@@ -308,6 +308,11 @@ export const commonZh = {
         addBtn:'增加',
         removeBtn:'删除',
         bookingNot:'采购单缺失',
+        setting:'设置',
+        todayDate:'当日数据',
+
+        record:'记录',
+        language:'语言'
 
     }
 }
@@ -626,6 +631,12 @@ export const commonEn = {
         addBtn:'Add',
         removeBtn:'Remove',
         bookingNot:'Purchase order missing',
+        setting:'Setting',
+        todayDate:'Today\'s data',
+
+        record:'Record',
+        language:'Language'
+
     }
 }
 
@@ -932,5 +943,11 @@ export const commonRu = {
         addBtn:'Добавить',
         removeBtn:'Удалить',
         bookingNot:'Отсутствие заказа на закупку',
+        setting:'Настройка',
+        todayDate:'Данные за день',
+
+        record:'запись',
+        language:'язык'
+
     }
 }

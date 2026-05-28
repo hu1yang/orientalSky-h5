@@ -292,7 +292,7 @@ export default function Home(){
         !loading ?
           <Grid columns={2} gap={8}>
             <Grid.Item span={2}>
-              <Card title={t('home.totalTransaction')} extra={<Button fill='none'><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
+              <Card title={t('home.totalTransaction')} extra={<Button fill='none' onClick={getData}><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
                 <div className={'flex justify-start'}>
                   <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
                     {(() => {

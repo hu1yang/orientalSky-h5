@@ -1,31 +1,33 @@
 import {useMatches, useNavigate} from "react-router";
 
 import {TabBar} from "antd-mobile";
+import {useTranslation} from "react-i18next";
 
 const tabs = [
   {
     key: 'dashboard',
-    title: '首页',
+    title: 'common.routerHome',
     icon: <i className={'iconfont icon-Dashboard text-[1.8rem]!'} />,
   },
   {
     key: 'order',
-    title: '订单',
+    title: 'order.order',
     icon: <i className={'iconfont icon-dingdan1 text-[1.8rem]!'} />,
   },
   {
     key: 'agent',
-    title: '代理',
-    icon: <i className={'iconfont icon-personal text-[1.8rem]!'} />,
+    title: 'common.routerAgent',
+    icon: <i className={'iconfont icon-person1 text-[1.8rem]!'} />,
   },
   {
     key: 'setting',
-    title: '设置',
+    title: 'common.setting',
     icon: <i className={'iconfont icon-shezhi text-[1.8rem]!'} />,
   },
 ]
 
 export default function TabBarComponent(){
+  const {t} = useTranslation()
   const matches = useMatches()
   const navigate = useNavigate()
   const currentRoute = matches[matches.length - 1]
@@ -55,7 +57,7 @@ export default function TabBarComponent(){
           tabs.map(item => (
             <TabBar.Item key={item.key}
                          icon={item.icon}
-                         title={item.title} />
+                         title={t(item.title)} />
           ))
         }
       </TabBar>

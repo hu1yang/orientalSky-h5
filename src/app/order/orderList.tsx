@@ -53,6 +53,7 @@ import {selectAgentMap} from "@/store/modules/base.ts";
 import Log from "@/component/default/log.tsx";
 import type {OrderInfo} from "@/types/group.ts";
 import AgentSearch from "@/component/default/agentSearch.tsx";
+import NoData from "@/component/default/noData.tsx";
 
 
 
@@ -205,7 +206,7 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
 
                 </div>
 
-                <CouponOutline color={'var(--warning-color)'} fontSize={14} />
+                <CouponOutline color={'var(--active-color)'} fontSize={14} />
               </div>
               <Tag round
                    color={listValue.status === 'cancelled' ? 'danger' : 'primary'}>{statusShow}</Tag>
@@ -415,7 +416,11 @@ export default function OrderList(){
   }
 
   useEffect(() => {
-    resetData()
+    const changeData = () => {
+      setLoading(true)
+      resetData()
+    }
+    changeData()
   }, [pathType,searchFormData]);
 
 
@@ -433,9 +438,9 @@ export default function OrderList(){
         !loading ? <>
             <PullToRefresh onRefresh={resetData}>
               {
-                listValue.map(item => (
+                listValue.length ? listValue.map(item => (
                   <ListCard key={item.id} listValue={item} getlogFnc={getlog} pathType={pathType} />
-                ))
+                )) : <NoData />
               }
             </PullToRefresh>
             {

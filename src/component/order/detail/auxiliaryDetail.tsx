@@ -183,32 +183,32 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
         auxiliaryList.length ? (
           <Tabs activeKey={auxiliaryTab} style={{
             '--title-font-size':'1rem',
-            '--content-padding':'12px 0'
+            '--content-padding':'12px 0',
           }} onChange={(val) => setAuxiliaryTab(val)}>
             {
               auxiliaryList.map(auxiliary => (
                 <Tabs.Tab key={auxiliary.id} title={`${auxiliary.id}(${t('common.'+statusAuxiliaryArs[auxiliary.status])})`}>
                   <PassengerCard passengers={auxiliaryPassenger} status={'auxiliary'} />
                   <SegmentCard itineraryList={auxiliaryItineraries} status={'auxiliary'} />
-                  <Card title={'价格确认表'}>
+                  <Card title={t('order.auxiliaryConfirmed')}>
                     {
                       auxiliary.appendForAttachTypes.map((appendForAttachType,appendForAttachTypeIndex) => (
                         <React.Fragment key={appendForAttachTypeIndex}>
                           <Grid columns={2}>
                             <Grid.Item span={2}>
-                              <CardText label={'姓名/证件号'} value={appendForAttachType.passengerNames?.join(',')}
+                              <CardText label={`${t('order.fullName')}/${t('order.travelerIdNo')}`} value={appendForAttachType.passengerNames?.join(',')}
                                         valueStyle={'!text-(--warning-color)'} labelStyle={'!w-30'} />
                             </Grid.Item>
                             <Grid.Item>
-                              <CardText label={'航班号'} value={appendForAttachType.flightNumbers?.join(',')}
+                              <CardText label={t('order.flightNumber')} value={appendForAttachType.flightNumbers?.join(',')}
                                         valueStyle={'!text-(--warning-color)'} labelStyle={'!w-30'} />
                             </Grid.Item>
                             <Grid.Item>
-                              <CardText label={'辅营产品'} value={t('order.'+appendForAttachType?.type)}
+                              <CardText label={t('order.auxiliaryProducts')} value={t('order.'+appendForAttachType?.type)}
                                         valueStyle={'!text-(--warning-color)'} labelStyle={'!w-30'} />
                             </Grid.Item>
                             <Grid.Item span={2}>
-                              <CardText label={'辅营单说明'} value={appendForAttachType.attachNotes?.join(',')}
+                              <CardText label={t('order.auxiliaryProductsNotes')} value={appendForAttachType.attachNotes?.join(',')}
                                         labelStyle={'!w-30'} style={'!items-start'} valueStyle={'!text-(--text)'} />
                             </Grid.Item>
                           </Grid>
@@ -238,7 +238,7 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
                             <span className={'!text-[1.2rem] text-(--text)'}>{auxiliary?.confirmed.currency}</span>
                           </div>} labelStyle={'!w-30'}/>
                           <Divider />
-                          <CardText label={'Settlement total'} value={<div>
+                          <CardText label={t('order.totalSettlementPrice')} value={<div>
                             <span className={'font-bold !text-[1.7rem] mr-2 text-(--price-color)'}>{auxiliary?.confirmed.netPaymentAmount}</span>
                             <span className={'!text-[1.2rem] text-(--text)'}>{auxiliary?.confirmed.currency}</span>
                           </div>} valueStyle={'text-right'} labelStyle={'font-bold !w-auto !text-[1.2rem]'} />
@@ -256,14 +256,14 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
                                 '--background-color':'var(--warning-color)'
                               }} onClick={executeAmount}>
                                 {
-                                  !['appendPaid'].includes(auxiliary.status) ? t('common.'+ statusAuxiliaryArs[auxiliary.status]) : '执行辅营'
+                                  !['appendPaid'].includes(auxiliary.status) ? t('common.'+ statusAuxiliaryArs[auxiliary.status]) : t('order.executeAuxiliaryEd')
                                 }
                               </Button>
                               :
                               <Button block disabled={auxiliary.status !== 'created'} style={{
                                 '--background-color':'var(--success-color)'
                               }} onClick={sureAmount}>
-                                金额确认
+                                {t('order.tripAmount')}
                               </Button>
                           }
                         </Grid.Item>
@@ -272,9 +272,9 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
                             <Grid.Item>
                               {
                                 ['appendPaid'].includes(auxiliary.status)?
-                                  <Button block onClick={rejectAuxiliary}>辅营驳回</Button>
+                                  <Button block onClick={rejectAuxiliary}>{t('order.rejectAuxiliary')}</Button>
                                   :
-                                  <Button block onClick={rejectAmount}>金额驳回</Button>
+                                  <Button block onClick={rejectAmount}>{t('order.amountRejected')}</Button>
                               }
                             </Grid.Item>
                           )

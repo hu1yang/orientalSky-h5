@@ -18,7 +18,7 @@ interface IBaseOption {
   titleTips: string[]
   title: string
   xData: string[],
-  barData: number[],
+  barData: (number|string)[],
   lineData: number[],
   barColor: { offset: number, color: string }[],
   lineColor: string,
@@ -42,6 +42,7 @@ function pluckFields<T extends Record<string, any>>(arr: T[], fields: string[]) 
   return result
 }
 const primaryColor = getCssVar('--active-color')
+
 
 export default function Retrieval(){
   const {t} = useTranslation()
@@ -259,7 +260,7 @@ export default function Retrieval(){
         !loading ?
           <Grid columns={2} gap={8}>
             <Grid.Item span={2}>
-              <Card title={t('home.totalQuery')} extra={<Button fill='none'><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
+              <Card title={t('home.totalQuery')} extra={<Button fill='none' onClick={getData}><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
                 <div className={'flex justify-start'}>
                   <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.queryTimes.toLocaleString()}</span>
                 </div>

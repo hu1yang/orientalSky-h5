@@ -104,7 +104,7 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries, 
         changeList.length ? (
           <Tabs activeKey={changeTab} style={{
             '--title-font-size':'1rem',
-            '--content-padding':'12px 0'
+            '--content-padding':'12px 0',
           }} onChange={(val) => setChangeTab(val)}>
             {
               changeList.map(change => (

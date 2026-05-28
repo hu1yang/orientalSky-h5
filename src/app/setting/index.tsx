@@ -5,15 +5,15 @@ import {removeLogin} from "@/store/modules/tool.ts";
 import type {RootState} from "@/store";
 import {useTranslation} from "react-i18next";
 
-import {Avatar, Button, Card, List, Space, Tag} from "antd-mobile";
+import {Avatar, Button, Dialog, List, Space, Tag} from "antd-mobile";
 import {selectGroupMap} from "@/store/modules/base.ts";
-import {PayCircleOutline, RightOutline} from "antd-mobile-icons";
+import {GlobalOutline, PayCircleOutline, TruckOutline} from "antd-mobile-icons";
 import {userSignOut} from "@/utils/request/identity.ts";
 
 export default function Setting() {
   const navigate = useNavigate()
 
-  const {t} = useTranslation();
+  const {t,i18n} = useTranslation();
 
   const {identity} = useSelector((state: RootState) => state.toolInfo);
   const groupMap = useSelector(selectGroupMap)
@@ -70,7 +70,37 @@ export default function Setting() {
         <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('group.basicConfiguration')}</h3>
           <List mode={'card'} className={'m-auto!'}>
-            <List.Item prefix={<PayCircleOutline fontSize={18} />} onClick={() => {navigate('/group/foundation/booking')}}>{t('order.purchasingAccount')}</List.Item>
+            <List.Item prefix={<TruckOutline fontSize={18} />} onClick={() => {navigate('/group/foundation/booking')}}>{t('order.purchasingAccount')}</List.Item>
+            <List.Item prefix={<GlobalOutline fontSize={18} />} onClick={() => {
+              Dialog.show({
+                content: t('common.exitAccount'),
+                closeOnAction: true,
+                closeOnMaskClick: true,
+                actions: [
+                  {
+                    key: 'en_US',
+                    text: 'English',
+                    onClick:() => {
+                      i18n.changeLanguage('en_US');
+                    }
+                  },
+                  {
+                    key: 'zh_CN',
+                    text: '中文',
+                    onClick:() => {
+                      i18n.changeLanguage('zh_CN');
+                    }
+                  },
+                  {
+                    key: 'ru_RU',
+                    text: 'Russian',
+                    onClick:() => {
+                      i18n.changeLanguage('ru_RU');
+                    }
+                  },
+                ]
+              })
+            }}>{t('common.language')}</List.Item>
           </List>
         </div>
         <div className={'mb-5'}>

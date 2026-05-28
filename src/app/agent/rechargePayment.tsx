@@ -2,6 +2,8 @@ import {useEffect, useRef, useState} from "react";
 
 import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
+import {useSelector} from "react-redux";
+import {selectAgentMap} from "@/store/modules/base.ts";
 
 import {
   Button,
@@ -12,12 +14,12 @@ import {
   ImageViewer,
   InfiniteScroll,
   Input, Loading,
-  Popup, PullToRefresh,
+  Popup, PullToRefresh, Radio, SearchBar,
   Space, Steps,
   Tag, TextArea,
   Toast
 } from "antd-mobile";
-import {BillOutline} from "antd-mobile-icons";
+import {BillOutline, FilterOutline} from "antd-mobile-icons";
 
 import CardText from "@/component/card/cardText.tsx";
 
@@ -36,15 +38,18 @@ import type {
   OrderInfo, RevokeAgentPaymentFormGroup,
 } from "@/types/group.ts";
 import type {IExchangeRateAgent} from "@/types/agent.ts";
-import {useSelector} from "react-redux";
 import {result} from "@/utils/public.ts";
-import {selectAgentMap} from "@/store/modules/base.ts";
+import AgentSearch from "@/component/default/agentSearch.tsx";
+import {changedTypeArr} from "@/utils/common.ts";
+import NoData from "@/component/default/noData.tsx";
 
 type IAgentPayment = AgentPayment & {
   branchCode: string
   agentCode:string
 }
 type IUrUserObj = { accountInfo:IAgentPayment,accountPrice:GroupBalance,totalAmount:number }
+
+const statusArr = ['pending', 'reviewed', 'confirmed', 'rejected', 'cancelled']
 
 const { Step } = Steps
 export default function AgentRechargePayment() {
@@ -54,7 +59,11 @@ export default function AgentRechargePayment() {
 
   const [hasMore, setHasMore] = useState(false)
   const pageRef = useRef(0)
-  const [searchForm, setSearchForm] = useState<ISearchRechargeForm>({
+
+  const [visiblePopSearch, setVisiblePopSearch] = useState(false)
+  const [keyword, setKeyword] = useState('')
+  const [searchForm] = Form.useForm()
+  const [searchFormData, setSearchFormData] = useState<ISearchRechargeForm>({
     transactionId:'',
     id:'',
     bankAccountCode:'',
@@ -87,6 +96,43 @@ export default function AgentRechargePayment() {
   }
 
 
+  const closeFilter = () => {
+    setVisiblePopSearch(false)
+  }
+
+  const onSearchFinish = (val) => {
+    setSearchFormData(prevState => ({
+      ...prevState,
+      ...val,
+    }))
+    closeFilter()
+  }
+
+  const resetSearchFilter = () => {
+    searchForm.resetFields()
+    setKeyword('')
+    setSearchFormData({
+      transactionId:'',
+      id:'',
+      bankAccountCode:'',
+      status:'',
+      unLinked:null,
+      minTime: '',
+      maxTime: '',
+      changedType:'',
+      agentId:'',
+      branchId:''
+    })
+    closeFilter()
+  }
+
+  const searchFilter = (val: string) => {
+    setSearchFormData(prev => ({
+      ...prev,
+      transactionId:val
+    }))
+  }
+
   const resetData = async () => {
     pageRef.current = 0
     await getData(0,true)
@@ -95,7 +141,7 @@ export default function AgentRechargePayment() {
   const getData = async (nextPage:number,reset:boolean = false) => {
     // setLoading(reset)
     try {
-      const response = await getAgentPaymentsGroup({pageSize:20,page:nextPage},searchForm)
+      const response = await getAgentPaymentsGroup({pageSize:20,page:nextPage},searchFormData)
       if(response){
         const value = response.map(item => {
           const info = agentMap.get(item.agentId)
@@ -127,7 +173,6 @@ export default function AgentRechargePayment() {
       setPictureVisible(true)
     }else{
       window.open(blobUrl, '_blank')
-      console.log(11)
     }
   }
 
@@ -285,16 +330,27 @@ export default function AgentRechargePayment() {
 
   useEffect(() => {
     getExchange()
-    getData(0,true)
   }, []);
+
+  useEffect(() => {
+    getData(0,true)
+  }, [searchFormData]);
   return (
     <section className={'containerMain'}>
       <div className={'p-2'}>
+        <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
+          <SearchBar className={'flex-1'} placeholder={t('order.transactionSerialNumber')}
+                     style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
+                     onSearch={searchFilter} onClear={() => searchFilter('')}/>
+          <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+            <FilterOutline fontSize={18} color={'var(--active-color)'} />
+          </Button>
+        </div>
         {
           !loading? <>
               <PullToRefresh onRefresh={resetData}>
                 {
-                  listValue.map((item) => (
+                  listValue.length ? listValue.map((item) => (
                     <Card className={'mb-2'}
                           title={
                             <div className={'flex items-center'}>
@@ -312,9 +368,9 @@ export default function AgentRechargePayment() {
                       <div className={'text-left'}>
                         <div>
                           <div className={'mb-2'}>
-                    <span className={'text-[1.6rem] text-(--success-color)'}>
-                      {item.totalAmount.toLocaleString()}
-                    </span>
+                            <span className={'text-[1.6rem] text-(--success-color)'}>
+                              {item.totalAmount.toLocaleString()}
+                            </span>
                             <span className={'text-(--price-color) text-[1.8rem] ml-2'}>{item.currency}/<span className={'text-[1.2rem]'}>{item.exchangeRate}</span></span>
                           </div>
                           {
@@ -397,7 +453,7 @@ export default function AgentRechargePayment() {
                         }
                       </div>
                     </Card>
-                  ))
+                  )):<NoData />
                 }
               </PullToRefresh>
               {
@@ -435,21 +491,21 @@ export default function AgentRechargePayment() {
               <CardText label={t('order.financialTransactionChanges')} value={t('order.'+urSurePayInfo?.accountInfo.changedType)} valueStyle={'!text-(--warning-color)'} />
               <Grid columns={3} gap={8} className={'mt-5'}>
                 <Grid.Item>
-                  <div className={'w-full flex flex-col justify-center items-center bg-(--price-color) py-5 rounded-[8px]'}>
+                  <div className={'w-full flex flex-col justify-center items-center bg-(--price-color) py-5 rounded-(--rounder-radius)'}>
                     <span className={'text-white text-[1.1rem] mb-2'}>{t('foundation.balance')}</span>
                     <span className={'text-white text-[1.6rem] mb-2'}>{urSurePayInfo?.accountPrice.balance.toLocaleString()}</span>
                     <span className={'text-white text-[1.1rem]'}>{urSurePayInfo?.accountPrice.currency}</span>
                   </div>
                 </Grid.Item>
                 <Grid.Item>
-                  <div className={'w-full flex flex-col justify-center items-center bg-(--warning-color) py-5 rounded-[8px]'}>
+                  <div className={'w-full flex flex-col justify-center items-center bg-(--warning-color) py-5 rounded-(--rounder-radius)'}>
                     <span className={'text-white text-[1.1rem] mb-2'}>{urSurePayInfo?.accountInfo?.changedType === 'income' ? t('group.agentTotalAmount'):t('group.agentPaymentAmount')}</span>
                     <span className={'text-white text-[1.6rem] mb-2'}>{urSurePayInfo?.accountInfo.totalAmount.toLocaleString()}</span>
                     <span className={'text-white text-[1.1rem]'}>{urSurePayInfo?.accountInfo.currency}</span>
                   </div>
                 </Grid.Item>
                 <Grid.Item>
-                  <div className={'w-full flex flex-col justify-center items-center bg-(--success-color) py-5 rounded-[8px]'}>
+                  <div className={'w-full flex flex-col justify-center items-center bg-(--success-color) py-5 rounded-(--rounder-radius)'}>
                     <span className={'text-white text-[1.1rem] mb-2'}>{urSurePayInfo?.accountInfo?.changedType === 'income' ? t('group.actualRechargeAmount'):t('group.actualPaymentAmount')}</span>
                     <span className={'text-white text-[1.6rem] mb-2'}>{urSurePayInfo?.totalAmount.toLocaleString()}</span>
                     <span className={'text-white text-[1.1rem]'}>{urSurePayInfo?.accountPrice.currency}</span>
@@ -457,7 +513,7 @@ export default function AgentRechargePayment() {
                 </Grid.Item>
               </Grid>
             </Card>
-            <Card title={'确认审核'} className={'mb-2'}>
+            <Card title={t('common.reviewAgentBalance')} className={'mb-2'}>
               <Form layout='horizontal' form={urSureForm} onFinish={urSureFormFinish} style={{
                 '--border-top':'0',
                 '--border-bottom':'0',
@@ -477,7 +533,7 @@ export default function AgentRechargePayment() {
                 </Form.Item>
               </Form>
             </Card>
-            <Card title={'操作记录'} className={'mb-2'}>
+            <Card title={t('common.record')} className={'mb-2'}>
               <Steps direction='vertical' className={'scroll-auto'}>
                 {
                   logList.map((log,logIndex) => (
@@ -491,6 +547,57 @@ export default function AgentRechargePayment() {
             确认充值
           </Button>
         </div>
+      </Popup>
+      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+             bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
+        <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
+          <Grid columns={2} gap={8}>
+            <Grid.Item>
+              <Button block size='small' onClick={resetSearchFilter}>
+                {t('group.reset')}
+              </Button>
+            </Grid.Item>
+            <Grid.Item>
+              <Button block type='submit' color='primary' size='small'>
+                {t('common.search')}
+              </Button>
+            </Grid.Item>
+          </Grid>
+        }>
+          <Form.Item label={t('foundation.agent')} name={'agentId'}>
+            <AgentSearch />
+          </Form.Item>
+          <Form.Item label={t('order.isSure')} name={'unLinked'}>
+            <Radio.Group>
+              <Space direction='vertical'>
+                <Radio>{t('common.open')}</Radio>
+                <Radio>{t('common.close')}</Radio>
+              </Space>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item label={t('order.status')} name={'status'}>
+            <Radio.Group>
+              <Space direction='vertical' wrap>
+                {
+                  statusArr.map((item) => (
+                    <Radio key={item} value={item}>{t('order.'+item)}</Radio>
+                  ))
+                }
+              </Space>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item label={t('order.financialTransactionChanges')} name={'changedType'}>
+            <Radio.Group>
+              <Space direction='vertical' wrap>
+                {
+                  changedTypeArr.map((item) => (
+                    <Radio key={item} value={item}>{t('order.'+item)}</Radio>
+                  ))
+                }
+              </Space>
+            </Radio.Group>
+          </Form.Item>
+        </Form>
       </Popup>
     </section>
   )

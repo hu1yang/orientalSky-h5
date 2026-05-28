@@ -14,7 +14,7 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
   const {t} = useTranslation()
 
   return (
-    <Card className={'mb-5'} title={'Passenger'} extra={<RightOutline />}>
+    <Card className={'mb-5'} title={t('order.passenger')} extra={<RightOutline />}>
       {
         passengers.map((passenger,passengerIndex) => (
           <React.Fragment key={passenger.id}>
@@ -39,7 +39,7 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
                 <div>
                   {
                     status !== 'ticket' && (
-                      <span className={`${status === 'refund'?'text-(--price-color)':'text-(--warning-color)'} text-[1.2rem] font-bold`}>{status}</span>
+                      <span className={`${status === 'refund'?'text-(--price-color)':'text-(--warning-color)'} text-[1.2rem] font-bold`}>{t('order.'+status)}</span>
                     )
                   }
                 </div>
@@ -48,10 +48,10 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
                 borderStyle: 'dashed',
                 margin: '8px 0'
               }} />
-              <CardText label={'Document'} value={`${passenger.idNumber || '--'} · ${t('order.'+passengerIdTypeArr[passenger.passengerIdType])}`} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
-              <CardText label={'DOB'} value={passenger.birthday} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
-              <CardText label={'Expiry'} value={passenger.expiryDate} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
-              <CardText label={'PNR / Ticket'} value={
+              <CardText label={t('order.documents')} value={`${passenger.idNumber || '--'} · ${t('order.'+passengerIdTypeArr[passenger.passengerIdType])}`} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={t('order.birthday')} value={passenger.birthday} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={t('order.expiryDate')} value={passenger.expiryDate} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={`${t('order.pnr')} / ${t('order.ticketNumber')}`} value={
                 <div className={'flex justify-end flex-col'}>
                   {
                     passenger.ticketNumbers.length ? passenger.ticketNumbers.map(ticketNumber => (
@@ -59,11 +59,11 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
                         key={ticketNumber.id}>
                         {ticketNumber.bookingNumber} / {ticketNumber.ticketNumber}
                       </span>
-                    )) : <span className={'text-(--text) text-[1.2rem]'}>not assigned</span>
+                    )) : <span className={'text-(--text) text-[1.2rem]'}>--</span>
                   }
                 </div>
               } labelStyle={'!w-auto'} valueStyle={'text-right text-[1.1rem] !text-(--success-color)'} style={'!items-start'} />
-              <CardText label={'Contact'} value={`${passenger.phoneNumber}`} labelStyle={'!w-auto'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={t('order.contact')} value={`${passenger.phoneNumber}`} labelStyle={'!w-auto'} valueStyle={'text-right text-[1.1rem] font-bold'} />
             </div>
             {
               passengerIndex !== passengers.length - 1 && (

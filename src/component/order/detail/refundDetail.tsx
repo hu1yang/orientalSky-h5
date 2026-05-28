@@ -200,7 +200,7 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
         refundList.length ? (
           <Tabs activeKey={refundTab} style={{
             '--title-font-size':'1rem',
-            '--content-padding':'12px 0'
+            '--content-padding':'12px 0',
           }} onChange={(val) => setRefundTab(val)}>
             {
               refundList.map(refund => (
@@ -222,14 +222,14 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
                                 '--background-color':'var(--warning-color)'
                               }} onClick={executeAmount}>
                                 {
-                                  ['refundPaid','completed'].includes(refund.status) ? t('common.'+ statusRefundArs[refund.status]) : '执行退款'
+                                  ['refundPaid','completed'].includes(refund.status) ? t('common.'+ statusRefundArs[refund.status]) : t('order.executeRefundEd')
                                 }
                                 </Button>
                               :
                               <Button block disabled={refund.status !== 'created'} style={{
                                 '--background-color':'var(--success-color)'
                               }} onClick={sureAmount}>
-                                金额确认
+                                {t('order.tripAmount')}
                               </Button>
                           }
                         </Grid.Item>
@@ -238,9 +238,9 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
                             <Grid.Item>
                               {
                                 ['refundPaid','completed'].includes(refund.status)?
-                                  <Button block onClick={rejectRefund}>退款驳回</Button>
+                                  <Button block onClick={rejectRefund}>{t('order.refundReject')}</Button>
                                   :
-                                  <Button block onClick={rejectAmount}>金额驳回</Button>
+                                  <Button block onClick={rejectAmount}>{t('order.amountRejected')}</Button>
                               }
                             </Grid.Item>
                           )

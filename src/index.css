@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --container-width: 1024px;
+  --container-width: 750px;
   --layout-padding: 10px;
   --header-height: 50px;
 
@@ -129,3 +129,4 @@ p {
 .segmentBox .adm-step:last-child .adm-step-content{
   padding-bottom: 0 !important;
 }
+

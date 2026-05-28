@@ -11,7 +11,7 @@ export default memo(function SegmentBox({itineraries}:{itineraries:Itinerary[]})
   },[itineraries])
 
   return (
-    <div className={'bg-[#f0f1f5] rounded-[8px] p-1 segmentBox'}>
+    <div className={'bg-[#f0f1f5] rounded-(--rounder-radius) p-1 segmentBox'}>
       <Steps direction='vertical' className={'!p-[8px]'}>
 
         {

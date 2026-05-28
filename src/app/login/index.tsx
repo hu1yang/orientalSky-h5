@@ -81,43 +81,45 @@ export default function Login(){
   return (
     <div className={'w-full h-[100vh]'}>
       <div className={'bg-[url("@/assets/picture/loginback.jpg")] bg-no-repeat bg-cover bg-center w-full h-full fixed top-0 left-0'}></div>
-      <div className={'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] py-10 px-0 bg-[#0202021a] rounded-[20px] backdrop-sepia-[blur(10px)]'}>
-        <div className={'w-[230px] h-[41px] mx-auto mb-8'}>
-          <img src={logo} alt=""/>
-        </div>
-        <Form form={loginForm} mode={'card'} className={'backdrop-sepia-[blur(10px)]'} onFinish={finishForm} style={{
-          '--adm-color-background': 'transparent',
-          '--adm-color-light':'#fff',
-          '--border-top': '0',
-          '--border-bottom': '0',
-          '--border-inner': '0',
-        }} footer={
-          <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
-            {t('login.login')}
-          </Button>
-        }>
-
-          <Form.Item name={'userName'} rules={[
-            {required: true, message: t('login.enterUserName')},
-          ]}>
-            <Input placeholder={t('login.enterUserName')} />
-          </Form.Item>
-          <Form.Item name={'password'} rules={[
-            {required: true, message: t('login.enterPassWord')},
-            { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,32}$/, message: t('login.enterPassWordTip') },
-          ]}>
-            <Input placeholder={t('login.enterPassWord')} type={'password'} />
-          </Form.Item>
-          <Form.Item name={'captchaCode'} extra={
-            <div className={''} onClick={getCaptchaFnc}>
-              {
-                !!catchaImg && <img src={catchaImg}/>
-              }
-            </div>
+      <div className={'w-full h-full relative'}>
+        <div className={'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] py-10 px-0 bg-[#0202021a] rounded-(--rounder-radius) backdrop-sepia-[blur(10px)]'}>
+          <div className={'w-[230px] h-[41px] mx-auto mb-8'}>
+            <img src={logo} alt=""/>
+          </div>
+          <Form form={loginForm} mode={'card'} className={'backdrop-sepia-[blur(10px)]'} onFinish={finishForm} style={{
+            '--adm-color-background': 'transparent',
+            '--adm-color-light':'#fff',
+            '--border-top': '0',
+            '--border-bottom': '0',
+            '--border-inner': '0',
+          }} footer={
+            <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
+              {t('login.login')}
+            </Button>
           }>
-            <Input placeholder={t('login.enterCode')}/>
-          </Form.Item>
-        </Form>
+
+            <Form.Item name={'userName'} rules={[
+              {required: true, message: t('login.enterUserName')},
+            ]}>
+              <Input className='bg-transparent text-white' placeholder={t('login.enterUserName')} />
+            </Form.Item>
+            <Form.Item name={'password'} rules={[
+              {required: true, message: t('login.enterPassWord')},
+              { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,32}$/, message: t('login.enterPassWordTip') },
+            ]}>
+              <Input className='bg-transparent text-white' placeholder={t('login.enterPassWord')} type={'password'} />
+            </Form.Item>
+            <Form.Item name={'captchaCode'} extra={
+              <div className={''} onClick={getCaptchaFnc}>
+                {
+                  !!catchaImg && <img src={catchaImg}/>
+                }
+              </div>
+            }>
+              <Input className='bg-transparent text-white' placeholder={t('login.enterCode')}/>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
     </div>
   )

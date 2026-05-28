@@ -9,7 +9,6 @@ export default function NoData(){
       status={'empty'}
       style={{
         '--image-height': '150px',
-
       }} />
   )
 }

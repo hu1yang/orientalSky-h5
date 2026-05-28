@@ -67,7 +67,7 @@ function DatePicker({ selectionModeValue = 'single', value, changeDate }: DatePi
   return (
     <>
       <div
-        className={'flex items-center border border-(--border) py-1 px-3 rounded-[5px] active:opacity-75'}
+        className={'flex items-center border border-(--border) py-1 px-3 rounded-(--rounder-radius) active:opacity-75'}
         onClick={(event) => {
           event.preventDefault();
           setDatePicker(true);
@@ -83,7 +83,7 @@ function DatePicker({ selectionModeValue = 'single', value, changeDate }: DatePi
         visible={datePicker}
         style={{ '--z-index': '9999999' }}
         onMaskClick={() => setDatePicker(false)}
-        bodyStyle={{ height: '60vh' }}
+        bodyStyle={{ height: '80vh' }}
         destroyOnClose
         afterShow={handleAfterShow} // 💡 核心优化：代替 setTimeout 确保 100% 能拿到 ref 并正常滚动
       >

@@ -17,7 +17,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
   const {t} = useTranslation()
 
   return (
-    <Card className={'mb-5'} title={'Amounts'} extra={<RightOutline />}>
+    <Card className={'mb-5'} title={t('order.priceInformation')} extra={<RightOutline />}>
       <div className={'mb-4 flex justify-between'}>
         <div>
           {
@@ -37,7 +37,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
             <Grid columns={2} gap={8}>
               <Grid.Item>
                 <div className={'bg-(--code-bg) p-4 rounded-(--rounder-radius)'}>
-                  <span className={'font-medium text-(--text-h) text-[1.1rem]'}>Fare</span>
+                  <span className={'font-medium text-(--text-h) text-[1.1rem]'}>{t('foundation.printAmount')}</span>
                   {
                     itinerarie.amounts.map(amount => (
                       <div className={'flex justify-between items-center mb-1'} key={amount.familyCode}>
@@ -50,7 +50,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
               </Grid.Item>
               <Grid.Item>
                 <div className={'bg-(--code-bg) p-4 rounded-(--rounder-radius)'}>
-                  <span className={'font-medium text-(--text-h) text-[1.1rem]'}>Tax</span>
+                  <span className={'font-medium text-(--text-h) text-[1.1rem]'}>{t('foundation.taxesAmount')}</span>
                   {
                     itinerarie.amounts.map(amount => (
                       <div className={'flex justify-between items-center mb-1'} key={amount.familyCode}>
@@ -66,7 +66,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
               style={{
                 borderStyle: 'dashed',
               }} />
-            <CardText label={'Discount'} value={<div className={'flex justify-end flex-col'}>
+            <CardText label={t('order.discount')} value={<div className={'flex justify-end flex-col'}>
               {
                 itinerarie.amounts.map(amount => (
                   <span
@@ -76,7 +76,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
                 ))
               }
             </div>} valueStyle={'text-right !text-(--text)'} labelStyle={'text-(--text)'} style={'items-start mb-2'} />
-            <CardText label={'Profit'} value={<div className={'flex justify-end flex-col'}>
+            <CardText label={t('order.profit')} value={<div className={'flex justify-end flex-col'}>
               {
                 itinerarie.amounts.map(amount => {
                   const policie = policies.find(policie => policie.familyCode === amount.familyCode)
@@ -101,7 +101,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
       }
 
       <Divider />
-      <CardText label={'Settlement total'} value={<div>
+      <CardText label={t('order.totalSettlementPrice')} value={<div>
         <span className={'font-bold !text-[1.7rem] mr-2'}>{totalPrice}</span>
         <span className={'!text-[1.2rem] text-(--text)'}>{currency}</span>
       </div>} valueStyle={'text-right'} labelStyle={'font-bold !w-auto !text-[1.2rem]'} />

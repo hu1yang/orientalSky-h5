@@ -5,6 +5,7 @@ import type {Segment} from '@/types/group.ts'
 import {Card, Divider, Steps} from 'antd-mobile'
 import type {Itinerary} from "@/types/order.ts";
 import {RightOutline} from "antd-mobile-icons";
+import i18n from '@/i18n'
 
 dayjs.extend(duration)
 
@@ -47,7 +48,7 @@ const transferTimer = (prev: Segment, next: Segment) => {
 
 const FlightInfoCard = memo(({segment, familyName}: { segment: Segment, familyName: string }) => {
   return (
-    <div className={'py-2 px-6 bg-(--code-bg) rounded-[8px] mt-4 flex items-center justify-between'}>
+    <div className={'py-2 px-6 bg-(--code-bg) rounded-(--rounder-radius) mt-4 flex items-center justify-between'}>
       <div>
         <p className={'text-[var(--text-h)] font-medium'}>
           {segment.flightNumber}({segment.aircraftModel})
@@ -93,14 +94,14 @@ const LayoverCard = memo(
     nextSegment: Segment
   }) => {
     return (
-      <div className={'flex justify-between py-2 px-4 bg-[#fdedce] rounded-[8px]'}>
+      <div className={'flex justify-between py-2 px-4 bg-[#fdedce] rounded-(--rounder-radius)'}>
         <p className={'!text-[1.2rem] text-[#956631]'}>
           {nextSegment.departureAirport}
         </p>
 
         <div className={'flex flex-col items-end'}>
           <span className={'font-medium text-(--text-h) text-[#956631]'}>
-            Layover · {transferTimer(prevSegment, nextSegment)}
+            {i18n.t('order.transfer')} · {transferTimer(prevSegment, nextSegment)}
           </span>
 
           <span className={'text-[#956631]'}>
@@ -117,6 +118,7 @@ const SegmentInfo = memo(({itinerarie, status, segmentsType = 'segments'}: {
   status: 'ticket' | 'refund' | 'change' | 'auxiliary'
   segmentsType: 'segments' | 'changeSegments'
 }) => {
+
   const segmentArr = useMemo(() => {
     if (segmentsType === 'changeSegments') {
       return itinerarie.changeSegments
@@ -139,7 +141,7 @@ const SegmentInfo = memo(({itinerarie, status, segmentsType = 'segments'}: {
             <span
               className={`${status === 'refund' ? 'text-(--price-color)' : 'text-(--warning-color)'} text-[1.2rem] font-bold ${(segmentsType === 'segments' && status === 'change') && 'line-through !text-(--price-color)'}`}>
               {
-                status === 'change' ? (segmentsType === 'segments' ? '原始数据' : '新数据') : status
+                status === 'change' ? (segmentsType === 'segments' ? i18n.t('order.rawData') : i18n.t('order.newData')) : i18n.t('order.'+status)
               }
             </span>
             :
@@ -208,8 +210,9 @@ export default memo(function SegmentCard({itineraryList, status = 'ticket'}: {
   itineraryList: ItineraryChange[]
   status?: 'ticket' | 'refund' | 'change' | 'auxiliary'
 }) {
+
   return (
-    <Card title={'Segments'} extra={<RightOutline/>} className={'mb-5'}>
+    <Card title={i18n.t('order.travelInfo')} extra={<RightOutline/>} className={'mb-5'}>
       {
         itineraryList.map((itinerarie, itinerarieIndex) => (
           <React.Fragment key={itinerarie.id}>

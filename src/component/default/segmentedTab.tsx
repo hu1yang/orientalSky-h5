@@ -21,7 +21,7 @@ export default memo(function SegmentedTab(
     const optionsMemo = useMemo(() => {
       switch (type) {
         case 'dashboard':
-          return [{label: '当日数据', value: '/'}, {
+          return [{label: t('common.todayDate'), value: '/'}, {
             label: t('common.routerSalesData'),
             value: '/data/sale'
           }, {label: t('common.routerDataRetrieval'), value: '/data/retrieval'}]
@@ -32,7 +32,7 @@ export default memo(function SegmentedTab(
           }, {label: t('common.routerChange'), value: '/order/change'}, {
             label: t('common.routerAuxiliary'),
             value: '/order/auxiliary'
-          },]
+          }]
       }
     }, [type])
 

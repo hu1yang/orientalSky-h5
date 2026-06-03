@@ -74,7 +74,7 @@ export default function Login(){
     if(token){
       toHome()
     }else{
-      getCaptchaFnc()
+      // getCaptchaFnc()
     }
   },[])
 
@@ -109,15 +109,15 @@ export default function Login(){
             ]}>
               <Input className='bg-transparent text-white' placeholder={t('login.enterPassWord')} type={'password'} />
             </Form.Item>
-            <Form.Item name={'captchaCode'} extra={
-              <div className={''} onClick={getCaptchaFnc}>
-                {
-                  !!catchaImg && <img src={catchaImg}/>
-                }
-              </div>
-            }>
-              <Input className='bg-transparent text-white' placeholder={t('login.enterCode')}/>
-            </Form.Item>
+            {/*<Form.Item name={'captchaCode'} extra={*/}
+            {/*  <div className={''} onClick={getCaptchaFnc}>*/}
+            {/*    {*/}
+            {/*      !!catchaImg && <img src={catchaImg}/>*/}
+            {/*    }*/}
+            {/*  </div>*/}
+            {/*}>*/}
+            {/*  <Input className='bg-transparent text-white' placeholder={t('login.enterCode')}/>*/}
+            {/*</Form.Item>*/}
           </Form>
         </div>
       </div>

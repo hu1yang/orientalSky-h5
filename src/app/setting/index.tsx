@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 
 import {Avatar, Button, Dialog, List, Space, Tag} from "antd-mobile";
 import {selectGroupMap} from "@/store/modules/base.ts";
-import {GlobalOutline, PayCircleOutline, TruckOutline} from "antd-mobile-icons";
 import {userSignOut} from "@/utils/request/identity.ts";
 
 export default function Setting() {
@@ -62,16 +61,22 @@ export default function Setting() {
           </List>
         </div>
         <div className={'mb-5'}>
+          <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerCompanyManagement')}</h3>
+          <List mode={'card'} className={'m-auto!'}>
+            <List.Item prefix={<i className={'iconfont icon-line-company text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/group/company')}}>{t('common.routerCompanyList')}</List.Item>
+          </List>
+        </div>
+        <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerFinance')}</h3>
           <List mode={'card'} className={'m-auto!'}>
-            <List.Item prefix={<PayCircleOutline fontSize={18} />} onClick={() => {navigate('/group/rechargePayment')}}>{t('group.agentRecharge')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-chongzhi text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/group/rechargePayment')}}>{t('group.agentRecharge')}</List.Item>
           </List>
         </div>
         <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('group.basicConfiguration')}</h3>
           <List mode={'card'} className={'m-auto!'}>
-            <List.Item prefix={<TruckOutline fontSize={18} />} onClick={() => {navigate('/group/foundation/booking')}}>{t('order.purchasingAccount')}</List.Item>
-            <List.Item prefix={<GlobalOutline fontSize={18} />} onClick={() => {
+            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/group/foundation/booking')}}>{t('order.purchasingAccount')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-yuyan2 text-(--text)! text-[1.6rem]!'} />} onClick={() => {
               Dialog.show({
                 content: t('common.exitAccount'),
                 closeOnAction: true,

@@ -41,8 +41,8 @@ export default function Index() {
   const {id} = useParams()
 
   const [searchForm, setSearchForm] = useState<AgentsSearchForm>({
-    branchId: '',
-    agentId:id||'',
+    branchId: id||'',
+    agentId: '',
     code:'',
     country:'',
     groupCode:'',
@@ -77,7 +77,7 @@ export default function Index() {
     try {
       const response = await getAgentsCount(searchForm)
       const data = response.items.map(item => {
-        const info = agentMap.get(item.branchId)
+        const info = agentMap.get(item.id)
         return {
           branchCode: info?.branchCode,
           agentCode: info?.agentCode,
@@ -157,7 +157,7 @@ export default function Index() {
                       <div className={'flex justify-end'}>
                         <Space justify={'end'}>
                           <Button shape='rounded' size={'small'} onClick={() => resetHistory(item.id)}>{t('quote.resetVerificationHistory')}</Button>
-                          <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
+                          <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/group/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
                         </Space>
                       </div>
                     </Card>

@@ -8,7 +8,7 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad
 } from "./routerMenu.ts";
 
 
@@ -78,9 +78,8 @@ export const router = createBrowserRouter([
           }
         ]
       },
-
       {
-        path:'/group/agent/:id?',
+        path:'/group/agent',
         element: <AgentLoad/>,
         handle:{
           routerType: 'agent'
@@ -107,33 +106,53 @@ export const router = createBrowserRouter([
         }
       },
       {
-        path: 'group/rechargePayment',
-        element: <AgentRechargePaymentLoad/>,
-        handle: {
-          title: 'common.routerRechargePaymentRecord'
-        }
+        path: 'group/',
+        children: [
+          {
+            path: 'company',
+            element: <CompanyLoad />,
+            handle: {
+              title: 'common.routerCompanyList'
+            }
+          },
+          {
+            path: 'rechargePayment',
+            element: <AgentRechargePaymentLoad/>,
+            handle: {
+              title: 'common.routerRechargePaymentRecord'
+            }
+          },
+          {
+            path:'foundation/booking',
+            element: <FoundationBookingLoad />,
+            handle: {
+              title: 'common.routerBookingAccountConfiguration'
+            }
+          },
+          {
+            path: 'agentDetail/:id',
+            element: <AgentInfoLoad/>,
+            handle: {
+              title: 'common.routerAgency'
+            }
+          },
+          {
+            path: 'personal',
+            element: <PersonalLoad/>,
+            handle: {
+              title: 'common.routerPersonal'
+            }
+          },
+          {
+            path:'agent/:id',
+            element: <AgentLoad/>,
+            handle:{
+              title: 'common.routerAgency'
+            }
+          },
+        ]
       },
-      {
-        path:'group/foundation/booking',
-        element: <FoundationBookingLoad />,
-        handle: {
-          title: 'common.routerBookingAccountConfiguration'
-        }
-      },
-      {
-        path: 'agentDetail/:id',
-        element: <AgentInfoLoad/>,
-        handle: {
-          title: 'common.routerAgency'
-        }
-      },
-      {
-        path: 'group/personal',
-        element: <PersonalLoad/>,
-        handle: {
-          title: 'common.routerPersonal'
-        }
-      },
+
     ]
   },
   {

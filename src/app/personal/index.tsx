@@ -182,11 +182,11 @@ export default function Personal(){
                 <Divider/>
                 <Grid columns={2} gap={8}>
                   <Grid.Item>
-                    <Button block size={'middle'} color={'danger'}
+                    <Button block size={'small'} color={'danger'}
                             onClick={() => renewInfo('password')}>{t('personal.changePassword')}</Button>
                   </Grid.Item>
                   <Grid.Item>
-                    <Button block size={'middle'} color={'warning'}
+                    <Button block size={'small'} color={'warning'}
                             onClick={() => renewInfo('info')}>{t('group.renew')}</Button>
                   </Grid.Item>
                 </Grid>

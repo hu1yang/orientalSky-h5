@@ -6,6 +6,146 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "651184",
+      "name": "充值",
+      "font_class": "chongzhi0101",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "658008",
+      "name": "多语言",
+      "font_class": "duoyuyan",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "712224",
+      "name": "采购计划",
+      "font_class": "icon-order-plan",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "724489",
+      "name": "充值",
+      "font_class": "chongzhi",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "1680736",
+      "name": "采购单",
+      "font_class": "caigoudan",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "1974512",
+      "name": "采购计划",
+      "font_class": "caigoujihua",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "3607068",
+      "name": "绿洲_语言切换",
+      "font_class": "lvzhou_yuyanqiehuan",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "3702936",
+      "name": "采购单",
+      "font_class": "navicon-cgd",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "4236152",
+      "name": "企业管理",
+      "font_class": "company",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "4633285",
+      "name": "充值",
+      "font_class": "chongzhi1",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "5111465",
+      "name": "语言-空",
+      "font_class": "yuyan-kong",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "5360120",
+      "name": "充值",
+      "font_class": "chongzhi2",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "11019845",
+      "name": "采购单",
+      "font_class": "caigoudan1",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "11810481",
+      "name": "语言",
+      "font_class": "yuyan",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "12729948",
+      "name": "语言",
+      "font_class": "yuyan1",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "15811132",
+      "name": "line-company",
+      "font_class": "line-company",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "17280210",
+      "name": "icon_company",
+      "font_class": "icon_company",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "19761505",
+      "name": "ic24-company",
+      "font_class": "ic24-company",
+      "unicode": "f2f5",
+      "unicode_decimal": 62197
+    },
+    {
+      "icon_id": "34453184",
+      "name": "company",
+      "font_class": "company1",
+      "unicode": "e84f",
+      "unicode_decimal": 59471
+    },
+    {
+      "icon_id": "46296406",
+      "name": "语言",
+      "font_class": "yuyan2",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
       "icon_id": "286948",
       "name": "person",
       "font_class": "person",

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5176536 */
-  src: url('iconfont.woff2?t=1779791120819') format('woff2'),
-       url('iconfont.woff?t=1779791120819') format('woff'),
-       url('iconfont.ttf?t=1779791120819') format('truetype');
+  src: url('iconfont.woff2?t=1779954934718') format('woff2'),
+       url('iconfont.woff?t=1779954934718') format('woff'),
+       url('iconfont.ttf?t=1779954934718') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,86 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-chongzhi0101:before {
+  content: "\e613";
+}
+
+.icon-duoyuyan:before {
+  content: "\e654";
+}
+
+.icon-icon-order-plan:before {
+  content: "\e62b";
+}
+
+.icon-chongzhi:before {
+  content: "\e69c";
+}
+
+.icon-caigoudan:before {
+  content: "\e671";
+}
+
+.icon-caigoujihua:before {
+  content: "\e602";
+}
+
+.icon-lvzhou_yuyanqiehuan:before {
+  content: "\e629";
+}
+
+.icon-navicon-cgd:before {
+  content: "\e651";
+}
+
+.icon-company:before {
+  content: "\e61b";
+}
+
+.icon-chongzhi1:before {
+  content: "\e65c";
+}
+
+.icon-yuyan-kong:before {
+  content: "\e692";
+}
+
+.icon-chongzhi2:before {
+  content: "\e62c";
+}
+
+.icon-caigoudan1:before {
+  content: "\e609";
+}
+
+.icon-yuyan:before {
+  content: "\e684";
+}
+
+.icon-yuyan1:before {
+  content: "\e614";
+}
+
+.icon-line-company:before {
+  content: "\e65e";
+}
+
+.icon-icon_company:before {
+  content: "\e66e";
+}
+
+.icon-ic24-company:before {
+  content: "\f2f5";
+}
+
+.icon-company1:before {
+  content: "\e84f";
+}
+
+.icon-yuyan2:before {
+  content: "\e61c";
 }
 
 .icon-person:before {

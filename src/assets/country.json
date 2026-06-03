@@ -1,0 +1,1112 @@
+[
+    {
+        "countryCode": "AE",
+        "countryEName": "United Arab Emirates",
+        "countryCName": "阿联酋"
+    },
+    {
+        "countryCode": "AF",
+        "countryEName": "Afghanistan",
+        "countryCName": "阿富汗"
+    },
+    {
+        "countryCode": "AG",
+        "countryEName": "Antigua and Barbuda",
+        "countryCName": "安提瓜和巴布达"
+    },
+    {
+        "countryCode": "AI",
+        "countryEName": null,
+        "countryCName": "安圭拉"
+    },
+    {
+        "countryCode": "AL",
+        "countryEName": "Albania",
+        "countryCName": "阿尔巴尼亚"
+    },
+    {
+        "countryCode": "AM",
+        "countryEName": "Armenia",
+        "countryCName": "亚美尼亚"
+    },
+    {
+        "countryCode": "AN",
+        "countryEName": null,
+        "countryCName": "安的列斯"
+    },
+    {
+        "countryCode": "AO",
+        "countryEName": "Angola",
+        "countryCName": "安哥拉"
+    },
+    {
+        "countryCode": "AR",
+        "countryEName": "Argentina",
+        "countryCName": "阿根廷"
+    },
+    {
+        "countryCode": "AS",
+        "countryEName": null,
+        "countryCName": "美属萨摩亚"
+    },
+    {
+        "countryCode": "AT",
+        "countryEName": "Austria",
+        "countryCName": "奥地利"
+    },
+    {
+        "countryCode": "AU",
+        "countryEName": "Australia",
+        "countryCName": "澳大利亚"
+    },
+    {
+        "countryCode": "AW",
+        "countryEName": null,
+        "countryCName": "阿鲁巴"
+    },
+    {
+        "countryCode": "AZ",
+        "countryEName": "Azerbaijan",
+        "countryCName": "阿塞拜疆"
+    },
+    {
+        "countryCode": "BA",
+        "countryEName": "Bosnia and Herzegovina",
+        "countryCName": "波黑"
+    },
+    {
+        "countryCode": "BB",
+        "countryEName": "Barbados",
+        "countryCName": "巴巴多斯"
+    },
+    {
+        "countryCode": "BD",
+        "countryEName": "Bangladesh",
+        "countryCName": "孟加拉国"
+    },
+    {
+        "countryCode": "BE",
+        "countryEName": "Belgium",
+        "countryCName": "比利时"
+    },
+    {
+        "countryCode": "BF",
+        "countryEName": "Burkina Faso",
+        "countryCName": "布基纳法索"
+    },
+    {
+        "countryCode": "BG",
+        "countryEName": "Bulgaria",
+        "countryCName": "保加利亚"
+    },
+    {
+        "countryCode": "BH",
+        "countryEName": "Bahrain",
+        "countryCName": "巴林"
+    },
+    {
+        "countryCode": "BI",
+        "countryEName": "Burundi",
+        "countryCName": "布隆迪"
+    },
+    {
+        "countryCode": "BJ",
+        "countryEName": "Benin",
+        "countryCName": "贝宁"
+    },
+    {
+        "countryCode": "BM",
+        "countryEName": null,
+        "countryCName": "百慕大"
+    },
+    {
+        "countryCode": "BN",
+        "countryEName": "Brunei Darussalam",
+        "countryCName": "文莱达鲁萨兰国"
+    },
+    {
+        "countryCode": "BO",
+        "countryEName": "Bolivia",
+        "countryCName": "玻利维亚"
+    },
+    {
+        "countryCode": "BQ",
+        "countryEName": null,
+        "countryCName": "荷兰加勒比区"
+    },
+    {
+        "countryCode": "BR",
+        "countryEName": "Brazil",
+        "countryCName": "巴西"
+    },
+    {
+        "countryCode": "BS",
+        "countryEName": "Bahamas",
+        "countryCName": "巴哈马"
+    },
+    {
+        "countryCode": "BT",
+        "countryEName": "Bhutan",
+        "countryCName": "不丹"
+    },
+    {
+        "countryCode": "BW",
+        "countryEName": "Botswana",
+        "countryCName": "博茨瓦纳"
+    },
+    {
+        "countryCode": "BY",
+        "countryEName": "Belarus",
+        "countryCName": "白俄罗斯"
+    },
+    {
+        "countryCode": "BZ",
+        "countryEName": "Belize",
+        "countryCName": "伯利兹"
+    },
+    {
+        "countryCode": "CA",
+        "countryEName": "Canada",
+        "countryCName": "加拿大"
+    },
+    {
+        "countryCode": "CC",
+        "countryEName": null,
+        "countryCName": "科科斯（基林）群岛"
+    },
+    {
+        "countryCode": "CD",
+        "countryEName": "The Democratic Republic of the Congo",
+        "countryCName": "刚果民主共和国"
+    },
+    {
+        "countryCode": "CF",
+        "countryEName": "Central African Republic",
+        "countryCName": "中非"
+    },
+    {
+        "countryCode": "CG",
+        "countryEName": "Congo",
+        "countryCName": "刚果共和国"
+    },
+    {
+        "countryCode": "CH",
+        "countryEName": "Switzerland",
+        "countryCName": "瑞士"
+    },
+    {
+        "countryCode": "CI",
+        "countryEName": "Côte d'Ivoire",
+        "countryCName": "科特迪瓦"
+    },
+    {
+        "countryCode": "CK",
+        "countryEName": "Cook Islands",
+        "countryCName": "库克群岛"
+    },
+    {
+        "countryCode": "CL",
+        "countryEName": "Chile",
+        "countryCName": "智利"
+    },
+    {
+        "countryCode": "CM",
+        "countryEName": "Cameroon",
+        "countryCName": "喀麦隆"
+    },
+    {
+        "countryCode": "CN",
+        "countryEName": "China",
+        "countryCName": "中国"
+    },
+    {
+        "countryCode": "CO",
+        "countryEName": "Colombia",
+        "countryCName": "哥伦比亚"
+    },
+    {
+        "countryCode": "CR",
+        "countryEName": "Costa Rica",
+        "countryCName": "哥斯达黎加"
+    },
+    {
+        "countryCode": "CU",
+        "countryEName": "Cuba",
+        "countryCName": "古巴"
+    },
+    {
+        "countryCode": "CV",
+        "countryEName": "Cabo Verde",
+        "countryCName": "佛得角"
+    },
+    {
+        "countryCode": "CW",
+        "countryEName": "Curaçao",
+        "countryCName": "库拉索岛"
+    },
+    {
+        "countryCode": "CY",
+        "countryEName": "Cyprus",
+        "countryCName": "塞浦路斯"
+    },
+    {
+        "countryCode": "CZ",
+        "countryEName": "Czechia",
+        "countryCName": "捷克"
+    },
+    {
+        "countryCode": "DE",
+        "countryEName": "Germany",
+        "countryCName": "德国"
+    },
+    {
+        "countryCode": "DJ",
+        "countryEName": "Djibouti",
+        "countryCName": "吉布提"
+    },
+    {
+        "countryCode": "DK",
+        "countryEName": "Denmark",
+        "countryCName": "丹麦"
+    },
+    {
+        "countryCode": "DM",
+        "countryEName": "Dominica",
+        "countryCName": "多米尼克"
+    },
+    {
+        "countryCode": "DO",
+        "countryEName": "Dominican Republic",
+        "countryCName": "多米尼加共和国"
+    },
+    {
+        "countryCode": "DZ",
+        "countryEName": "Algeria",
+        "countryCName": "阿尔及利亚"
+    },
+    {
+        "countryCode": "EC",
+        "countryEName": "Ecuador",
+        "countryCName": "厄瓜多尔"
+    },
+    {
+        "countryCode": "EE",
+        "countryEName": "Estonia",
+        "countryCName": "爱沙尼亚"
+    },
+    {
+        "countryCode": "EG",
+        "countryEName": "Egypt",
+        "countryCName": "埃及"
+    },
+    {
+        "countryCode": "ER",
+        "countryEName": "Eritrea",
+        "countryCName": "厄立特里亚"
+    },
+    {
+        "countryCode": "ES",
+        "countryEName": "Spain",
+        "countryCName": "西班牙"
+    },
+    {
+        "countryCode": "ET",
+        "countryEName": "Ethiopia",
+        "countryCName": "埃塞俄比亚"
+    },
+    {
+        "countryCode": "FI",
+        "countryEName": "Finland",
+        "countryCName": "芬兰"
+    },
+    {
+        "countryCode": "FJ",
+        "countryEName": "Fiji",
+        "countryCName": "斐济"
+    },
+    {
+        "countryCode": "FK",
+        "countryEName": null,
+        "countryCName": "福克兰群岛"
+    },
+    {
+        "countryCode": "FM",
+        "countryEName": "Federated States of Micronesia",
+        "countryCName": "密克罗尼西亚"
+    },
+    {
+        "countryCode": "FO",
+        "countryEName": null,
+        "countryCName": "法罗群岛"
+    },
+    {
+        "countryCode": "FR",
+        "countryEName": "France",
+        "countryCName": "法国"
+    },
+    {
+        "countryCode": "GA",
+        "countryEName": "Gabon",
+        "countryCName": "加蓬"
+    },
+    {
+        "countryCode": "GB",
+        "countryEName": "United Kingdom of Great Britain and Northern Ireland",
+        "countryCName": "英国"
+    },
+    {
+        "countryCode": "GD",
+        "countryEName": "Grenada",
+        "countryCName": "格林纳达"
+    },
+    {
+        "countryCode": "GE",
+        "countryEName": "Georgia",
+        "countryCName": "格鲁吉亚"
+    },
+    {
+        "countryCode": "GF",
+        "countryEName": null,
+        "countryCName": "法属圭亚那"
+    },
+    {
+        "countryCode": "GH",
+        "countryEName": "Ghana",
+        "countryCName": "加纳"
+    },
+    {
+        "countryCode": "GI",
+        "countryEName": null,
+        "countryCName": "直布罗陀"
+    },
+    {
+        "countryCode": "GL",
+        "countryEName": null,
+        "countryCName": "格陵兰"
+    },
+    {
+        "countryCode": "GM",
+        "countryEName": "Gambia",
+        "countryCName": "冈比亚"
+    },
+    {
+        "countryCode": "GN",
+        "countryEName": "Guinea",
+        "countryCName": "几内亚"
+    },
+    {
+        "countryCode": "GP",
+        "countryEName": null,
+        "countryCName": "瓜德罗普岛"
+    },
+    {
+        "countryCode": "GQ",
+        "countryEName": "Equatorial Guinea",
+        "countryCName": "赤道几内亚"
+    },
+    {
+        "countryCode": "GR",
+        "countryEName": "Greece",
+        "countryCName": "希腊"
+    },
+    {
+        "countryCode": "GT",
+        "countryEName": "Guatemala",
+        "countryCName": "危地马拉"
+    },
+    {
+        "countryCode": "GW",
+        "countryEName": "Guinea-Bissau",
+        "countryCName": "几内亚比绍"
+    },
+    {
+        "countryCode": "GY",
+        "countryEName": "Guyana",
+        "countryCName": "圭亚那"
+    },
+    {
+        "countryCode": "HN",
+        "countryEName": "Honduras",
+        "countryCName": "洪都拉斯"
+    },
+    {
+        "countryCode": "HR",
+        "countryEName": "Croatia",
+        "countryCName": "克罗地亚"
+    },
+    {
+        "countryCode": "HT",
+        "countryEName": "Haiti",
+        "countryCName": "海地"
+    },
+    {
+        "countryCode": "HU",
+        "countryEName": "Hungary",
+        "countryCName": "匈牙利"
+    },
+    {
+        "countryCode": "ID",
+        "countryEName": "Indonesia",
+        "countryCName": "印度尼西亚"
+    },
+    {
+        "countryCode": "IE",
+        "countryEName": "Ireland",
+        "countryCName": "爱尔兰"
+    },
+    {
+        "countryCode": "IL",
+        "countryEName": "Israel",
+        "countryCName": "以色列"
+    },
+    {
+        "countryCode": "IN",
+        "countryEName": "India",
+        "countryCName": "印度"
+    },
+    {
+        "countryCode": "IQ",
+        "countryEName": "Iraq",
+        "countryCName": "伊拉克"
+    },
+    {
+        "countryCode": "IR",
+        "countryEName": "Iran",
+        "countryCName": "伊朗"
+    },
+    {
+        "countryCode": "IS",
+        "countryEName": "Iceland",
+        "countryCName": "冰岛"
+    },
+    {
+        "countryCode": "IT",
+        "countryEName": "Italy",
+        "countryCName": "意大利"
+    },
+    {
+        "countryCode": "JM",
+        "countryEName": "Jamaica",
+        "countryCName": "牙买加"
+    },
+    {
+        "countryCode": "JO",
+        "countryEName": "Jordan",
+        "countryCName": "约旦"
+    },
+    {
+        "countryCode": "JP",
+        "countryEName": "Japan",
+        "countryCName": "日本"
+    },
+    {
+        "countryCode": "KE",
+        "countryEName": "Kenya",
+        "countryCName": "肯尼亚"
+    },
+    {
+        "countryCode": "KG",
+        "countryEName": "Kyrgyzstan",
+        "countryCName": "吉尔吉斯斯坦"
+    },
+    {
+        "countryCode": "KH",
+        "countryEName": "Cambodia",
+        "countryCName": "柬埔寨"
+    },
+    {
+        "countryCode": "KI",
+        "countryEName": "Kiribati",
+        "countryCName": "基里巴斯"
+    },
+    {
+        "countryCode": "KM",
+        "countryEName": "Comoros",
+        "countryCName": "科摩罗"
+    },
+    {
+        "countryCode": "KN",
+        "countryEName": "Saint Kitts and Nevis",
+        "countryCName": "圣基茨和尼维斯"
+    },
+    {
+        "countryCode": "KP",
+        "countryEName": "Korea (Democratic People's Republic of)",
+        "countryCName": "朝鲜"
+    },
+    {
+        "countryCode": "KR",
+        "countryEName": "Korea (Republic of)",
+        "countryCName": "韩国"
+    },
+    {
+        "countryCode": "KW",
+        "countryEName": "Kuwait",
+        "countryCName": "科威特"
+    },
+    {
+        "countryCode": "KY",
+        "countryEName": null,
+        "countryCName": "开曼群岛"
+    },
+    {
+        "countryCode": "KZ",
+        "countryEName": "Kazakhstan",
+        "countryCName": "哈萨克斯坦"
+    },
+    {
+        "countryCode": "LA",
+        "countryEName": "Lao People's Democratic Republic",
+        "countryCName": "老挝"
+    },
+    {
+        "countryCode": "LB",
+        "countryEName": "Lebanon",
+        "countryCName": "黎巴嫩"
+    },
+    {
+        "countryCode": "LC",
+        "countryEName": "Saint Lucia",
+        "countryCName": "圣卢西亚"
+    },
+    {
+        "countryCode": "LK",
+        "countryEName": "Sri Lanka",
+        "countryCName": "斯里兰卡"
+    },
+    {
+        "countryCode": "LR",
+        "countryEName": "Liberia",
+        "countryCName": "利比里亚"
+    },
+    {
+        "countryCode": "LS",
+        "countryEName": "Lesotho",
+        "countryCName": "莱索托"
+    },
+    {
+        "countryCode": "LT",
+        "countryEName": "Lithuania",
+        "countryCName": "立陶宛"
+    },
+    {
+        "countryCode": "LU",
+        "countryEName": "Luxembourg",
+        "countryCName": "卢森堡"
+    },
+    {
+        "countryCode": "LV",
+        "countryEName": "Latvia",
+        "countryCName": "拉脱维亚"
+    },
+    {
+        "countryCode": "LY",
+        "countryEName": "Libya",
+        "countryCName": "利比亚"
+    },
+    {
+        "countryCode": "MA",
+        "countryEName": "Morocco",
+        "countryCName": "摩洛哥"
+    },
+    {
+        "countryCode": "MC",
+        "countryEName": "Monaco",
+        "countryCName": "摩纳哥"
+    },
+    {
+        "countryCode": "MD",
+        "countryEName": "Moldova",
+        "countryCName": "摩尔多瓦"
+    },
+    {
+        "countryCode": "ME",
+        "countryEName": "Montenegro",
+        "countryCName": "黑山"
+    },
+    {
+        "countryCode": "MG",
+        "countryEName": "Madagascar",
+        "countryCName": "马达加斯加"
+    },
+    {
+        "countryCode": "MH",
+        "countryEName": "Marshall Islands",
+        "countryCName": "马绍尔群岛"
+    },
+    {
+        "countryCode": "MK",
+        "countryEName": "North Macedonia",
+        "countryCName": "北马其顿共和国"
+    },
+    {
+        "countryCode": "ML",
+        "countryEName": "Mali",
+        "countryCName": "马里"
+    },
+    {
+        "countryCode": "MM",
+        "countryEName": "Myanmar",
+        "countryCName": "缅甸"
+    },
+    {
+        "countryCode": "MN",
+        "countryEName": "Mongolia",
+        "countryCName": "蒙古"
+    },
+    {
+        "countryCode": "MQ",
+        "countryEName": null,
+        "countryCName": "马提尼克"
+    },
+    {
+        "countryCode": "MR",
+        "countryEName": "Mauritania",
+        "countryCName": "毛里塔尼亚"
+    },
+    {
+        "countryCode": "MS",
+        "countryEName": null,
+        "countryCName": "英属蒙塞拉特岛"
+    },
+    {
+        "countryCode": "MT",
+        "countryEName": "Malta",
+        "countryCName": "马耳他"
+    },
+    {
+        "countryCode": "MU",
+        "countryEName": "Mauritius",
+        "countryCName": "毛里求斯"
+    },
+    {
+        "countryCode": "MV",
+        "countryEName": "Maldives",
+        "countryCName": "马尔代夫"
+    },
+    {
+        "countryCode": "MW",
+        "countryEName": "Malawi",
+        "countryCName": "马拉维"
+    },
+    {
+        "countryCode": "MX",
+        "countryEName": "Mexico",
+        "countryCName": "墨西哥"
+    },
+    {
+        "countryCode": "MY",
+        "countryEName": "Malaysia",
+        "countryCName": "马来西亚"
+    },
+    {
+        "countryCode": "MZ",
+        "countryEName": "Mozambique",
+        "countryCName": "莫桑比克"
+    },
+    {
+        "countryCode": "NA",
+        "countryEName": "Namibia",
+        "countryCName": "纳米比亚"
+    },
+    {
+        "countryCode": "NC",
+        "countryEName": null,
+        "countryCName": "新喀里多尼亚"
+    },
+    {
+        "countryCode": "NE",
+        "countryEName": "Niger",
+        "countryCName": "尼日尔"
+    },
+    {
+        "countryCode": "NF",
+        "countryEName": null,
+        "countryCName": "诺福克岛（澳属）"
+    },
+    {
+        "countryCode": "NG",
+        "countryEName": "Nigeria",
+        "countryCName": "尼日利亚"
+    },
+    {
+        "countryCode": "NI",
+        "countryEName": "Nicaragua",
+        "countryCName": "尼加拉瓜"
+    },
+    {
+        "countryCode": "NL",
+        "countryEName": "Netherlands",
+        "countryCName": "荷兰"
+    },
+    {
+        "countryCode": "NO",
+        "countryEName": "Norway",
+        "countryCName": "挪威"
+    },
+    {
+        "countryCode": "NP",
+        "countryEName": "Nepal",
+        "countryCName": "尼泊尔"
+    },
+    {
+        "countryCode": "NR",
+        "countryEName": "Nauru",
+        "countryCName": "瑙鲁"
+    },
+    {
+        "countryCode": "NU",
+        "countryEName": "Niue",
+        "countryCName": "纽埃（新西兰属）"
+    },
+    {
+        "countryCode": "NZ",
+        "countryEName": "New Zealand",
+        "countryCName": "新西兰"
+    },
+    {
+        "countryCode": "OM",
+        "countryEName": "Oman",
+        "countryCName": "阿曼"
+    },
+    {
+        "countryCode": "PA",
+        "countryEName": "Panama",
+        "countryCName": "巴拿马"
+    },
+    {
+        "countryCode": "PE",
+        "countryEName": "Peru",
+        "countryCName": "秘鲁"
+    },
+    {
+        "countryCode": "PF",
+        "countryEName": null,
+        "countryCName": "法属波利尼西亚"
+    },
+    {
+        "countryCode": "PG",
+        "countryEName": "Papua New Guinea",
+        "countryCName": "巴布亚新几内亚"
+    },
+    {
+        "countryCode": "PH",
+        "countryEName": "Philippines",
+        "countryCName": "菲律宾"
+    },
+    {
+        "countryCode": "PK",
+        "countryEName": "Pakistan",
+        "countryCName": "巴基斯坦"
+    },
+    {
+        "countryCode": "PL",
+        "countryEName": "Poland",
+        "countryCName": "波兰"
+    },
+    {
+        "countryCode": "PM",
+        "countryEName": null,
+        "countryCName": "圣皮埃尔和密克隆岛"
+    },
+    {
+        "countryCode": "PR",
+        "countryEName": null,
+        "countryCName": "波多黎各"
+    },
+    {
+        "countryCode": "PT",
+        "countryEName": "Portugal",
+        "countryCName": "葡萄牙"
+    },
+    {
+        "countryCode": "PW",
+        "countryEName": "Palau",
+        "countryCName": "帕劳"
+    },
+    {
+        "countryCode": "PY",
+        "countryEName": "Paraguay",
+        "countryCName": "巴拉圭"
+    },
+    {
+        "countryCode": "QA",
+        "countryEName": "Qatar",
+        "countryCName": "卡塔尔"
+    },
+    {
+        "countryCode": "RE",
+        "countryEName": null,
+        "countryCName": "留尼汪（法属）"
+    },
+    {
+        "countryCode": "RO",
+        "countryEName": "Romania",
+        "countryCName": "罗马尼亚"
+    },
+    {
+        "countryCode": "RS",
+        "countryEName": "Serbia",
+        "countryCName": "塞尔维亚"
+    },
+    {
+        "countryCode": "RU",
+        "countryEName": "Russian Federation",
+        "countryCName": "俄罗斯"
+    },
+    {
+        "countryCode": "RW",
+        "countryEName": "Rwanda",
+        "countryCName": "卢旺达"
+    },
+    {
+        "countryCode": "SA",
+        "countryEName": "Saudi Arabia",
+        "countryCName": "沙特阿拉伯"
+    },
+    {
+        "countryCode": "SB",
+        "countryEName": "Solomon Islands",
+        "countryCName": "所罗门群岛"
+    },
+    {
+        "countryCode": "SC",
+        "countryEName": "Seychelles",
+        "countryCName": "塞舌尔"
+    },
+    {
+        "countryCode": "SD",
+        "countryEName": "Sudan",
+        "countryCName": "苏丹"
+    },
+    {
+        "countryCode": "SE",
+        "countryEName": "Sweden",
+        "countryCName": "瑞典"
+    },
+    {
+        "countryCode": "SG",
+        "countryEName": "Singapore",
+        "countryCName": "新加坡"
+    },
+    {
+        "countryCode": "SH",
+        "countryEName": null,
+        "countryCName": "圣赫勒拿、阿森松和特里斯坦-达库尼亚"
+    },
+    {
+        "countryCode": "SI",
+        "countryEName": "Slovenia",
+        "countryCName": "斯洛文尼亚"
+    },
+    {
+        "countryCode": "SK",
+        "countryEName": "Slovakia",
+        "countryCName": "斯洛伐克"
+    },
+    {
+        "countryCode": "SL",
+        "countryEName": "Sierra Leone",
+        "countryCName": "塞拉利昂"
+    },
+    {
+        "countryCode": "SN",
+        "countryEName": "Senegal",
+        "countryCName": "塞内加尔"
+    },
+    {
+        "countryCode": "SO",
+        "countryEName": "Somalia",
+        "countryCName": "索马里"
+    },
+    {
+        "countryCode": "SR",
+        "countryEName": "Suriname",
+        "countryCName": "苏里南"
+    },
+    {
+        "countryCode": "SS",
+        "countryEName": "South Sudan",
+        "countryCName": "南苏丹"
+    },
+    {
+        "countryCode": "ST",
+        "countryEName": "Sao Tome and Principe",
+        "countryCName": "圣多美和普林西比"
+    },
+    {
+        "countryCode": "SV",
+        "countryEName": "El Salvador",
+        "countryCName": "萨尔瓦多"
+    },
+    {
+        "countryCode": "SX",
+        "countryEName": null,
+        "countryCName": "荷属圣马丁"
+    },
+    {
+        "countryCode": "SY",
+        "countryEName": "Syrian Arab Republic",
+        "countryCName": "叙利亚"
+    },
+    {
+        "countryCode": "SZ",
+        "countryEName": "Eswatini",
+        "countryCName": "斯威士兰"
+    },
+    {
+        "countryCode": "TC",
+        "countryEName": null,
+        "countryCName": "特克斯和凯科斯群岛"
+    },
+    {
+        "countryCode": "TD",
+        "countryEName": "Chad",
+        "countryCName": "乍得"
+    },
+    {
+        "countryCode": "TG",
+        "countryEName": "Togo",
+        "countryCName": "多哥"
+    },
+    {
+        "countryCode": "TH",
+        "countryEName": "Thailand",
+        "countryCName": "泰国"
+    },
+    {
+        "countryCode": "TJ",
+        "countryEName": "Tajikistan",
+        "countryCName": "塔吉克斯坦"
+    },
+    {
+        "countryCode": "TL",
+        "countryEName": "Timor-Leste",
+        "countryCName": "东帝汶"
+    },
+    {
+        "countryCode": "TM",
+        "countryEName": "Turkmenistan",
+        "countryCName": "土库曼斯坦"
+    },
+    {
+        "countryCode": "TN",
+        "countryEName": "Tunisia",
+        "countryCName": "突尼斯"
+    },
+    {
+        "countryCode": "TO",
+        "countryEName": "Tonga",
+        "countryCName": "汤加"
+    },
+    {
+        "countryCode": "TR",
+        "countryEName": "Turkey",
+        "countryCName": "土耳其"
+    },
+    {
+        "countryCode": "TT",
+        "countryEName": "Trinidad and Tobago",
+        "countryCName": "特立尼达和多巴哥"
+    },
+    {
+        "countryCode": "TV",
+        "countryEName": "Tuvalu",
+        "countryCName": "图瓦卢"
+    },
+    {
+        "countryCode": "TZ",
+        "countryEName": "The United Republic of Tanzania",
+        "countryCName": "坦桑尼亚"
+    },
+    {
+        "countryCode": "UA",
+        "countryEName": "Ukraine",
+        "countryCName": "乌克兰"
+    },
+    {
+        "countryCode": "UG",
+        "countryEName": "Uganda",
+        "countryCName": "乌干达"
+    },
+    {
+        "countryCode": "US",
+        "countryEName": "United States of America",
+        "countryCName": "美国"
+    },
+    {
+        "countryCode": "UY",
+        "countryEName": "Uruguay",
+        "countryCName": "乌拉圭"
+    },
+    {
+        "countryCode": "UZ",
+        "countryEName": "Uzbekistan",
+        "countryCName": "乌兹别克斯坦"
+    },
+    {
+        "countryCode": "VC",
+        "countryEName": "Saint Vincent and the Grenadines",
+        "countryCName": "圣文森特和格林纳丁斯"
+    },
+    {
+        "countryCode": "VE",
+        "countryEName": "Venezuela",
+        "countryCName": "委内瑞拉"
+    },
+    {
+        "countryCode": "VG",
+        "countryEName": null,
+        "countryCName": "英属维尔京群岛"
+    },
+    {
+        "countryCode": "VI",
+        "countryEName": null,
+        "countryCName": "美属维尔京群岛"
+    },
+    {
+        "countryCode": "VN",
+        "countryEName": "Viet Nam",
+        "countryCName": "越南"
+    },
+    {
+        "countryCode": "VU",
+        "countryEName": "Vanuatu",
+        "countryCName": "瓦努阿图"
+    },
+    {
+        "countryCode": "WF",
+        "countryEName": null,
+        "countryCName": "瓦利斯和富图纳群岛"
+    },
+    {
+        "countryCode": "WS",
+        "countryEName": "Samoa",
+        "countryCName": "萨摩亚"
+    },
+    {
+        "countryCode": "YE",
+        "countryEName": "Yemen",
+        "countryCName": "也门"
+    },
+    {
+        "countryCode": "YT",
+        "countryEName": null,
+        "countryCName": "马约特"
+    },
+    {
+        "countryCode": "ZA",
+        "countryEName": "South Africa",
+        "countryCName": "南非"
+    },
+    {
+        "countryCode": "ZM",
+        "countryEName": "Zambia",
+        "countryCName": "赞比亚"
+    },
+    {
+        "countryCode": "ZW",
+        "countryEName": "Zimbabwe",
+        "countryCName": "津巴布韦"
+    }
+]

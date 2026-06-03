@@ -1,11 +1,10 @@
-import {useState} from "react";
 import {useLocation} from "react-router";
 import {useSelector} from "react-redux";
 import type {RootState} from "@/store";
 import {useTranslation} from "react-i18next";
 
-import {Avatar, Button, Popup, Space} from "antd-mobile";
-import {BellOutline, SearchOutline} from "antd-mobile-icons";
+import {Avatar, Button, Space} from "antd-mobile";
+import {BellOutline} from "antd-mobile-icons";
 
 export default function Header() {
   const location = useLocation()
@@ -13,8 +12,6 @@ export default function Header() {
   const {identity} = useSelector((state: RootState) => state.toolInfo);
 
   const {t} = useTranslation()
-
-  const [visible, setVisible] = useState(false)
 
   return (
     <div
@@ -37,22 +34,10 @@ export default function Header() {
               <Button color='default' fill='none' style={{padding: '4px 5px'}}>
                 <BellOutline fontSize={18} />
               </Button>
-              <Button color='default' fill='none' style={{padding: '4px 5px'}}>
-                <SearchOutline fontSize={18} />
-              </Button>
             </Space>
           </div>
         </div>
       </div>
-      <Popup visible={visible} position='left' bodyStyle={{ width: '70vw' }} onMaskClick={() => {
-        setVisible(false)
-      }}>
-        <div>
-
-        </div>
-
-
-      </Popup>
     </div>
   )
 }

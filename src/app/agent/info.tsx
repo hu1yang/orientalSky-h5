@@ -13,7 +13,7 @@ import {
   Dialog,
   Form,
   Grid,
-  Input,
+  Input, Loading,
   Popup,
   PullToRefresh,
   Radio,
@@ -52,9 +52,9 @@ const providerTypeValue = ['notifyEvents', 'issuedTicket', 'rejectTicket', 'refu
 
 export default function AgentInfo() {
   const {t} = useTranslation()
-  const loadingRef = useRef(false)
   const {id} = useParams()
 
+  const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
   const {channel} = useSelector((state: RootState) => state.baseInfo);
 
@@ -491,8 +491,6 @@ export default function AgentInfo() {
   }
 
   const getData = async () => {
-    if (loadingRef.current) return
-    loadingRef.current = true
     try{
       const response = await getAgentSettingGroup(id || '')
       if(Object.keys(response).length){
@@ -504,7 +502,7 @@ export default function AgentInfo() {
         })
       }
     } finally {
-      loadingRef.current = false
+      setLoading(false)
     }
   }
 
@@ -516,168 +514,174 @@ export default function AgentInfo() {
     <section className={'containerMain'}>
       <div className={'p-2'}>
         <PullToRefresh onRefresh={getData}>
-          <Card className={'mb-2'} style={{ borderRadius: '4px' }}
-                extra={
-                  <Space>
-                    <DefaultButton title={t('group.renew')} onClick={() => changeInfo('agentSetting',agentDetail)} />
-                    <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('agentSetting',agentDetail?.id as string)} />
-                  </Space>
-                }
-                title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.baseInfo')}({agentDetail?.agentCode})</span>}>
-            <CardText label={t('base.contactName')} value={agentDetail?.contactName} />
-            <CardText label={t('base.phoneNumber')} value={agentDetail?.phoneNumber} />
-            <CardText label={t('base.emailAddress')} value={agentDetail?.emailAddress} />
-            <CardText label={t('base.localAddress')} value={agentDetail?.localAddress} />
-            <CardText label={t('base.isEnabled')} value={<Tag round color={agentDetail?.isEnabled ? 'success' : 'danger'}>
-              {agentDetail?.isEnabled ? t('base.enabled') : t('base.disabled')}
-            </Tag>} />
-            <CardText label={t('base.remarks')} value={agentDetail?.remarks} />
-            <CardText label={t('base.operator')} value={agentDetail?.operator} />
-            <CardText label={t('base.channelCodes')} value={
-              <Space wrap style={{ '--gap': '4px' }}>
-                {
-                  agentDetail?.channelCodes?.map(channel => <Tag color='#2db7f5' key={channel}>{channel}</Tag>)
-                }
-              </Space>
-            } />
-          </Card>
-          <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.feessSettings')}</span>} extra={
-            <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('feessSettings',null)} />
-          }>
-            {
-              agentDetail?.feessSettings.map(feessSetting => (
-                <Grid columns={2} gap={8} key={feessSetting.id}>
-                  <Grid.Item>
-                    <div className={'flex items-center'}>
-                      <DownFill className={'rotate-270 mr-2 text-(--text)'} fontSize={'.9rem'} />
-                      <span className={'mr-2'}>{feessSetting.id}</span>
-                      <Tag round color={feessSetting.isEnabled ? 'success' : 'danger'}>{feessSetting.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
-                    </div>
-                  </Grid.Item>
-                  <Grid.Item>
-                    <Space justify={'end'} block>
-                      <DefaultButton title={t('group.renew')} onClick={() => changeInfo('feessSettings',feessSetting)} />
-                      <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('feessSettings',feessSetting.id)} />
+          {
+            !loading?
+              <>
+                <Card className={'mb-2'} style={{ borderRadius: '4px' }}
+                      extra={
+                        <Space>
+                          <DefaultButton title={t('group.renew')} onClick={() => changeInfo('agentSetting',agentDetail)} />
+                          <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('agentSetting',agentDetail?.id as string)} />
+                        </Space>
+                      }
+                      title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.baseInfo')}({agentDetail?.agentCode})</span>}>
+                  <CardText label={t('base.contactName')} value={agentDetail?.contactName} />
+                  <CardText label={t('base.phoneNumber')} value={agentDetail?.phoneNumber} />
+                  <CardText label={t('base.emailAddress')} value={agentDetail?.emailAddress} />
+                  <CardText label={t('base.localAddress')} value={agentDetail?.localAddress} />
+                  <CardText label={t('base.isEnabled')} value={<Tag round color={agentDetail?.isEnabled ? 'success' : 'danger'}>
+                    {agentDetail?.isEnabled ? t('base.enabled') : t('base.disabled')}
+                  </Tag>} />
+                  <CardText label={t('base.remarks')} value={agentDetail?.remarks} />
+                  <CardText label={t('base.operator')} value={agentDetail?.operator} />
+                  <CardText label={t('base.channelCodes')} value={
+                    <Space wrap style={{ '--gap': '4px' }}>
+                      {
+                        agentDetail?.channelCodes?.map(channel => <Tag color='#2db7f5' key={channel}>{channel}</Tag>)
+                      }
                     </Space>
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.startDate')} value={feessSetting.issuedDate} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.voidedFeesAmount')} value={feessSetting.voidedFeesAmount} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.appendFeesAmount')} value={feessSetting.appendFeesAmount} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.refundFeesAmount')} value={feessSetting.refundFeesAmount} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.changeFeesAmount')} value={feessSetting.changeFeesAmount} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.defaultPurchaseRange')} value={feessSetting.orderRangeAmount} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.defaultPaymentRange')} value={feessSetting.payedRangeAmount} />
-                  </Grid.Item>
+                  } />
+                </Card>
+                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.feessSettings')}</span>} extra={
+                  <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('feessSettings',null)} />
+                }>
+                  {
+                    agentDetail?.feessSettings.map(feessSetting => (
+                      <Grid columns={2} gap={8} key={feessSetting.id}>
+                        <Grid.Item>
+                          <div className={'flex items-center'}>
+                            <DownFill className={'rotate-270 mr-2 text-(--text)'} fontSize={'.9rem'} />
+                            <span className={'mr-2'}>{feessSetting.id}</span>
+                            <Tag round color={feessSetting.isEnabled ? 'success' : 'danger'}>{feessSetting.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
+                          </div>
+                        </Grid.Item>
+                        <Grid.Item>
+                          <Space justify={'end'} block>
+                            <DefaultButton title={t('group.renew')} onClick={() => changeInfo('feessSettings',feessSetting)} />
+                            <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('feessSettings',feessSetting.id)} />
+                          </Space>
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.startDate')} value={feessSetting.issuedDate} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.voidedFeesAmount')} value={feessSetting.voidedFeesAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.appendFeesAmount')} value={feessSetting.appendFeesAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.refundFeesAmount')} value={feessSetting.refundFeesAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.changeFeesAmount')} value={feessSetting.changeFeesAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.defaultPurchaseRange')} value={feessSetting.orderRangeAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.defaultPaymentRange')} value={feessSetting.payedRangeAmount} />
+                        </Grid.Item>
 
-                </Grid>
-              ))
-            }
-          </Card>
+                      </Grid>
+                    ))
+                  }
+                </Card>
 
-          <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.scaleSettings')}</span>} extra={
-            <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('scaleSettings',null)} />
-          }>
-            {
-              agentDetail?.scaleSettings.map(scaleSetting => (
-                <Grid columns={2} gap={8} key={scaleSetting.id}>
-                  <Grid.Item>
-                    <div className={'flex items-center'}>
-                      <DownFill className={'rotate-270 mr-2 text-(--text)'} fontSize={'.9rem'} />
-                      <span className={'mr-2'}>{scaleSetting.id}</span>
-                      <Tag round color={scaleSetting.isEnabled ? 'success' : 'danger'}>{scaleSetting.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
-                    </div>
-                  </Grid.Item>
-                  <Grid.Item>
-                    <Space justify={'end'} block>
-                      <DefaultButton title={t('group.renew')} onClick={() => changeInfo('scaleSettings',scaleSetting)} />
-                      <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('scaleSettings',scaleSetting.id)} />
-                    </Space>
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.startDate')} value={scaleSetting.issuedDate} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.unpaidForwardDaysLength')} value={scaleSetting.scaleLimitedDaysLength} labelStyle={'!w-40'} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.scaleLimited')} value={scaleSetting.scaleLimited} />
-                  </Grid.Item>
-                  <Grid.Item>
-                    <CardText label={t('base.queryOrQuoteScaleLimited')} value={scaleSetting.scaleLimitedFineByOnce} labelStyle={'!w-40'} />
-                  </Grid.Item>
+                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.scaleSettings')}</span>} extra={
+                  <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('scaleSettings',null)} />
+                }>
+                  {
+                    agentDetail?.scaleSettings.map(scaleSetting => (
+                      <Grid columns={2} gap={8} key={scaleSetting.id}>
+                        <Grid.Item>
+                          <div className={'flex items-center'}>
+                            <DownFill className={'rotate-270 mr-2 text-(--text)'} fontSize={'.9rem'} />
+                            <span className={'mr-2'}>{scaleSetting.id}</span>
+                            <Tag round color={scaleSetting.isEnabled ? 'success' : 'danger'}>{scaleSetting.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
+                          </div>
+                        </Grid.Item>
+                        <Grid.Item>
+                          <Space justify={'end'} block>
+                            <DefaultButton title={t('group.renew')} onClick={() => changeInfo('scaleSettings',scaleSetting)} />
+                            <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('scaleSettings',scaleSetting.id)} />
+                          </Space>
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.startDate')} value={scaleSetting.issuedDate} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.unpaidForwardDaysLength')} value={scaleSetting.scaleLimitedDaysLength} labelStyle={'!w-40'} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.scaleLimited')} value={scaleSetting.scaleLimited} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.queryOrQuoteScaleLimited')} value={scaleSetting.scaleLimitedFineByOnce} labelStyle={'!w-40'} />
+                        </Grid.Item>
 
-                </Grid>
-              ))
-            }
+                      </Grid>
+                    ))
+                  }
 
-          </Card>
-          <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.pushProviders')}</span>} extra={
-            <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('pushProviders',null)} />
-          }>
-            {
-              agentDetail?.pushProviders.map(pushProvider => (
-                <Grid columns={6} className={'!items-center w-full'} key={pushProvider.id}>
-                  <Grid.Item span={2}>
-                    <span className={'line-clamp-1 break-all'}>{pushProvider.request_Url}</span>
-                  </Grid.Item>
-                  <Grid.Item span={2}>
-                    <span>{pushProvider.providerType}</span>
-                  </Grid.Item>
-                  <Grid.Item span={1}>
-                    <span>{pushProvider.timeoutSeconds}</span>
-                  </Grid.Item>
-                  <Grid.Item span={1}>
-                    <div className={'text-center'}>
-                      <Tag round color={pushProvider.isEnabled ? 'success' : 'danger'}>{pushProvider.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
-                    </div>
-                  </Grid.Item>
-                  <Grid.Item span={6}>
-                    <Space justify={'end'} block>
-                      <DefaultButton title={t('group.renew')}  onClick={() => changeInfo('pushProviders',pushProvider)} />
-                      <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('pushProviders',pushProvider.id)} />
-                    </Space>
-                  </Grid.Item>
-                </Grid>
-              ))
-            }
-          </Card>
-          <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.dataAccessers')}</span>} extra={
-            <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('dataAccessers',null)} />
-          }>
-            {
-              agentDetail?.dataAccessers.map(dataAccesser => (
-                <Grid columns={6} className={'!items-center w-full'} key={dataAccesser.id}>
-                  <Grid.Item span={2}>
-                    <span>{dataAccesser.remoteAddress}</span>
-                  </Grid.Item>
-                  <Grid.Item span={1}>
-                    <div className={'text-center'}>
-                      <Tag round color={dataAccesser.isEnabled ? 'success' : 'danger'}>{dataAccesser.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
-                    </div>
-                  </Grid.Item>
-                  <Grid.Item span={3}>
-                    <Space justify={'end'} block>
-                      <DefaultButton title={t('group.renew')} onClick={() => changeInfo('dataAccessers',dataAccesser)} />
-                      <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('dataAccessers',dataAccesser.id)} />
-                    </Space>
-                  </Grid.Item>
-                </Grid>
-              ))
-            }
-          </Card>
+                </Card>
+                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.pushProviders')}</span>} extra={
+                  <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('pushProviders',null)} />
+                }>
+                  {
+                    agentDetail?.pushProviders.map(pushProvider => (
+                      <Grid columns={6} className={'!items-center w-full'} key={pushProvider.id}>
+                        <Grid.Item span={2}>
+                          <span className={'line-clamp-1 break-all'}>{pushProvider.request_Url}</span>
+                        </Grid.Item>
+                        <Grid.Item span={2}>
+                          <span>{pushProvider.providerType}</span>
+                        </Grid.Item>
+                        <Grid.Item span={1}>
+                          <span>{pushProvider.timeoutSeconds}</span>
+                        </Grid.Item>
+                        <Grid.Item span={1}>
+                          <div className={'text-center'}>
+                            <Tag round color={pushProvider.isEnabled ? 'success' : 'danger'}>{pushProvider.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
+                          </div>
+                        </Grid.Item>
+                        <Grid.Item span={6}>
+                          <Space justify={'end'} block>
+                            <DefaultButton title={t('group.renew')}  onClick={() => changeInfo('pushProviders',pushProvider)} />
+                            <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('pushProviders',pushProvider.id)} />
+                          </Space>
+                        </Grid.Item>
+                      </Grid>
+                    ))
+                  }
+                </Card>
+                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.dataAccessers')}</span>} extra={
+                  <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('dataAccessers',null)} />
+                }>
+                  {
+                    agentDetail?.dataAccessers.map(dataAccesser => (
+                      <Grid columns={6} className={'!items-center w-full'} key={dataAccesser.id}>
+                        <Grid.Item span={2}>
+                          <span>{dataAccesser.remoteAddress}</span>
+                        </Grid.Item>
+                        <Grid.Item span={1}>
+                          <div className={'text-center'}>
+                            <Tag round color={dataAccesser.isEnabled ? 'success' : 'danger'}>{dataAccesser.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
+                          </div>
+                        </Grid.Item>
+                        <Grid.Item span={3}>
+                          <Space justify={'end'} block>
+                            <DefaultButton title={t('group.renew')} onClick={() => changeInfo('dataAccessers',dataAccesser)} />
+                            <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('dataAccessers',dataAccesser.id)} />
+                          </Space>
+                        </Grid.Item>
+                      </Grid>
+                    ))
+                  }
+                </Card>
+              </>:
+              <Loading />
+          }
         </PullToRefresh>
       </div>
       <Popup visible={infoVisible} position='bottom' onMaskClick={closeInfoVisible}>

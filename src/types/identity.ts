@@ -1,4 +1,3 @@
-import type {UploadRequestOptionsAgent} from "@/types/agent.ts";
 
 export type IScheme = 'group_scheme' | 'agent_scheme';
 
@@ -273,7 +272,7 @@ export type BankAgentForm = Pick<BankAgents, 'branchId'|'bankSwiftOrName'|'bankA
 export interface UploadAgentForm{
     AgentId: string;
     Remarks: string;
-    FormFiles: UploadRequestOptionsAgent[];
+    FormFiles: any[];
 }
 
 export interface UpdateName {

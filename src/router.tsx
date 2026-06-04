@@ -8,7 +8,7 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad
 } from "./routerMenu.ts";
 
 
@@ -113,6 +113,13 @@ export const router = createBrowserRouter([
             element: <CompanyLoad />,
             handle: {
               title: 'common.routerCompanyList'
+            }
+          },
+          {
+            path: 'user/:branchId?',
+            element: <UserLoad />,
+            handle: {
+              title: 'common.routerCompanyUser'
             }
           },
           {

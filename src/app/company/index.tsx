@@ -25,6 +25,7 @@ import CardText from "@/component/card/cardText.tsx";
 import {AddOutline} from "antd-mobile-icons";
 
 import countryArr from "@/assets/country.json"
+import type {IBranch} from "@/types/group.ts";
 
 
 type ICompany = GroupBranch & {
@@ -42,14 +43,16 @@ export default function Company() {
 
   const [companyVisible, setCompanyVisible] = useState(false)
   const [buttonLoading, setButtonLoading] = useState(false)
-  const [companyForm] = Form.useForm()
+  const [companyForm] = Form.useForm();
+
+
 
   const closeCompanyVisible = () => {
     setCompanyVisible(false)
     companyForm.resetFields()
   }
 
-  const finishForm = async (val) => {
+  const finishForm = async (val: IBranch) => {
     setButtonLoading(true)
     try {
       const branchId = companyForm.getFieldValue('branchId')
@@ -136,7 +139,7 @@ export default function Company() {
                   <Divider />
                   <Space justify={'end'} className={'w-full'}>
                     <Button size={'small'} disabled={!branch.authorization} color={'primary'} onClick={() => updateBranch(branch)}>{t('group.updateBranch')}</Button>
-                    {/*<Button size={'small'} disabled={!branch.authorization} color={'success'}>{t('common.routerUserManagement')}</Button>*/}
+                    <Button size={'small'} disabled={!branch.authorization} color={'success'} onClick={() => navigate(`/group/user/${branch.id}`)}>{t('common.routerUserManagement')}</Button>
                     <Button size={'small'} disabled={!branch.authorization} color={'warning'} onClick={() => navigate(`/group/agent/${branch.id}`)}>{t('common.routerAgency')}</Button>
                   </Space>
                 </Card>
@@ -155,7 +158,13 @@ export default function Company() {
       </FloatingBubble>
       <Popup visible={companyVisible} position='bottom' onMaskClick={closeCompanyVisible}>
         <div className={'p-3 my-2 text-center'}>
-          <span className={'text-[1.4rem] mb-20'}>{t('group.createBranch')}</span>
+          {
+            companyVisible && (
+              <span className={'text-[1.4rem] mb-20'}>{
+                companyForm.getFieldValue('branchId') ? t('group.updateBranch') : t('group.createBranch')
+              }</span>
+            )
+          }
         </div>
         <Form form={companyForm} layout='vertical' onFinish={finishForm} footer={
           <Button block type='submit' color='primary' size='middle' loading={buttonLoading}>
@@ -210,6 +219,7 @@ export default function Company() {
           </Form.Item>
         </Form>
       </Popup>
+
     </section>
   )
 }

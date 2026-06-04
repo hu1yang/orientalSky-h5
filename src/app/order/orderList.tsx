@@ -417,6 +417,10 @@ export default function OrderList(){
 
   useEffect(() => {
     const changeData = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // 或 'auto'
+      });
       setLoading(true)
       resetData()
     }

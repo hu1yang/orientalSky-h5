@@ -333,19 +333,23 @@ export default function AgentRechargePayment() {
   }, []);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 或 'auto'
+    });
     getData(0,true)
   }, [searchFormData]);
   return (
     <section className={'containerMain'}>
+      <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('order.transactionSerialNumber')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
+                   onSearch={searchFilter} onClear={() => searchFilter('')}/>
+        <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+          <FilterOutline fontSize={18} color={'var(--active-color)'} />
+        </Button>
+      </div>
       <div className={'p-2'}>
-        <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
-          <SearchBar className={'flex-1'} placeholder={t('order.transactionSerialNumber')}
-                     style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
-                     onSearch={searchFilter} onClear={() => searchFilter('')}/>
-          <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
-            <FilterOutline fontSize={18} color={'var(--active-color)'} />
-          </Button>
-        </div>
         {
           !loading? <>
               <PullToRefresh onRefresh={resetData}>
@@ -356,8 +360,8 @@ export default function AgentRechargePayment() {
                             <div className={'flex items-center'}>
                               <BillOutline fontSize={20} color={'var(--warning-color)'} />
                               <span className={'text-[1.1rem] ml-2 font-normal'}>
-                        {item.agentCode}
-                      </span>
+                          {item.agentCode}
+                        </span>
                             </div>
                           }
                           extra={
@@ -368,9 +372,9 @@ export default function AgentRechargePayment() {
                       <div className={'text-left'}>
                         <div>
                           <div className={'mb-2'}>
-                            <span className={'text-[1.6rem] text-(--success-color)'}>
-                              {item.totalAmount.toLocaleString()}
-                            </span>
+                              <span className={'text-[1.6rem] text-(--success-color)'}>
+                                {item.totalAmount.toLocaleString()}
+                              </span>
                             <span className={'text-(--price-color) text-[1.8rem] ml-2'}>{item.currency}/<span className={'text-[1.2rem]'}>{item.exchangeRate}</span></span>
                           </div>
                           {
@@ -378,17 +382,17 @@ export default function AgentRechargePayment() {
                               <>
                                 <div className={'flex'}>
                                   <div>
-                            <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.beforeBalance.toLocaleString()}
-                              <em className={'text-[1rem] ml-1'}>USD</em>
-                            </span>
+                              <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.beforeBalance.toLocaleString()}
+                                <em className={'text-[1rem] ml-1'}>USD</em>
+                              </span>
                                   </div>
                                   <span className={'text-[1rem] ml-3'}>{t('order.beforeBalance')}</span>
                                 </div>
                                 <div className={'flex'}>
                                   <div>
-                            <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.currentBalance.toLocaleString()}
-                              <em className={'text-[1rem] ml-1'}>USD</em>
-                            </span>
+                              <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.currentBalance.toLocaleString()}
+                                <em className={'text-[1rem] ml-1'}>USD</em>
+                              </span>
                                   </div>
                                   <span className={'text-[1rem] ml-3'}>{t('order.currentBalance')}</span>
                                 </div>
@@ -464,7 +468,6 @@ export default function AgentRechargePayment() {
             </>:
             <Loading />
         }
-
       </div>
       <ImageViewer
         classNames={{

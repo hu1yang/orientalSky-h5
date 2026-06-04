@@ -210,6 +210,10 @@ export default function FoundationBooking() {
   }
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 或 'auto'
+    });
     resetData()
   }, [searchFormData]);
 

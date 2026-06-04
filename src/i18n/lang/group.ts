@@ -173,6 +173,12 @@ export const groupZh = {
         uploadFilesOnly: '仅上传文件',
         balanceAccount: '余额账户',
         title: '标题',
+
+        identityPermissions: '身份权限',
+        groupPermissions: '集团权限',
+        unauthorized: '未授权',
+        authorized: '已授权',
+
     }
 }
 
@@ -345,6 +351,11 @@ export const groupEn = {
         uploadFilesOnly: 'Upload only',
         balanceAccount: 'Balance Account',
         title: 'Title',
+
+        identityPermissions: 'identity permissions',
+        groupPermissions: 'Group Permissions',
+        unauthorized: 'Unauthorized',
+        authorized: 'Authorized',
     }
 }
 
@@ -516,5 +527,10 @@ export const groupRu = {
         uploadFilesOnly: 'Только загрузка файлов',
         balanceAccount: 'Баланс счета',
         title: 'заголовок',
+
+        identityPermissions: 'разрешения на идентификацию',
+        groupPermissions: 'Групповые права доступа',
+        unauthorized: 'Незаконный',
+        authorized: 'Авторизованный',
     }
 }

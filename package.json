@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "releaseTest": "cross-env DEPLOY_ENV=test node deploy.js",
+    "release": "cross-env DEPLOY_ENV=prod node deploy.js",
     "dev:group": "cross-env VITE_APP_TYPE=group_scheme vite",
     "dev:groupPro": "cross-env VITE_APP_TYPE=group_scheme vite --mode production",
     "build:group": "cross-env VITE_APP_TYPE=group_scheme vite build",
@@ -40,6 +42,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "node-ssh": "^13.2.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10"

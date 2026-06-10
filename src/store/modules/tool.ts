@@ -30,11 +30,11 @@ const toolSlice = createSlice({
       localStorage.setItem('identity', JSON.stringify(state.identity))
     },
     removeLogin(state) {
+      Cookie.remove('token')
+      router.navigate('/login')
       state.token = ''
       state.identity = null
-      Cookie.remove('token')
       localStorage.removeItem('identity')
-      router.navigate('/login')
     }
   }
 })

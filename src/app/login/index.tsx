@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {Button, Form, Input, Toast} from "antd-mobile";
 
 import logo from "@/assets/picture/blueLogo.png"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {generateCompanyCode} from "@/utils/public.ts";
 import {getCaptcha, userSignin} from "@/utils/request/identity.ts";
 import {setLogin} from "@/store/modules/tool.ts";
@@ -14,6 +14,8 @@ export default function Login(){
   const navigate = useNavigate();
   const {t} = useTranslation();
   const [loginForm] = Form.useForm();
+
+  const initRef = useRef(false);
 
 
   const [catchaImg, setCatchaImg] = useState<string|null>(null)
@@ -58,6 +60,9 @@ export default function Login(){
             icon: 'fail',
             content: `${response.errors[0].code}: ${response.errors[0].description}`,
           })
+          if(response.errors.some(error => error.code === 'CaptchaCodeError')){
+            getCaptchaFnc()
+          }
         }
       }
     } finally {
@@ -74,7 +79,9 @@ export default function Login(){
     if(token){
       toHome()
     }else{
-      // getCaptchaFnc()
+      if(initRef.current) return
+      initRef.current = true
+      getCaptchaFnc()
     }
   },[])
 
@@ -109,15 +116,15 @@ export default function Login(){
             ]}>
               <Input className='bg-transparent text-white' placeholder={t('login.enterPassWord')} type={'password'} />
             </Form.Item>
-            {/*<Form.Item name={'captchaCode'} extra={*/}
-            {/*  <div className={''} onClick={getCaptchaFnc}>*/}
-            {/*    {*/}
-            {/*      !!catchaImg && <img src={catchaImg}/>*/}
-            {/*    }*/}
-            {/*  </div>*/}
-            {/*}>*/}
-            {/*  <Input className='bg-transparent text-white' placeholder={t('login.enterCode')}/>*/}
-            {/*</Form.Item>*/}
+            <Form.Item name={'captchaCode'} extra={
+              <div className={''} onClick={getCaptchaFnc}>
+                {
+                  !!catchaImg && <img src={catchaImg}/>
+                }
+              </div>
+            }>
+              <Input className='bg-transparent text-white' placeholder={t('login.enterCode')}/>
+            </Form.Item>
           </Form>
         </div>
       </div>

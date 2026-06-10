@@ -48,7 +48,7 @@ export default function Setting() {
                     '--gap': '4px'
                   }}>
                     {
-                      branchCodes.map((branchCode) => (
+                      !!branchCodes?.length && branchCodes.map((branchCode) => (
                         <Tag round color='#2db7f5' key={branchCode}>
                           {branchCode}
                         </Tag>

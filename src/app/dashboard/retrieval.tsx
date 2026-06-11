@@ -167,7 +167,7 @@ export default function Retrieval(){
           titleTips:[
             t('home.realTimeQuery'),t('home.cacheTimeQuery'),t('home.totalQuery'),t('home.totalBookings')
           ],
-          title:t('foundation.company_name'),
+          title:t('order.company_name'),
           xData:branchCode,
           barData:[branchesRealdTimes, branchesCacheTimes, branchesQueryTimes],
           lineData:branchesOrderTimes,

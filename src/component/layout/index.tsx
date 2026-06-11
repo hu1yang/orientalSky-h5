@@ -71,7 +71,7 @@ export default function Layout({noDefault}:{
         {
           noDefault ?
             <Header />:
-            <div className={'lg:w-(--container-width) w-full h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-99'}>
+            <div className={'lg:w-(--container-width) w-full h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-999'}>
               <NavBar onBack={onBack} style={{lineHeight: 1.6}}>{t(title)}</NavBar>
             </div>
         }

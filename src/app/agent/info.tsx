@@ -517,7 +517,7 @@ export default function AgentInfo() {
           {
             !loading?
               <>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }}
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }}
                       extra={
                         <Space>
                           <DefaultButton title={t('group.renew')} onClick={() => changeInfo('agentSetting',agentDetail)} />
@@ -542,7 +542,7 @@ export default function AgentInfo() {
                     </Space>
                   } />
                 </Card>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.feessSettings')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.feessSettings')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('feessSettings',null)} />
                 }>
                   {
@@ -588,7 +588,7 @@ export default function AgentInfo() {
                   }
                 </Card>
 
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.scaleSettings')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.scaleSettings')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('scaleSettings',null)} />
                 }>
                   {
@@ -625,7 +625,7 @@ export default function AgentInfo() {
                   }
 
                 </Card>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.pushProviders')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.pushProviders')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('pushProviders',null)} />
                 }>
                   {
@@ -655,7 +655,7 @@ export default function AgentInfo() {
                     ))
                   }
                 </Card>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.dataAccessers')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.dataAccessers')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('dataAccessers',null)} />
                 }>
                   {

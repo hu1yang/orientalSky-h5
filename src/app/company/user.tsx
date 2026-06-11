@@ -41,7 +41,7 @@ import {AddOutline} from "antd-mobile-icons";
 export default function User() {
   const {branchId} = useParams()
   const {t} = useTranslation()
-  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const {branchAgents,branchMore} = useSelector((state: RootState) => state.baseInfo);
 
   const [keyword, setKeyword] = useState('')
   const [loading, setLoading] = useState(true)
@@ -190,9 +190,9 @@ export default function User() {
             <Selector
               columns={3}
               multiple
-              options={branchAgents.map(item => ({
-                label: item.branch.code,
-                value: item.branch.id,
+              options={branchMore.map(item => ({
+                label: item.code,
+                value: item.id,
               }))}
             />
           </Form.Item>
@@ -208,9 +208,9 @@ export default function User() {
                   <Selector
                     columns={3}
                     multiple
-                    options={branchAgents.map(item => ({
-                      label: item.branch.code,
-                      value: item.branch.id,
+                    options={branchMore.map(item => ({
+                      label: item.code,
+                      value: item.id,
                     }))}
                   />
                 </Form.Item>
@@ -258,7 +258,9 @@ export default function User() {
                         routes.routeValidateKeys.length ?
                           routes.routeValidateKeys.map(routeValidateKey => (
                             <CheckList.Item key={routeValidateKey.routeKey}
-                                            value={routeValidateKey.routeKey}>{routeValidateKey.description}-{routeValidateKey.headerTitle}</CheckList.Item>
+                                            value={routeValidateKey.routeKey}>
+                              {t('management.'+routeValidateKey.methodName)}-{t('management.'+routeValidateKey.className)}
+                            </CheckList.Item>
                           ))
                           :
                           <NoData/>
@@ -484,8 +486,8 @@ export default function User() {
                       </Button>
                       <Popover.Menu
                         actions={[
-                          {key: 'role', text: t('group.updateRole'), onClick: () => updateUser(item, 'role')},
                           {key: 'branch', text: t('group.updateCompany'), onClick: () => updateUser(item, 'branch')},
+                          {key: 'role', text: t('group.updateRole'), onClick: () => updateUser(item, 'role')},
                           {
                             key: 'department',
                             text: t('group.updateDepartment'),

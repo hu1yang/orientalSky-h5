@@ -13,6 +13,7 @@ import {airportEn, airportZh, airportRu} from "@/i18n/lang/airport.ts";
 import {quoteEn, quoteZh, quoteRu} from "@/i18n/lang/quote.ts";
 
 import {resolveLocale} from "@/utils/local.ts";
+import {managementEn, managementRu, managementZh} from "@/i18n/lang/management.ts";
 
 const locale = resolveLocale()
 i18n.use(initReactI18next).init({
@@ -20,19 +21,19 @@ i18n.use(initReactI18next).init({
     en_US: {
       translation: {
         ...commonEn, ...loginEn, ...homeEn, ...orderEn, ...foundationEn,
-        ...groupEn, ...personalEn, ...baseEn, ...airportEn, ...quoteEn
+        ...groupEn, ...personalEn, ...baseEn, ...airportEn, ...quoteEn, ...managementEn
       }
     },
     zh_CN: {
       translation: {
         ...commonZh, ...loginZh, ...homeZh, ...orderZh, ...foundationZh,
-        ...groupZh, ...personalZh, ...baseZh, ...airportZh, ...quoteZh
+        ...groupZh, ...personalZh, ...baseZh, ...airportZh, ...quoteZh, ...managementZh
       }
     },
     ru_RU: {
       translation: {
         ...commonRu, ...loginRu, ...homeRu, ...orderRu, ...foundationRu,
-        ...groupRu, ...personalRu, ...baseRu, ...airportRu, ...quoteRu
+        ...groupRu, ...personalRu, ...baseRu, ...airportRu, ...quoteRu, ...managementRu
       }
 
     }

@@ -49,8 +49,8 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
                 margin: '8px 0'
               }} />
               <CardText label={t('order.documents')} value={`${passenger.idNumber || '--'} · ${t('order.'+passengerIdTypeArr[passenger.passengerIdType])}`} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
-              <CardText label={t('order.birthday')} value={passenger.birthday} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
-              <CardText label={t('order.expiryDate')} value={passenger.expiryDate} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={t('order.birthday')} value={passenger.birthday || '-'} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={t('order.expiryDate')} value={passenger.expiryDate || '-'} labelStyle={'!w-20'} valueStyle={'text-right text-[1.1rem] font-bold'} />
               <CardText label={`${t('order.pnr')} / ${t('order.ticketNumber')}`} value={
                 <div className={'flex justify-end flex-col'}>
                   {
@@ -63,7 +63,7 @@ export default memo(function PassengerCard({passengers,status = 'ticket'}:{
                   }
                 </div>
               } labelStyle={'!w-auto'} valueStyle={'text-right text-[1.1rem] !text-(--success-color)'} style={'!items-start'} />
-              <CardText label={t('order.contact')} value={`${passenger.phoneNumber}`} labelStyle={'!w-auto'} valueStyle={'text-right text-[1.1rem] font-bold'} />
+              <CardText label={t('base.phoneNumber')} value={`${passenger.phoneNumber || '-'}`} labelStyle={'!w-auto'} valueStyle={'text-right text-[1.1rem] font-bold'} />
             </div>
             {
               passengerIndex !== passengers.length - 1 && (

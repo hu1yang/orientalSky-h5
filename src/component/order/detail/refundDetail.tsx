@@ -6,7 +6,6 @@ import {Button, Dialog, Grid, Tabs, TextArea, Toast} from "antd-mobile";
 import {useDetailData} from "@/context/order/detailContext.tsx";
 import {
   getRefundInfoGroup,
-  paymentRefundGroup,
   refundRejectGroup,
   rejectRefundAmountsGroup
 } from "@/utils/request/group.ts";
@@ -84,22 +83,6 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
     if(amountRef.current){
       amountRef.current.openSurePop(refundPassenger,refundTab as string)
     }
-  }
-
-  const executeAmount = () => {
-    const message = t('order.refundTips', { tc:`${totalPrice}USD` })
-    Dialog.confirm({
-      content: message,
-      onConfirm: async () => {
-        const resposne = await paymentRefundGroup(refundTab)
-        result(resposne)
-        if(resposne.succeed){
-          getDetail()
-        }else{
-          throw new Error()
-        }
-      }
-    })
   }
 
   const rejectAmount = () => {
@@ -200,33 +183,33 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
         refundList.length ? (
           <Tabs activeKey={refundTab} style={{
             '--title-font-size':'1rem',
-            '--content-padding':'12px 0',
+            '--content-padding':'12px 0 0',
           }} onChange={(val) => setRefundTab(val)}>
             {
               refundList.map(refund => (
                 <Tabs.Tab key={refund.id} title={`${refund.id}(${t('common.'+ statusRefundArs[refund.status])})`}>
-                  <PassengerCard passengers={refundPassenger} status={'refund'} />
-                  <SegmentCard itineraryList={refundItineraries} status={'refund'} />
                   {
                     !!refund.confirmed && (
                       <PriceConfirmation confirmed={refund.confirmed} currency={refund.order?.currency || ''} type={'refund'} totalPrice={totalPrice} />
                     )
                   }
+                  <PassengerCard passengers={refundPassenger} status={'refund'} />
+                  <SegmentCard itineraryList={refundItineraries} status={'refund'} />
                   {
                     refund.status !== 'cancelled' && (
-                      <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5'}>
+                      <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5 bottom-2'}>
                         <Grid.Item span={['refundPaid','completed','executed'].includes(refund.status)?1:2}>
                           {
                             ['refundPaid','completed','executed'].includes(refund.status)?
                               <Button block disabled={refund.status !== 'executed'} style={{
                                 '--background-color':'var(--warning-color)'
-                              }} onClick={executeAmount}>
+                              }} onClick={sureAmount}>
                                 {
                                   ['refundPaid','completed'].includes(refund.status) ? t('common.'+ statusRefundArs[refund.status]) : t('order.executeRefundEd')
                                 }
-                                </Button>
+                              </Button>
                               :
-                              <Button block disabled={refund.status !== 'created'} style={{
+                              <Button block style={{
                                 '--background-color':'var(--success-color)'
                               }} onClick={sureAmount}>
                                 {t('order.tripAmount')}
@@ -254,7 +237,6 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
           </Tabs>
         ):
           <NoData />
-
       }
       <RCAmount ref={amountRef} resetDetailFnc={getDetail} type={'refund'} />
     </div>

@@ -147,7 +147,7 @@ export default function Personal(){
         {
           !loading ?
             <PullToRefresh onRefresh={getData}>
-              <Card className={'mb-2'} style={{borderRadius: '4px'}} title={<span
+              <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span
                 className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.baseInfo')}</span>}>
                 <CardText label={t('personal.realName')} value={userDetail?.user.actualName}/>
                 <CardText label={t('personal.username')} value={userDetail?.user.userName}/>

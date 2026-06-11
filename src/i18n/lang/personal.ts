@@ -30,7 +30,7 @@ export const personalZh = {
 export const personalEn = {
     personal:{
         personalInformation:'Profile',
-        basicInformation:'Basic Info',
+        basicInformation:'Basic Information',
         username: 'Username',
         realName: 'Real Name',
         userId: 'User ID',
@@ -38,7 +38,7 @@ export const personalEn = {
         branchId: 'Branch ID',
         roles: 'Roles',
         tokenInfo: 'Token',
-        changePassword: 'Change Password',
+        changePassword: 'Reset Password',
         oldPassword: 'Old Password',
         newPassword: 'New Password',
         confirmPassword: 'Confirm Password',
@@ -70,7 +70,7 @@ export const personalRu = {
         oldPassword: 'Старый пароль',
         newPassword: 'Новый пароль',
         confirmPassword: 'Подтвердите пароль',
-        cancel: 'Отмена',
+        cancel: 'Отм.',
         submit: 'Отправить',
 
         oldPasswordRequired: 'Введите старый пароль',

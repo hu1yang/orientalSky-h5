@@ -212,11 +212,12 @@ export default function AgentRechargePayment() {
     })
   }
 
-  const reviewPayment = (row:IAgentPayment) => {
+  const reviewPayment = async (row:IAgentPayment) => {
     let remarks = ''
+    const agentInfo = await getAgentAccountGroup(row.agentId)
     const exchangeRateInfo = exchangeRates.find(ex => ex.currencyCode === row.currency)
     if(!exchangeRateInfo) return
-    const accountInfo = exchangeRates.find(ex => ex.currencyCode === 'USD')
+    const accountInfo = exchangeRates.find(ex => ex.currencyCode === (agentInfo.currency ?? 'USD'))
     Dialog.confirm({
       content: (
         <div className={'w-full flex flex-col justify-start'}>
@@ -268,6 +269,7 @@ export default function AgentRechargePayment() {
     return response
   }
   const rechargePrice = async (totalAmount:number,rechargeCurrency:string,accountCurrency:string) => {
+    if(rechargeCurrency == accountCurrency) return totalAmount
     const rechargeInfo = await getCurrencyTarget(rechargeCurrency)
     const accountInfo = await getCurrencyTarget(accountCurrency)
     return (totalAmount / (rechargeInfo.cashSellingRate / accountInfo.cashSellingRate))

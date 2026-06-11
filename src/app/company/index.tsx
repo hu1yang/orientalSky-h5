@@ -127,7 +127,7 @@ export default function Company() {
           {
             !loading ?
               branchs.map((branch) => (
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} key={branch.id}
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }}  key={branch.id}
                       title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('group.companyName')}({branch.name})</span>}>
                   <CardText label={t('group.companyCode')} value={branch.code} />
                   <CardText label={t('group.companyAddress')} value={branch.localAddress} />

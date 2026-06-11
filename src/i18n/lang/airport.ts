@@ -31,19 +31,19 @@ export const airportZh = {
 
 export const airportEn = {
     airport: {
-        countryCode: 'Ctry Code',
+        countryCode: 'Country Code',
         cityCode: 'City Code',
         airportCode: 'IATA Code',
-        nationality: 'Natl.',
-        countryName: 'Ctry Name',
-        updatedTime: 'Updated At',
+        nationality: 'Nationality Name',
+        countryName: 'Country Name',
+        updatedTime: 'Updated Time',
         operator: 'Operator',
         airportName: 'Airport Name',
         cityName: 'City Name',
-        channelCode: 'Ch. Code',
-        travelIssuedDate: 'Dep. Date/Time',
-        travelExpiryDate: 'Arr. Date/Time',
-        issuedWeeks: 'Weeks',
+        channelCode: 'Channel Code',
+        travelIssuedDate: 'Departure Date/Time',
+        travelExpiryDate: 'Arrive Date/Time',
+        issuedWeeks: 'Day of Week',
         op: 'Action',
         addedWaypoints: 'Add Waypoints',
         editWaypoint: 'Edit Waypoint',
@@ -53,10 +53,10 @@ export const airportEn = {
         isNumber: 'Must be a number',
         is_1440: 'Range: -1440 to 1440',
         policiesid: 'Policy ID',
-        batchCode: 'Batch No.',
+        batchCode: 'Batch Code',
         blacklist: 'Blacklist',
         bySegment: 'By Segment',
-        isExpired: 'Expired?',
+        isExpired: 'Expiration Status',
     }
 }
 

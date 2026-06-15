@@ -830,48 +830,7 @@ export const bookingDetailGroup = (id:string) => axios.post<CommonResponseOrder>
 
 
 // 采购单辅营查询
-// export const appendConsultGroup = (id:string,form:{seekTypes:ISeekType[]}) => axios.post<AppendConsult,{seekTypes:ISeekType[]}>(`/groupApi/Service/AppendSeeking/${id}`,form)
-export const appendConsultGroup = (id:string,form:{seekTypes:ISeekType[]}) => Promise.resolve({
-    "content": {
-        "currency": "USD",
-        "results": [
-            {
-                "resultType": "luggage",
-                "flightNumbers": [
-                    "FZ462"
-                ],
-                "passengerNames": [
-                    "KHANDAKAR/ASIF"
-                ],
-                "resultKey": "16923829-BUPL",
-                "resultName": "BUPL",
-                "perPaymentAmount": 5.5,
-                "descriptions": [
-                    "10 kg Baggage Upgrade"
-                ],
-                "expandsSettings": []
-            },
-            {
-                "resultType": "luggage",
-                "flightNumbers": [
-                    "FZ462"
-                ],
-                "passengerNames": [
-                    "KHANDAKAR/ASIF"
-                ],
-                "resultKey": "16923829-BUPX",
-                "resultName": "BUPX",
-                "perPaymentAmount": 41.0,
-                "descriptions": [
-                    "20 kg Baggage Upgrade"
-                ],
-                "expandsSettings": []
-            }
-        ]
-    },
-    "succeed": true,
-    "message": null
-})
+export const appendConsultGroup = (id:string,form:{seekTypes:ISeekType[]}) => axios.post<AppendConsult,{seekTypes:ISeekType[]}>(`/groupApi/Service/AppendSeeking/${id}`,form)
 export const bookingAppendGroup = (id:string,form:AppendConsultForm) => axios.patch<CommonResponseGroup,AppendConsultForm>(`/groupApi/Service/BookingAppend/${id}`,form)
 
 

@@ -140,8 +140,7 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
   const sureAmount = (passengers: Passenger[],id: string) => {
     setDetailId(id)
     setVisiblePop(true)
-    const info = refundList.find(refund => refund.id === detailId);
-
+    const info = refundList.find(refund => refund.id === id);
     if(info?.status === 'executed'){
       form.setFieldsValue({
         id:id,
@@ -187,6 +186,22 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
       setBookingList(res)
     })
   }
+
+  const chooseBooking = () => {
+    Dialog.show({
+      content: t('order.purchaseOrderNumber'),
+      closeOnAction: true,
+      closeOnMaskClick: true,
+      actions: bookingList.map(a => ({
+        key: a.id,
+        text: `${a.id}(${t('common.'+ statusBookingTicket[bookingInfo?.status || 'created'])})`,
+        onClick:() => {
+          setBookingId(a.id);
+        }
+      }))
+    })
+  }
+
   useEffect(() => {
     if(bookingList.length && detailInfo){
       changeBooking(bookingList[0])
@@ -261,8 +276,20 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
   }
 
   const closePop = () => {
+    swiperRef.current?.swipeTo(0)
     setVisiblePop(false)
     form.resetFields()
+    setLoadingBtn(false)
+    setPurchaseLoading(false)
+    setActiveIndex(0)
+    setDetailId('')
+    setBookingList([])
+    setBookingId('')
+    setPurchaseObj(null)
+    setPurchaseInquiryInfo(null)
+    setAirRefundPirce(0)
+    setTicketingProfit(0)
+    setRefundFeesAmount(0)
   }
 
   const rechargePrice = (price: number , rechargeRate:number = 1) => {
@@ -330,9 +357,9 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
   return (
     <Popup visible={visiblePop} position='right' showCloseButton onClose={closePop}
            bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}>
-      <div className={'pt-0 px-1 h-full flex flex-col'}>
+      <div className={'pt-0 h-full flex flex-col'}>
         <div className={'h-[40px] text-center leading-[40px]'}>
-          <span className={'text-[1.4rem] font-bold '}>Refund Pricing</span>
+          <span className={'text-[1.4rem] font-bold '}>{t('order.'+type)}</span>
         </div>
         {
           type === 'refund' && (
@@ -341,7 +368,7 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
               setActiveIndex(index)
               swiperRef.current?.swipeTo(index)
             }}
-                       value={tabItems[activeIndex].value}></Segmented>
+                       value={tabItems[activeIndex].value} />
           )
         }
         <Swiper direction='horizontal'
@@ -441,7 +468,7 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
             type === 'refund' ? (
               <Swiper.Item>
                 <div className={'w-full px-[12px]'}>
-                  <div className={'w-full flex justify-between items-center my-5'}>
+                  <div className={'w-full flex justify-between items-center my-5'} onClick={chooseBooking}>
                     <div>
                       <span className={'text-[1rem] text-(--text)'}>{t('order.purchaseOrderNumber')}</span>
                       <p className={'text-[1.2rem] text-(--text-h)'}>{bookingInfo?.id}</p>

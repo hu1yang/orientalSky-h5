@@ -27,6 +27,7 @@ import type {
   UpOrderRCAmounts
 } from "@/types/order.ts";
 import {
+  bookingRefundGroup,
   getBookingOrdersGroup, getExchangeRateGroup, getFeessSettingGroup, paymentRefundGroup,
   refundConsultGroup,
   upsertChangeAmountsGroup,
@@ -326,10 +327,32 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
         }
         const airRefundResult = rechargePrice(response.content.amounts.reduce((total, item) => total + Number(item.netRefundAmount), 0),currencyExchange)
         setAirRefundPirce(airRefundResult)
+      }else{
+        Toast.show({
+          icon: 'fail',
+          content: response.message,
+        })
       }
     } finally {
       setPurchaseLoading(false)
     }
+  }
+
+  const implementRefund = async () => {
+    Dialog.confirm({
+      content: t('order.purchaseRefundTips'),
+      onConfirm: async () => {
+        setPurchaseLoading(true)
+        try {
+          const response= await bookingRefundGroup(bookingId,purchaseObj as PurchaseRefund)
+          if(response){
+            result(response)
+          }
+        } finally {
+          setPurchaseLoading(false)
+        }
+      }
+    })
   }
 
   const getExchange = async (value:string) => {
@@ -338,7 +361,15 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
   }
 
   const executeAmount = () => {
-    const message = t('order.refundTips', { tc:`${totalPrice}${orderDetail?.currency}` })
+    const total = detailInfo?.confirmed?.amounts.reduce((sum, amount) => {
+      const netRefundAmount = Number(amount.netRefundAmount) || 0
+      return sum + netRefundAmount;
+    }, 0);
+
+    const totalPrice = Math.round((total || 0) * 100) / 100; // 最终总价再处理一遍
+
+    const message = t('order.refundTips', { tc:`${totalPrice}${detailInfo?.confirmed?.currency}` })
+
     Dialog.confirm({
       content: message,
       onConfirm: async () => {
@@ -567,7 +598,12 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
                       }/>
                     </Card>
                   </div>
-                  <Button block color={"warning"} onClick={refundInquiry} loading={purchaseLoading}>{t('order.refundInquiryBtn')}</Button>
+                  {
+                    purchaseInquiryInfo ?
+                      <Button block color={"danger"} size='middle' onClick={implementRefund} loading={purchaseLoading}>{t('order.sureRefundFnc')}</Button>
+                      :
+                      <Button block color={"warning"} size='middle' onClick={refundInquiry} loading={purchaseLoading}>{t('order.refundInquiryBtn')}</Button>
+                  }
                 </div>
               </Swiper.Item>
             ):<></>

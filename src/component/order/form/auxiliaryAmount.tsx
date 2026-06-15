@@ -292,6 +292,11 @@ export default memo(forwardRef(function AuxiliaryAmount({resetDetailFnc}:{
       if(response.succeed){
         setAuxiliaryInquiryList(response.content.results)
         setAuxiliaryArrCurrency(response.content.currency)
+      }else{
+        Toast.show({
+          icon: 'fail',
+          content: response.message,
+        })
       }
     } finally {
       setLoadingBtn(false)
@@ -406,6 +411,11 @@ export default memo(forwardRef(function AuxiliaryAmount({resetDetailFnc}:{
         })
         closePop()
         resetDetailFnc()
+      }else{
+        Toast.show({
+          icon: 'fail',
+          content: response.message,
+        })
       }
     } finally {
       setLoadingBtn(false)
@@ -554,7 +564,7 @@ export default memo(forwardRef(function AuxiliaryAmount({resetDetailFnc}:{
                 !auxiliaryInquiryList.length ?
                   <Button color='warning' size='middle' loading={loadingBtn} onClick={inquiryAux}>{t('order.auxiliaryInquiry')}</Button>
                   :
-                  <Button color='warning' size='middle' disabled={!allSelectedTotalPrice && detailInfo?.status === 'appendPaid'} loading={loadingBtn} onClick={implementAuxiliary}>{t('order.airlineAuxiliaryAmount')}</Button>
+                  <Button color='danger' size='middle' disabled={!allSelectedTotalPrice && detailInfo?.status === 'appendPaid'} loading={loadingBtn} onClick={implementAuxiliary}>{t('order.airlineAuxiliaryAmount')}</Button>
               }
             </div>
           </Swiper.Item>

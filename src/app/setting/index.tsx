@@ -19,6 +19,7 @@ export default function Setting() {
   const dispatch = useDispatch()
 
   const branchCodes = useMemo(() => {
+    if(!identity) return []
     return (identity?.branchIds as string[])?.map(branchId => {
       const branch = groupMap.get(branchId)
       return branch.branchCode
@@ -31,7 +32,6 @@ export default function Setting() {
       dispatch(removeLogin())
     }
   }
-
 
   return (
     <section className={'containerMain'}>

@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path:'/',
-        element: <SegmentedTab type={'dashboard'} />,
+        element: <SegmentedTab />,
         children:[
           {
             path: '/',
@@ -45,38 +45,11 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        path:'/order/',
-        element: <SegmentedTab type={'order'} />,
-        children:[
-          {
-            path:'ticket/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          },
-          {
-            path:'refund/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          },
-          {
-            path:'change/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          },
-          {
-            path:'auxiliary/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          }
-        ]
+        path:'/order/:orderType',
+        element: <OrderListLoad />,
+        handle:{
+          routerType: 'order'
+        }
       },
       {
         path:'/group/agent',

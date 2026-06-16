@@ -29,13 +29,13 @@ export default function Header() {
               </div>
           }
 
-          <div className={'flex items-center'}>
-            <Space>
-              <Button color='default' fill='none' style={{padding: '4px 5px'}}>
-                <BellOutline fontSize={18} />
-              </Button>
-            </Space>
-          </div>
+          {/*<div className={'flex items-center'}>*/}
+          {/*  <Space>*/}
+          {/*    <Button color='default' fill='none' style={{padding: '4px 5px'}}>*/}
+          {/*      <BellOutline fontSize={18} />*/}
+          {/*    </Button>*/}
+          {/*  </Space>*/}
+          {/*</div>*/}
         </div>
       </div>
     </div>

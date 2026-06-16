@@ -448,7 +448,7 @@ export const orderZh = {
         rechargeRecords: '渠道充值',
         transferIn: '转移',
         differentTerminal: '不同中转',
-        locakNameTips: '是否锁定{name}已锁定的订单',
+        locakNameTips: '是否锁定{{name}}已锁定的订单',
 
         createTicket:'创建票号',
         refundTicket:'退票单票号',

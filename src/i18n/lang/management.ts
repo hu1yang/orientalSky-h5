@@ -188,7 +188,21 @@ export const managementZh = {
         UpdateUserLockedAsync: '用户锁定设置',
         ChangeUserPasswordAsync: '用户密码修改',
 
+        ExportTopupPaymentsAsync: '导出代理在线充值记录列表',
+        UpdatePayedSetting: '更新支付渠道',
+        UpdatePayedInvoker: '更新支付配置',
+        UpdatePayedSettingExpands: '更新支付扩展',
+        UpdatePayedInvokerExpands: '更新调用扩展',
+        AddTopupSetting: '添加代理充值配置',
+        UpdateTopupSetting: '更新代理充值配置',
+        DeleteTopupSetting: '删除代理充值配置',
 
+        AddTopupPaymentAsync:'添加在线充值申请',
+        CancelTopupPaymentAsync:'取消在线充值申请',
+        ExportQueryWaypointsAsync:'导出渠道航点列表',
+        AddAgentPaymentAsync:'添加余额变动申请',
+        UpdateAgentPaymentAsync:'更新余额变动申请',
+        CancelAgentPaymentAsync:'取消余额变动申请',
     }
 }
 
@@ -382,6 +396,21 @@ export const managementEn = {
         UpdateUserLockedAsync: 'User lock settings',
         ChangeUserPasswordAsync: 'User password modification',
 
+        ExportTopupPaymentsAsync: 'Export agent online recharge',
+        UpdatePayedSetting: 'Update payment channels',
+        UpdatePayedInvoker: 'Update payment configuration',
+        UpdatePayedSettingExpands: 'Update payment extension',
+        UpdatePayedInvokerExpands: 'Update call extension',
+        AddTopupSetting: 'Add agent recharge configuration',
+        UpdateTopupSetting: 'Update agent recharge configuration',
+        DeleteTopupSetting: 'Delete agent recharge configuration',
+
+        AddTopupPaymentAsync:'Add online recharge application',
+        CancelTopupPaymentAsync:'Cancel online recharge application',
+        ExportQueryWaypointsAsync:'Export channel waypoint list',
+        AddAgentPaymentAsync:'Add balance change application',
+        UpdateAgentPaymentAsync:'Update balance change application',
+        CancelAgentPaymentAsync:'Cancel balance change application',
     }
 }
 
@@ -603,5 +632,21 @@ export const managementRu = {
         UpdateUserLockedAsync: 'Настройки блокировки пользователя',
         ChangeUserPasswordAsync: 'Изменение пароля пользователя',
 
+
+        ExportTopupPaymentsAsync: 'Онлайн-пополнение счета экспортного агента',
+        UpdatePayedSetting: 'Обновить каналы оплаты',
+        UpdatePayedInvoker: 'Обновить настройки платежей',
+        UpdatePayedSettingExpands: 'Обновить расширение платежа',
+        UpdatePayedInvokerExpands: 'Обновить добавочный номер телефона',
+        AddTopupSetting: 'Добавить конфигурацию пополнения счета агента',
+        UpdateTopupSetting: 'Обновить конфигурацию пополнения счета агента',
+        DeleteTopupSetting: 'Удалить конфигурацию переплаты агента',
+
+        AddTopupPaymentAsync:'Добавить онлайн-загрузку заявки',
+        CancelTopupPaymentAsync:'Отменить заявку на онлайн-пополнение',
+        ExportQueryWaypointsAsync:'Список точек маршрута экспортного канала',
+        AddAgentPaymentAsync:'Добавить заявку на изменение баланса',
+        UpdateAgentPaymentAsync:'Обновление заявки на изменение баланса',
+        CancelAgentPaymentAsync:'Отменить заявку на изменение баланса',
     }
 }

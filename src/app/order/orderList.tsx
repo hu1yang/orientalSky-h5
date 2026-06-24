@@ -55,8 +55,9 @@ import {
 import {selectAgentMap} from "@/store/modules/base.ts";
 import Log from "@/component/default/log.tsx";
 import type {OrderInfo} from "@/types/group.ts";
-import AgentSearch from "@/component/default/agentSearch.tsx";
 import NoData from "@/component/default/noData.tsx";
+import DefaultSelect from "@/component/form/defaultSelect.tsx";
+import type {RootState} from "@/store";
 
 
 
@@ -324,6 +325,8 @@ export default function OrderList(){
   const {orderType} = useParams()
   const {t} = useTranslation()
   const agentMap = useSelector(selectAgentMap)
+  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const agentArr = branchAgents.map(b => b?.agents).flat()
 
   const [hasMore, setHasMore] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -523,7 +526,10 @@ export default function OrderList(){
             </Grid>
           }>
             <Form.Item label={t('foundation.agent')} name={'agentId'}>
-              <AgentSearch />
+              <DefaultSelect options={agentArr.map(item => ({
+                label: item.code,
+                value: item.id,
+              }))} multiple={false} placeholder={t('foundation.agent')} />
             </Form.Item>
             <Form.Item label={t('order.ticketNumber')} name={'ticketNumber'}>
               <Input placeholder={t('order.ticketNumber')} />

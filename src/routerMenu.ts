@@ -19,3 +19,7 @@ export const OrderDetailLoad = lazy(() => import('@/app/order/detail.tsx'));
 
 export const SettingLoad = lazy(() => import('@/app/setting/index.tsx'));
 export const PersonalLoad = lazy(() => import('@/app/personal/index.tsx'))
+
+export const ChannelPaymentLoad = lazy(() => import('@/app/channel/payment.tsx'));
+export const ChannelListLoad = lazy(() => import('@/app/channel/list.tsx'));
+export const ChannelBalanceLoad = lazy(() => import('@/app/channel/balance.tsx'));

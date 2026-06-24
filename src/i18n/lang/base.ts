@@ -12,6 +12,7 @@ export const baseZh = {
         disabled: '禁用',
         channelCodes: '渠道代码',
         feessSettings: '手续费配置列表',
+        topupSettings: '代理充值项列表',
         issuedDate: '出票日期',
         voidedFeesAmount: '废票费用',
         appendFeesAmount: '辅营费用',
@@ -56,6 +57,19 @@ export const baseZh = {
         limitedDayLength:'日期长度',
         dateRecurrence:'日期重复',
 
+        minPaymentAmount: '最小支付金额',
+        maxPaymentAmount: '最大支付金额',
+        minServiceFees: '最小服务费用',
+        maxServiceFees: '最大服务费用',
+        serviceFeeRate: '支付费用百分比',
+        paymentCodes: '适用充值渠道',
+
+        paymentName: '支付名称',
+        accountName: '支付账户名称',
+
+        paymentAmount: '支付总金额',
+        serviceAmount: '服务费金额',
+        receivedAmount: '入账金额值',
     }
 }
 
@@ -73,6 +87,7 @@ export const baseEn = {
         disabled: 'Disable',
         channelCodes: 'Channel Codes',
         feessSettings: 'Service Fee Settings List',
+        topupSettings: 'Agent recharge items',
         issuedDate: 'Issued Date',
         appendFeesAmount: 'Ancillary Fee',
         voidedFeesAmount: 'Void Fee',
@@ -116,6 +131,20 @@ export const baseEn = {
         availableCounts:'Available Count',
         limitedDayLength:'Date Range',
         dateRecurrence:'Recurrence',
+
+        minPaymentAmount: 'Minimum payment amount',
+        maxPaymentAmount: 'Maximum payment amount',
+        minServiceFees: 'Minimum service fee',
+        maxServiceFees: 'Maximum service fee',
+        serviceFeeRate: 'Percentage of payment',
+        paymentCodes: 'Applicable recharge channels',
+
+        paymentName: 'Payment Name',
+        accountName: 'Payment account name',
+
+        paymentAmount: 'Total payment amount',
+        serviceAmount: 'Service fee amount',
+        receivedAmount: 'Amount received',
     }
 }
 
@@ -133,6 +162,7 @@ export const baseRu = {
         disabled: 'Выключено',
         channelCodes: 'Коды каналов',
         feessSettings: 'Список настроек комиссий',
+        topupSettings: 'Товары для пополнения счета агента',
         issuedDate: 'Дата выдачи',
         appendFeesAmount: 'Дополнительные расходы',
         voidedFeesAmount: 'Плата за аннулирование',
@@ -176,5 +206,19 @@ export const baseRu = {
         availableCounts:'Доступное количество',
         limitedDayLength:'Длина периода',
         dateRecurrence:'Повторение даты',
+
+        minPaymentAmount: 'Минимальная сумма платежа',
+        maxPaymentAmount: 'Максимальная сумма платежа',
+        minServiceFees: 'Минимальная плата за обслуживание',
+        maxServiceFees: 'Максимальная плата за обслуживание',
+        serviceFeeRate: 'Процент оплаты',
+        paymentCodes: 'Применимые каналы пополнения счета',
+
+        paymentName: 'Название платежа',
+        accountName: 'Название платежного счета',
+
+        paymentAmount: 'Общая сумма платежа',
+        serviceAmount: 'Сумма сервисного сбора',
+        receivedAmount: 'Полученная сумма',
     }
 }

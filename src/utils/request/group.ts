@@ -70,7 +70,8 @@ import {
     type IChannelSettingsBalance, type IFindBalanceAccountsForm, type IPaymentAccount, type IBalanceAccountForm,
     type ValidSearchForm, type ValidList, type TeamPolicy, type ITeamdSegmentsForm, type ICabin, type ITeamdValences,
     type ITeamdInStocksForm, type ITeamRoutingForm, type TeamPoliciesGroup, type ITeamdFight,
-    type ConfirmationChannelForm, type ICountries, type DashboardScaleForm, type DashboardScale, type ChannelCode
+    type ConfirmationChannelForm, type ICountries, type DashboardScaleForm, type DashboardScale, type ChannelCode,
+    type TopupSettingsFormGroup, type IChannelPayedSettings, type IPayedSettingUpdate, type IPayedInvokerUpdate
 } from "@/types/group.ts";
 import type {
     AppendConsult, AppendConsultForm, AppendReplenishLogForm,
@@ -106,6 +107,10 @@ export const getAgentSettingGroup = (id:string) => axios.get<AgentSettingGroup>(
 
 // 添加代理接口授权
 export const addDataAccesserGroup = (form:DataAccessersFormGroup) => axios.post<CommonResponseGroup,DataAccessersFormGroup>('/groupApi/Configs/AddDataAccesser',form)
+
+export const addTopupSettingGroup = (form:TopupSettingsFormGroup) => axios.post<CommonResponseGroup,TopupSettingsFormGroup>(`/groupApi/Configs/AddTopupSetting`,form)
+export const updateTopupSettingGroup = (form:TopupSettingsFormGroup) => axios.patch<CommonResponseGroup,TopupSettingsFormGroup>(`/groupApi/Configs/UpdateTopupSetting`,form)
+export const deleteTopupSettingGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteTopupSetting/${id}`)
 
 // 更新代理接口授权
 export const updateDataAccesserGroup = (form:DataAccessersFormGroup) => axios.patch<CommonResponseGroup,DataAccessersFormGroup>('/groupApi/Configs/UpdateDataAccesser',form)
@@ -341,6 +346,13 @@ export const deleteQueryWaypointGroup = (id:string) => axios.del<CommonResponseG
 
 // 获取渠道基础配置信息
 export const getChannelSettingsGroup = () => axios.get<IChannelSettings[]>('/groupApi/Configs/GetChannelSettings')
+export const getPayedSettingsGroup = () => axios.get<IChannelPayedSettings[]>('/groupApi/Configs/GetPayedSettings')
+export const updatePayedSettingGroup = (form: IPayedSettingUpdate) => axios.patch<CommonResponseGroup,IPayedSettingUpdate>('/groupApi/Configs/UpdatePayedSetting',form)
+export const updatePayedInvokerGroup = (form: IPayedInvokerUpdate) => axios.patch<CommonResponseGroup,IPayedInvokerUpdate>('/groupApi/Configs/UpdatePayedInvoker',form)
+export const updatePayedSettingExpandsGroup = (form: ExpandsSettingFormGroup) => axios.patch<CommonResponseGroup,ExpandsSettingFormGroup>('/groupApi/Configs/UpdatePayedSettingExpands',form)
+export const updatePayedInvokerExpandsGroup = (form: ExpandsSettingFormGroup) => axios.patch<CommonResponseGroup,ExpandsSettingFormGroup>('/groupApi/Configs/UpdatePayedInvokerExpands',form)
+
+
 export const getChannelBalancesGroup = () => axios.get<IChannelSettingsBalance[]>(`/groupApi/Configs/GetChannelBalances`)
 export const updateChannelSettingGroup = (form:{id:string,isEnabled:boolean}) => axios.patch<CommonResponseGroup,{id:string,isEnabled:boolean}>(`/groupApi/Configs/UpdateChannelSetting`,form)
 export const updateInvokeProviderGroup = (form:{id:string,isEnabled:boolean,timeoutSeconds:string}) => axios.patch<CommonResponseGroup,{id:string,isEnabled:boolean,timeoutSeconds:string}>(`/groupApi/Configs/UpdateInvokeProvider`,form)

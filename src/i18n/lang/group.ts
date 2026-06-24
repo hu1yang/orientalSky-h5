@@ -179,6 +179,12 @@ export const groupZh = {
         unauthorized: '未授权',
         authorized: '已授权',
 
+        topupPaymentcreated:'已创建',
+        topupPaymentpending:'待支付',
+        topupPaymentprocessing:'处理中',
+        topupPaymentfinished:'已支付',
+        topupPaymentcancelled:'已取消',
+        cancelpayment:'取消充值单',
     }
 }
 
@@ -356,6 +362,13 @@ export const groupEn = {
         groupPermissions: 'Group Permissions',
         unauthorized: 'Unauthorized',
         authorized: 'Authorized',
+
+        topupPaymentcreated:'Created',
+        topupPaymentpending:'Pending',
+        topupPaymentprocessing:'Processing',
+        topupPaymentfinished:'Finished',
+        topupPaymentcancelled:'Cancelled',
+        cancelpayment:'Cancel recharge order',
     }
 }
 
@@ -532,5 +545,12 @@ export const groupRu = {
         groupPermissions: 'Групповые права доступа',
         unauthorized: 'Незаконный',
         authorized: 'Авторизованный',
+
+        topupPaymentcreated:'к оплате',
+        topupPaymentpending:'В ожидании',
+        topupPaymentprocessing:'Обработка',
+        topupPaymentfinished:'Готово',
+        topupPaymentcancelled:'Отменено',
+        cancelpayment:'Отменить заказ на пополнение счета',
     }
 }

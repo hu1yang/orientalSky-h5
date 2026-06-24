@@ -5,7 +5,7 @@ import type {
     ChangedType, DataAccessersAgent, FeessSetting,
     ISearchPayMentForm,
     PaymentType, PushProvider,
-    ScaleSetting,
+    ScaleSetting, TopupSettings,
     TradeRecord
 } from "@/types/agent.ts";
 
@@ -181,6 +181,10 @@ export interface IBooking extends ISearchBooking {
     branchIds:string[]
     orderRangeAmount:number|string
     payedRangeAmount:number|string
+    voidedFeesAmount:number|string
+    refundFeesAmount:number|string
+    changeFeesAmount:number|string
+    appendFeesAmount:number|string
 }
 
 export type IChannelAccount = Omit<IBooking, 'operator'|'updatedTime'|'createdTime'|'paymentSettings'|'expandSettings'> & {
@@ -426,6 +430,8 @@ export interface IAddWayPoints extends IWayPointsForm{
 export type DataAccessersFormGroup = Omit<DataAccessersAgent, 'operator'|'updatedTime'|'createdTime'|'expandSettings'>
 export type AgentSettingGroup = AgentSetting;
 export type FeessSettingGroup = FeessSetting;
+export type TopupSettingsGroup = TopupSettings;
+export type TopupSettingsFormGroup = Omit<TopupSettings, 'operator'|'updatedTime'|'createdTime'>
 export type PushProviderGroup = PushProvider;
 export type ScaleSettingGroup = ScaleSetting;
 
@@ -462,6 +468,34 @@ export type IChannelSettings = {
     createdTime:string|Date;
     expandSettings:ExpandsSetting[];
     invokeProviders:InvokeProvidersGroup[]
+}
+export type IPayedInvokers = Pick<InvokeProvidersGroup, 'id'|'isEnabled'|'timeoutSeconds'|'operator'|'updatedTime'|'createdTime'|'expandSettings'> & {
+    payedSettingId: string
+    invokerType: 'create'|'query'
+}
+
+export type IChannelPayedSettings = {
+    id: string
+    groupId: string
+    branchId: string
+    branchIds: string[]
+    isEnabled: boolean
+    paymentCode: string
+    paymentName: string
+    description: string
+    currencyCodes: string[]
+    accountName: string
+    expirationMinutes: number
+    operator: string
+    updatedTime: string
+    createdTime: string
+    expandSettings:ExpandsSetting[];
+    payedInvokers: IPayedInvokers[]
+}
+
+export type IPayedSettingUpdate = Pick<IChannelPayedSettings, 'id'|'branchIds'|'isEnabled'|'description'|'currencyCodes'>
+export type IPayedInvokerUpdate = Pick<IChannelPayedSettings, 'id'|'isEnabled'> & {
+    timeoutSeconds: number|string
 }
 
 export interface IFindBalanceAccountsForm{

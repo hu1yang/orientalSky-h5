@@ -39,9 +39,10 @@ import type {
 } from "@/types/group.ts";
 import type {IExchangeRateAgent} from "@/types/agent.ts";
 import {result} from "@/utils/public.ts";
-import AgentSearch from "@/component/default/agentSearch.tsx";
 import {changedTypeArr} from "@/utils/common.ts";
 import NoData from "@/component/default/noData.tsx";
+import type {RootState} from "@/store";
+import DefaultSelect from "@/component/form/defaultSelect.tsx";
 
 type IAgentPayment = AgentPayment & {
   branchCode: string
@@ -56,6 +57,8 @@ export default function AgentRechargePayment() {
   const {t} = useTranslation()
   const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
+  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const agentArr = branchAgents.map(b => b?.agents).flat()
 
   const [hasMore, setHasMore] = useState(false)
   const pageRef = useRef(0)
@@ -570,7 +573,10 @@ export default function AgentRechargePayment() {
           </Grid>
         }>
           <Form.Item label={t('foundation.agent')} name={'agentId'}>
-            <AgentSearch />
+            <DefaultSelect options={agentArr.map(item => ({
+              label: item.code,
+              value: item.id,
+            }))} multiple={false} placeholder={t('foundation.agent')} />
           </Form.Item>
           <Form.Item label={t('order.isSure')} name={'unLinked'}>
             <Radio.Group>

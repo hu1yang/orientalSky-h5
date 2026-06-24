@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {Avatar, Button, Dialog, List, Space, Tag} from "antd-mobile";
 import {selectGroupMap} from "@/store/modules/base.ts";
 import {userSignOut} from "@/utils/request/identity.ts";
+import Cookie from "js-cookie";
 
 export default function Setting() {
   const navigate = useNavigate()
@@ -22,14 +23,20 @@ export default function Setting() {
     if(!identity) return []
     return (identity?.branchIds as string[])?.map(branchId => {
       const branch = groupMap.get(branchId)
-      return branch.branchCode
+      return branch ? branch.branchCode : branchId
     })
   },[identity?.branchIds,groupMap])
 
   const logout = async () => {
     const response = await userSignOut()
     if(response.succeeded){
+      Cookie.remove('token')
+
+      localStorage.removeItem('identity')
       dispatch(removeLogin())
+      setTimeout(() => {
+        navigate('/login')
+      },200)
     }
   }
 
@@ -106,6 +113,14 @@ export default function Setting() {
                 ]
               })
             }}>{t('common.language')}</List.Item>
+          </List>
+        </div>
+        <div className={'mb-5'}>
+          <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerChannelManagement')}</h3>
+          <List mode={'card'} className={'m-auto!'}>
+            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/payment')}}>{t('common.routerChannelPayment')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/list')}}>{t('common.routerChannelList')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-chongzhi text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/balance')}}>{t('common.routerChannelBalance')}</List.Item>
           </List>
         </div>
         <div className={'mb-5'}>

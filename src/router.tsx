@@ -8,7 +8,8 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad,
+  ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad
 } from "./routerMenu.ts";
 
 
@@ -132,7 +133,32 @@ export const router = createBrowserRouter([
           },
         ]
       },
-
+      {
+        path:'channel/',
+        children: [
+          {
+            path:'payment',
+            element: <ChannelPaymentLoad />,
+            handle:{
+              title: 'common.routerChannelPayment'
+            }
+          },
+          {
+            path:'list',
+            element: <ChannelListLoad />,
+            handle:{
+              title: 'common.routerChannelList'
+            }
+          },
+          {
+            path: 'balance',
+            element: <ChannelBalanceLoad />,
+            handle:{
+              title: 'common.routerChannelBalance'
+            }
+          }
+        ]
+      }
     ]
   },
   {

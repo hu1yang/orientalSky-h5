@@ -316,7 +316,7 @@ export default function FoundationBooking() {
       </Popup>
       <Popup visible={visiblePop} position='right' showCloseButton onClose={closePop}
              bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}>
-        <div className={'py-20 px-1 h-full flex flex-col'}>
+        <div className={'pt-20 pb-10 px-1 h-full flex flex-col'}>
           <div className={'overflow-auto'}>
             <Form form={form} mode={'card'} onFinish={onFinish} footer={
               <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>

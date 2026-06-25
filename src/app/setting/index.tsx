@@ -118,9 +118,18 @@ export default function Setting() {
         <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerChannelManagement')}</h3>
           <List mode={'card'} className={'m-auto!'}>
-            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/payment')}}>{t('common.routerChannelPayment')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-duozhongzhifu text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/payment')}}>{t('common.routerChannelPayment')}</List.Item>
             <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/list')}}>{t('common.routerChannelList')}</List.Item>
             <List.Item prefix={<i className={'iconfont icon-chongzhi text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/channel/balance')}}>{t('common.routerChannelBalance')}</List.Item>
+          </List>
+        </div>
+        <div className={'mb-5'}>
+          <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerBaseData')}</h3>
+          <List mode={'card'} className={'m-auto!'}>
+            <List.Item prefix={<i className={'iconfont icon-plane-trip-international text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/base/nation')}}>{t('common.routerNation')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-jichang text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/base/airport')}}>{t('common.routerAirport')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-hangdianfeihang text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/base/waypoints')}}>{t('common.routerWaypoints')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-huilv01 text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/base/exchangeRate')}}>{t('common.routerExrate')}</List.Item>
           </List>
         </div>
         <div className={'mb-5'}>

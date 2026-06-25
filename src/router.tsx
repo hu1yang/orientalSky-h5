@@ -9,7 +9,7 @@ import {
   AgentRechargePaymentLoad,
   AgentInfoLoad,
   OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad,
-  ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad
+  ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad, BaseNation, BaseAirport, BaseWaypoint, BaseExrate
 } from "./routerMenu.ts";
 
 
@@ -155,6 +155,39 @@ export const router = createBrowserRouter([
             element: <ChannelBalanceLoad />,
             handle:{
               title: 'common.routerChannelBalance'
+            }
+          }
+        ]
+      },
+      {
+        path: 'base/',
+        children: [
+          {
+            path:'nation',
+            element: <BaseNation />,
+            handle:{
+              title: 'common.routerNation'
+            }
+          },
+          {
+            path:'airport',
+            element: <BaseAirport />,
+            handle: {
+              title: 'common.routerAirport'
+            }
+          },
+          {
+            path:'waypoints',
+            element: <BaseWaypoint />,
+            handle: {
+              title: 'common.routerWaypoints'
+            }
+          },
+          {
+            path:'exchangeRate',
+            element: <BaseExrate />,
+            handle: {
+              title: 'common.routerExrate'
             }
           }
         ]

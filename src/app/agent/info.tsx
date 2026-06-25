@@ -71,12 +71,6 @@ export default function AgentInfo() {
   const [infoVisible, setInfoVisible] = useState(false)
   const [infoForm] = Form.useForm()
 
-  const channelMemo = useMemo(() => {
-    return channel.map(item => ({
-      label:item.channelName,
-      value:item.channelCode,
-    }))
-  },[channel])
 
   const getExchange = () => {
     if(!exchangeRates.length){
@@ -441,7 +435,10 @@ export default function AgentInfo() {
             <Form.Item label={t('base.channelCodes')} name={'channelCodes'} rules={[
               { required: true, message: t('base.channelCodes') },
             ]}>
-              <Selector columns={3} multiple options={channelMemo} />
+              <Selector columns={3} multiple options={channel.map(item => ({
+                label:item.channelName,
+                value:item.channelCode,
+              }))} />
             </Form.Item>
           </>
         )

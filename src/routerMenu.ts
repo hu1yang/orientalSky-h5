@@ -23,3 +23,9 @@ export const PersonalLoad = lazy(() => import('@/app/personal/index.tsx'))
 export const ChannelPaymentLoad = lazy(() => import('@/app/channel/payment.tsx'));
 export const ChannelListLoad = lazy(() => import('@/app/channel/list.tsx'));
 export const ChannelBalanceLoad = lazy(() => import('@/app/channel/balance.tsx'));
+
+
+export const BaseNation = lazy(() => import('@/app/base/nation.tsx'))
+export const BaseAirport = lazy(() => import('@/app/base/airport.tsx'))
+export const BaseWaypoint = lazy(() => import('@/app/base/waypoint.tsx'))
+export const BaseExrate = lazy(() => import('@/app/base/exrate.tsx'))

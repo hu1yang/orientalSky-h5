@@ -6,6 +6,153 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1159238",
+      "name": "汇率01",
+      "font_class": "huilv01",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "2320731",
+      "name": "货币汇率",
+      "font_class": "huobihuishuai",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "3670066",
+      "name": "汇率",
+      "font_class": "icon-exchange_rate",
+      "unicode": "e75d",
+      "unicode_decimal": 59229
+    },
+    {
+      "icon_id": "750882",
+      "name": "多种支付",
+      "font_class": "duozhongzhifu",
+      "unicode": "e7ac",
+      "unicode_decimal": 59308
+    },
+    {
+      "icon_id": "2076259",
+      "name": "列表",
+      "font_class": "liebiao",
+      "unicode": "e88f",
+      "unicode_decimal": 59535
+    },
+    {
+      "icon_id": "2476583",
+      "name": "导航点",
+      "font_class": "daohangdian",
+      "unicode": "ea8e",
+      "unicode_decimal": 60046
+    },
+    {
+      "icon_id": "4143530",
+      "name": "列表",
+      "font_class": "ziyuan",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "5387879",
+      "name": "列表_o",
+      "font_class": "liebiao_o",
+      "unicode": "eb7c",
+      "unicode_decimal": 60284
+    },
+    {
+      "icon_id": "6337581",
+      "name": "机场",
+      "font_class": "jichang",
+      "unicode": "e6ee",
+      "unicode_decimal": 59118
+    },
+    {
+      "icon_id": "10139920",
+      "name": "plane-trip-international",
+      "font_class": "plane-trip-international",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "10970373",
+      "name": "机场",
+      "font_class": "jichang-",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "11217341",
+      "name": "汇率",
+      "font_class": "huishuai",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
+      "icon_id": "14164141",
+      "name": "汇率转换",
+      "font_class": "huishuaizhuanhuan",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "15446197",
+      "name": "nation",
+      "font_class": "nation",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "19217811",
+      "name": "航点编辑",
+      "font_class": "hangdianbianji",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "19537693",
+      "name": "机场贵宾厅",
+      "font_class": "jichangguibinting",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "19604232",
+      "name": "plane-trip-international",
+      "font_class": "plane-trip-international1",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "21732491",
+      "name": "汇率",
+      "font_class": "huishuai1",
+      "unicode": "e73e",
+      "unicode_decimal": 59198
+    },
+    {
+      "icon_id": "23869011",
+      "name": "航点飞行",
+      "font_class": "hangdianfeihang",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "27876611",
+      "name": "银行卡 待支付 支付",
+      "font_class": "a-yinhangkadaizhifuzhifu",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "28196283",
+      "name": "绘制航点",
+      "font_class": "huizhihangdian",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
       "icon_id": "651184",
       "name": "充值",
       "font_class": "chongzhi0101",

@@ -7,7 +7,7 @@ export default memo(function CardText({label, value, labelStyle, valueStyle, sty
         !!label &&
           <div className={`text-[1rem] text-(--text) w-30 inline-block ${labelStyle || ''}`}>{label}</div>
       }
-      <div className={`text-[var(--text-h)] flex-1 ${valueStyle || ''}`}>{value}</div>
+      <div className={`text-[var(--text-h)] flex-1 break-all ${valueStyle || ''}`}>{value}</div>
     </div>
   )
 })

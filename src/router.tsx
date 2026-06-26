@@ -104,13 +104,6 @@ export const router = createBrowserRouter([
             }
           },
           {
-            path:'foundation/booking',
-            element: <FoundationBookingLoad />,
-            handle: {
-              title: 'common.routerBookingAccountConfiguration'
-            }
-          },
-          {
             path: 'agentDetail/:id',
             element: <AgentInfoLoad/>,
             handle: {
@@ -157,6 +150,18 @@ export const router = createBrowserRouter([
               title: 'common.routerChannelBalance'
             }
           }
+        ]
+      },
+      {
+        path: 'foundation/',
+        children: [
+          {
+            path:'booking',
+            element: <FoundationBookingLoad />,
+            handle: {
+              title: 'common.routerBookingAccountConfiguration'
+            }
+          },
         ]
       },
       {

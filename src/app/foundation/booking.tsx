@@ -22,15 +22,20 @@ import CardText from "@/component/card/cardText.tsx";
 import {
   addChannelSettingsGroup, deleteChannelSettingsGroup,
   getChannelAccountsGroup,
-  resetChannelHistoryGroup,
+  resetChannelHistoryGroup, updateAccountExpandsGroup,
   updateChannelSettingsGroup
 } from "@/utils/request/group.ts";
 
-import type {IBooking, ISearchBooking} from "@/types/group.ts";
+import type {ExpandsSettingFormGroup, IBooking, ISearchBooking} from "@/types/group.ts";
 import {result} from "@/utils/public.ts";
 import MobileField from "@/component/form/mobileField.tsx";
 import {FilterOutline} from "antd-mobile-icons";
+import type {ExpandsSetting} from "@/types/agent.ts";
+import ExpandSettingsForm from "@/component/default/expandSettings.tsx";
 
+type IBookingC = IBooking & {
+  groupCodes: string[];
+}
 
 export default function FoundationBooking() {
   const {t} = useTranslation()
@@ -53,13 +58,26 @@ export default function FoundationBooking() {
     groupCode:''
   })
 
-  const [listValue, setListValue] = useState<IBooking[]>([])
+  const [listValue, setListValue] = useState<IBookingC[]>([])
 
   const [visiblePop, setVisiblePop] = useState(false)
   const [loadingBtn, setLoadingBtn] = useState(false)
   const [form] = Form.useForm()
   const [searchForm] = Form.useForm()
 
+
+  const edSettingRef = useRef<{
+    addProp:(val: ExpandsSettingFormGroup) => void
+  }|null>(null);
+
+  const openSetting = (id:string,form:ExpandsSetting[]) => {
+    if(edSettingRef.current){
+      edSettingRef.current.addProp({
+        id,
+        expandSettings:form
+      })
+    }
+  }
 
   const delChannel = (id: string) => {
     Dialog.confirm({
@@ -162,9 +180,16 @@ export default function FoundationBooking() {
       const response = await getChannelAccountsGroup({pageSize:20,page:nextPage},searchFormData)
       const data = response.map(item => {
         const group = groupMap.get(item.branchId)
+        const groupCodes = item.branchIds.map(bd => {
+          const gr = groupMap.get(bd)
+          if(gr){
+            return gr.branchCode
+          }
+        })
         return {
           ...item,
-          groupCode: group.branchCode
+          groupCode: group.branchCode,
+          groupCodes
         }
       })
       if(reset){
@@ -240,11 +265,47 @@ export default function FoundationBooking() {
                           key={item.id}>
                       <div className={'text-left'}>
                         <h4 className={'text-black font-bold text-[1.3rem] my-4'}>{t('base.baseInfo')}</h4>
+                        <CardText label={t('group.company')} value={item.groupCode} valueStyle={'text-(--active-color)! text-[1.3rem]!'} />
+                        <CardText label={t('group.applicableCompanies')} value={item.groupCodes.join(',') || '--'} valueStyle={'text-(--success-color)! text-[1.3rem]!'} />
                         <CardText label={t('order.accountName')} value={item.accountName}/>
                         <CardText label={t('order.scaleSetting')} value={item.scaleLimited}/>
                         <CardText label={t('order.queryLimited')} value={item.queryLimited}/>
                         <CardText label={t('order.scaleLimitedDaysLength')} value={item.scaleLimitedDaysLength}/>
                         <CardText label={t('order.notes')} value={item.remarks} valueStyle={'line-clamp-3'}/>
+                      </div>
+                      <Divider style={{
+                        borderStyle: 'dashed',
+                      }}/>
+                      <Grid columns={2} gap={8}>
+                        <Grid.Item>{t('base.voidedFeesAmount')}: {item.voidedFeesAmount} USD</Grid.Item>
+                        <Grid.Item>{t('base.refundFeesAmount')}: {item.refundFeesAmount} USD</Grid.Item>
+                        <Grid.Item>{t('base.changeFeesAmount')}: {item.changeFeesAmount} USD</Grid.Item>
+                        <Grid.Item>{t('base.appendFeesAmount')}: {item.appendFeesAmount} USD</Grid.Item>
+                      </Grid>
+                      <Divider style={{
+                        borderStyle: 'dashed',
+                      }}/>
+                      <Grid columns={2} gap={8}>
+                        <Grid.Item>{t('base.defaultPurchaseRange')}: {item.orderRangeAmount} USD</Grid.Item>
+                        <Grid.Item>{t('base.defaultPaymentRange')}: {item.payedRangeAmount} USD</Grid.Item>
+                      </Grid>
+                      <Divider style={{
+                        borderStyle: 'dashed',
+                      }}/>
+                      <div className={'mb-4'}>
+                        <div className={'mb-2 flex justify-between items-center'}>
+                          <span className={'text-(--text)'}>{t('group.extensionSettings')}</span>
+                          <Button color='primary' size={'mini'} fill='none' onClick={() => openSetting(item.id,item.expandSettings)}>
+                            {t('common.edit')}
+                          </Button>
+                        </div>
+                        <div className={'px-2'}>
+                          {
+                            item.expandSettings.map(expandSetting => (
+                              <CardText key={expandSetting.indexId} label={expandSetting.name} style={'items-start'} value={expandSetting.value} labelStyle={'text-[1.1rem]! w-50!'} valueStyle={'text-right text-[1.3rem]!'} />
+                            ))
+                          }
+                        </div>
                       </div>
                       <Divider/>
                       <div className={'flex justify-end'}>
@@ -415,6 +476,7 @@ export default function FoundationBooking() {
           </div>
         </div>
       </Popup>
+      <ExpandSettingsForm ref={edSettingRef} getData={resetData} axiosFnc={updateAccountExpandsGroup} />
     </section>
   )
 }

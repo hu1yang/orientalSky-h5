@@ -43,6 +43,7 @@ import {changedTypeArr} from "@/utils/common.ts";
 import NoData from "@/component/default/noData.tsx";
 import type {RootState} from "@/store";
 import DefaultSelect from "@/component/form/defaultSelect.tsx";
+import Log from "@/component/default/log.tsx";
 
 type IAgentPayment = AgentPayment & {
   branchCode: string
@@ -53,7 +54,7 @@ type IUrUserObj = { accountInfo:IAgentPayment,accountPrice:GroupBalance,totalAmo
 const statusArr = ['pending', 'reviewed', 'confirmed', 'rejected', 'cancelled']
 
 const { Step } = Steps
-export default function AgentRechargePayment() {
+export default function FinanceRechargePayment() {
   const {t} = useTranslation()
   const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
@@ -91,6 +92,10 @@ export default function AgentRechargePayment() {
   const [logList, setLogList] = useState<OrderInfo[]>([])
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [urSureForm] = Form.useForm()
+
+  const logRef = useRef<{
+    showLog: (logList: OrderInfo[]) => void
+  } | null>(null);
 
   const loadMore = async () => {
     const nextPage = pageRef.current + 1
@@ -262,6 +267,19 @@ export default function AgentRechargePayment() {
     })
   }
 
+  const getlog = (id: string) => {
+    getOperationLogsGroup({page:0,pageSize:50},id).then(res => {
+      if (res.length) {
+        if (logRef) {
+          logRef.current?.showLog(res)
+        }
+      } else {
+        Toast.show({
+          content: 'No Data',
+        })
+      }
+    })
+  }
   const getLog = (id:string) => {
     getOperationLogsGroup({page:0,pageSize:40},id).then((res) => {
       setLogList(res)
@@ -373,7 +391,6 @@ export default function AgentRechargePayment() {
                             <Tag round color={item.status === 'pending' ? 'warning' : item.status === 'reviewed' ? 'success' : 'primary'}>{t('order.'+item.status)}</Tag>
                           }
                           key={item.id}>
-                      <div></div>
                       <div className={'text-left'}>
                         <div>
                           <div className={'mb-2'}>
@@ -455,6 +472,8 @@ export default function AgentRechargePayment() {
                                               onClick={() => openPaymentSure(item)}>{t('common.surePayment')}</Button>
                                     )
                                   }
+                                  <Button shape='rounded' size={'small'} color={'warning'}
+                                          onClick={() => getlog(item.id)}>{t('common.routerLog')}</Button>
                                 </Space>
                               </div>
                             </>
@@ -581,8 +600,8 @@ export default function AgentRechargePayment() {
           <Form.Item label={t('order.isSure')} name={'unLinked'}>
             <Radio.Group>
               <Space direction='vertical'>
-                <Radio>{t('common.open')}</Radio>
-                <Radio>{t('common.close')}</Radio>
+                <Radio value={true}>{t('common.open')}</Radio>
+                <Radio value={false}>{t('common.close')}</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>
@@ -610,6 +629,7 @@ export default function AgentRechargePayment() {
           </Form.Item>
         </Form>
       </Popup>
+      <Log ref={logRef} />
     </section>
   )
 }

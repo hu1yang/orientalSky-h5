@@ -7,7 +7,6 @@ export const RetrievalLoad = lazy(() => import('@/app/dashboard/retrieval.tsx'))
 
 
 export const AgentLoad = lazy(() => import('@/app/agent/index'));
-export const AgentRechargePaymentLoad = lazy(() => import('@/app/agent/rechargePayment.tsx'));
 export const AgentInfoLoad = lazy(() => import('@/app/agent/info.tsx'));
 export const FoundationBookingLoad = lazy(() => import('@/app/foundation/booking.tsx'));
 export const CompanyLoad = lazy(() => import('@/app/company/index.tsx'));
@@ -31,3 +30,7 @@ export const BaseNation = lazy(() => import('@/app/base/nation.tsx'))
 export const BaseAirport = lazy(() => import('@/app/base/airport.tsx'))
 export const BaseWaypoint = lazy(() => import('@/app/base/waypoint.tsx'))
 export const BaseExrate = lazy(() => import('@/app/base/exrate.tsx'))
+
+
+export const AgentRechargePaymentLoad = lazy(() => import('@/app/finance/rechargePayment.tsx'));
+export const AgentRechargePaymentOnlineLoad = lazy(() => import('@/app/finance/rechargePaymentOnline.tsx'));

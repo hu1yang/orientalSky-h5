@@ -70,7 +70,7 @@ export default function DefaultSelect(props: Props) {
       <div onClick={() => setVisible(true)}>
         {
           (!value || value.length === 0) ?
-            <span className={'text-[#eeeeee]'}>{placeholder}</span>:
+            <span className={'text-[#d4d4d4]'}>{placeholder}</span>:
             valueShow.map((item) => (
               <p key={item['value']}>{item['label']}</p>
             ))

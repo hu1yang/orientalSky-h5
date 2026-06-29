@@ -71,7 +71,8 @@ import {
     type ValidSearchForm, type ValidList, type TeamPolicy, type ITeamdSegmentsForm, type ICabin, type ITeamdValences,
     type ITeamdInStocksForm, type ITeamRoutingForm, type TeamPoliciesGroup, type ITeamdFight,
     type ConfirmationChannelForm, type ICountries, type DashboardScaleForm, type DashboardScale, type ChannelCode,
-    type TopupSettingsFormGroup, type IChannelPayedSettings, type IPayedSettingUpdate, type IPayedInvokerUpdate
+    type TopupSettingsFormGroup, type IChannelPayedSettings, type IPayedSettingUpdate, type IPayedInvokerUpdate,
+    type IChannelPayedSettingsSearch, type ITopupPaymentsList
 } from "@/types/group.ts";
 import type {
     AppendConsult, AppendConsultForm, AppendReplenishLogForm,
@@ -111,6 +112,11 @@ export const addDataAccesserGroup = (form:DataAccessersFormGroup) => axios.post<
 export const addTopupSettingGroup = (form:TopupSettingsFormGroup) => axios.post<CommonResponseGroup,TopupSettingsFormGroup>(`/groupApi/Configs/AddTopupSetting`,form)
 export const updateTopupSettingGroup = (form:TopupSettingsFormGroup) => axios.patch<CommonResponseGroup,TopupSettingsFormGroup>(`/groupApi/Configs/UpdateTopupSetting`,form)
 export const deleteTopupSettingGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteTopupSetting/${id}`)
+
+export const getTopupPaymentsGroup = ({page,pageSize}:{page:number,pageSize:number},form: IChannelPayedSettingsSearch) => axios.post<ITopupPaymentsList[],IChannelPayedSettingsSearch>(`/groupApi/Configs/GetTopupPayments/${page}/${pageSize}`,form)
+export const exportTopupPaymentsGroup = (form: IChannelPayedSettingsSearch) => axios.post<Blob,IChannelPayedSettingsSearch>(`/groupApi/Configs/ExportTopupPayments`,form,{responseType: 'blob'})
+
+
 
 // 更新代理接口授权
 export const updateDataAccesserGroup = (form:DataAccessersFormGroup) => axios.patch<CommonResponseGroup,DataAccessersFormGroup>('/groupApi/Configs/UpdateDataAccesser',form)

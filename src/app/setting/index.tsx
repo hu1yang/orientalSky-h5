@@ -76,7 +76,8 @@ export default function Setting() {
         <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerFinance')}</h3>
           <List mode={'card'} className={'m-auto!'}>
-            <List.Item prefix={<i className={'iconfont icon-chongzhi text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/group/rechargePayment')}}>{t('group.agentRecharge')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-chongzhi text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/finance/rechargePayment')}}>{t('group.agentRecharge')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-chongzhi text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/finance/rechargePaymentOnline')}}>{t('common.routerRechargePaymentOnline')}</List.Item>
           </List>
         </div>
 

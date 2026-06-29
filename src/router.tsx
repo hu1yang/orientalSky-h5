@@ -9,7 +9,8 @@ import {
   AgentRechargePaymentLoad,
   AgentInfoLoad,
   OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad,
-  ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad, BaseNation, BaseAirport, BaseWaypoint, BaseExrate
+  ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad, BaseNation, BaseAirport, BaseWaypoint, BaseExrate,
+  AgentRechargePaymentOnlineLoad
 } from "./routerMenu.ts";
 
 
@@ -96,13 +97,7 @@ export const router = createBrowserRouter([
               title: 'common.routerCompanyUser'
             }
           },
-          {
-            path: 'rechargePayment',
-            element: <AgentRechargePaymentLoad/>,
-            handle: {
-              title: 'common.routerRechargePaymentRecord'
-            }
-          },
+
           {
             path: 'agentDetail/:id',
             element: <AgentInfoLoad/>,
@@ -122,6 +117,25 @@ export const router = createBrowserRouter([
             element: <AgentLoad/>,
             handle:{
               title: 'common.routerAgency'
+            }
+          },
+        ]
+      },
+      {
+        path: 'finance/',
+        children:[
+          {
+            path: 'rechargePayment',
+            element: <AgentRechargePaymentLoad/>,
+            handle: {
+              title: 'common.routerRechargePaymentRecord'
+            }
+          },
+          {
+            path: 'rechargePaymentOnline',
+            element: <AgentRechargePaymentOnlineLoad/>,
+            handle: {
+              title: 'common.routerRechargePaymentOnline'
             }
           },
         ]

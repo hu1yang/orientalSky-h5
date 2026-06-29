@@ -52,11 +52,7 @@ export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
       <div className={'p-3 my-2 text-center'}>
         <span className={'text-[1.4rem] mb-20'}>{t('group.extensionSettings')}</span>
       </div>
-      <Form layout='vertical' form={expendForm} mode='card' initialValues={{
-        expandSettings:[{
-          indexId:expendForm.getFieldValue('id')
-        }]
-      }} onFinish={expendFormFinish} footer={
+      <Form layout='vertical' form={expendForm} mode='card' onFinish={expendFormFinish} footer={
         <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
           {t('common.submit')}
         </Button>

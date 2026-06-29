@@ -34,12 +34,13 @@ import type {ExpandsSetting} from "@/types/agent.ts";
 import ExpandSettingsForm from "@/component/default/expandSettings.tsx";
 
 type IBookingC = IBooking & {
-  groupCodes: string[];
+  groupCodeInfo: string;
+  groupCodeInfos: string[];
 }
 
 export default function FoundationBooking() {
   const {t} = useTranslation()
-  const {channel,branchMore} = useSelector((state: RootState) => state.baseInfo);
+  const {channel,branchMore,branchAgents} = useSelector((state: RootState) => state.baseInfo);
   const groupMap = useSelector(selectGroupMap)
 
   const [hasMore, setHasMore] = useState(false)
@@ -120,6 +121,10 @@ export default function FoundationBooking() {
       scaleLimitedDaysLength: row.scaleLimitedDaysLength,
       orderRangeAmount:row.orderRangeAmount,
       payedRangeAmount:row.payedRangeAmount,
+      voidedFeesAmount:row.voidedFeesAmount,
+      refundFeesAmount:row.refundFeesAmount,
+      changeFeesAmount:row.changeFeesAmount,
+      appendFeesAmount:row.appendFeesAmount,
     })
     setVisiblePop(true)
   }
@@ -188,8 +193,8 @@ export default function FoundationBooking() {
         })
         return {
           ...item,
-          groupCode: group.branchCode,
-          groupCodes
+          groupCodeInfo: group.branchCode,
+          groupCodeInfos: groupCodes
         }
       })
       if(reset){
@@ -259,14 +264,14 @@ export default function FoundationBooking() {
                   listValue.map((item) => (
                     <Card className={'mb-2'} title={<span
                       className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.channelCode}(<span
-                      className={'text-red-500'}>{item.groupCode}</span>)</span>}
+                      className={'text-red-500'}>{item.groupCodeInfo}</span>)</span>}
                           extra={<Tag round
                                       color={!item.isEnabled ? 'danger' : 'success'}> {item?.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>}
                           key={item.id}>
                       <div className={'text-left'}>
                         <h4 className={'text-black font-bold text-[1.3rem] my-4'}>{t('base.baseInfo')}</h4>
-                        <CardText label={t('group.company')} value={item.groupCode} valueStyle={'text-(--active-color)! text-[1.3rem]!'} />
-                        <CardText label={t('group.applicableCompanies')} value={item.groupCodes.join(',') || '--'} valueStyle={'text-(--success-color)! text-[1.3rem]!'} />
+                        <CardText label={t('group.applicableCompanies')} value={item.groupCodeInfos.join(',') || '--'} valueStyle={'text-(--success-color)! text-[1.3rem]!'} />
+                        <CardText label={t('base.groupCode')} value={item.groupCode} valueStyle={'text-(--active-color)! text-[1.3rem]!'} />
                         <CardText label={t('order.accountName')} value={item.accountName}/>
                         <CardText label={t('order.scaleSetting')} value={item.scaleLimited}/>
                         <CardText label={t('order.queryLimited')} value={item.queryLimited}/>
@@ -302,7 +307,7 @@ export default function FoundationBooking() {
                         <div className={'px-2'}>
                           {
                             item.expandSettings.map(expandSetting => (
-                              <CardText key={expandSetting.indexId} label={expandSetting.name} style={'items-start'} value={expandSetting.value} labelStyle={'text-[1.1rem]! w-50!'} valueStyle={'text-right text-[1.3rem]!'} />
+                              <CardText key={expandSetting.value} label={expandSetting.name} style={'items-start'} value={expandSetting.value} labelStyle={'text-[1.1rem]! w-50!'} valueStyle={'text-right text-[1.3rem]!'} />
                             ))
                           }
                         </div>
@@ -390,8 +395,8 @@ export default function FoundationBooking() {
                 <Checkbox.Group>
                   <Space direction='horizontal' wrap>
                     {
-                      branchMore.map(branch => (
-                        <Checkbox value={branch.id} key={branch.id}>{branch.code}</Checkbox>
+                      branchAgents.map(ba => (
+                        <Checkbox value={ba.branch.id} key={ba.branch.id}>{ba.branch.code}</Checkbox>
                       ))
                     }
                   </Space>
@@ -401,8 +406,8 @@ export default function FoundationBooking() {
                 <Checkbox.Group>
                   <Space direction='horizontal' wrap>
                     {
-                      branchMore.map(branch => (
-                        <Checkbox value={branch.id} key={branch.id}>{branch.code}</Checkbox>
+                      branchAgents.map(ba => (
+                        <Checkbox value={ba.branch.id} key={ba.branch.id}>{ba.branch.code}</Checkbox>
                       ))
                     }
                   </Space>
@@ -433,6 +438,28 @@ export default function FoundationBooking() {
               <Form.Item name={'payedRangeAmount'} label={t('base.defaultPaymentRange')}>
                 <Input placeholder={t('base.defaultPaymentRange')} type={'number'} min={1} />
               </Form.Item>
+
+              <Form.Item name={'voidedFeesAmount'} label={t('base.voidedFeesAmount')} rules={[
+                {required: true, message: t('base.voidedFeesAmount')},
+              ]}>
+                <Input placeholder={t('base.voidedFeesAmount')} type={'number'} min={1} />
+              </Form.Item>
+              <Form.Item name={'refundFeesAmount'} label={t('base.refundFeesAmount')} rules={[
+                {required: true, message: t('base.refundFeesAmount')},
+              ]}>
+                <Input placeholder={t('base.refundFeesAmount')} type={'number'} min={1} />
+              </Form.Item>
+              <Form.Item name={'changeFeesAmount'} label={t('base.changeFeesAmount')} rules={[
+                {required: true, message: t('base.changeFeesAmount')},
+              ]}>
+                <Input placeholder={t('base.changeFeesAmount')} type={'number'} min={1} />
+              </Form.Item>
+              <Form.Item name={'appendFeesAmount'} label={t('base.appendFeesAmount')} rules={[
+                {required: true, message: t('base.appendFeesAmount')},
+              ]}>
+                <Input placeholder={t('base.appendFeesAmount')} type={'number'} min={1} />
+              </Form.Item>
+
               <Form.Item name={'scaleLimited'} label={t('order.scaleSetting')} rules={[
                 {required: true, message: t('order.scaleSetting')},
               ]}>

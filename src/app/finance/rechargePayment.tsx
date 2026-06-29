@@ -108,7 +108,7 @@ export default function FinanceRechargePayment() {
     setVisiblePopSearch(false)
   }
 
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val: ISearchRechargeForm) => {
     setSearchFormData(prevState => ({
       ...prevState,
       ...val,

@@ -221,7 +221,7 @@ export default function BaseWaypoints() {
             <Loading />
         }
       </div>
-      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+      <Popup visible={visiblePopSearch} destroyOnClose position='right' onMaskClick={closeFilter}
              bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
         <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
           <Grid columns={2} gap={8}>
@@ -247,7 +247,7 @@ export default function BaseWaypoints() {
           </Form.Item>
         </Form>
       </Popup>
-      <Popup visible={visible} onMaskClick={closeVisible}>
+      <Popup visible={visible} destroyOnClose onMaskClick={closeVisible}>
         <Form form={waypointsForm} mode={'card'} onFinish={onWaypointsFormFinish} footer={
           <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
             {t('common.submit')}

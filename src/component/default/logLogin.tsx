@@ -30,7 +30,7 @@ export default forwardRef(
     }
 
     return (
-      <Popup visible={visible} position='right' showCloseButton onClose={closePop} bodyStyle={{width: '100vw'}}>
+      <Popup visible={visible} destroyOnClose position='right' showCloseButton onClose={closePop} bodyStyle={{width: '100vw'}}>
         <div className={'py-20 px-5 h-full flex flex-col'}>
           <h2>{t('group.loginLog')}</h2>
           <div className={'overflow-auto'}>

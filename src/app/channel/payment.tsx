@@ -127,7 +127,7 @@ export default function ChannelPayment() {
                         <div className={'px-2'}>
                           {
                             item.expandSettings.map(expandSetting => (
-                              <CardText key={expandSetting.indexId} label={expandSetting.name} value={expandSetting.value} labelStyle={'text-[1.1rem]!'} style={'items-start'} valueStyle={'text-right text-[1.3rem]!'} />
+                              <CardText key={expandSetting.value} label={expandSetting.name} value={expandSetting.value} labelStyle={'text-[1.1rem]!'} style={'items-start'} valueStyle={'text-right text-[1.3rem]!'} />
                             ))
                           }
                         </div>

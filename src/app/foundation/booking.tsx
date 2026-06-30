@@ -334,7 +334,7 @@ export default function FoundationBooking() {
             <Loading />
         }
       </div>
-      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+      <Popup visible={visiblePopSearch} destroyOnClose position='right' onMaskClick={closeFilter}
              bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
         <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
           <Grid columns={2} gap={8}>
@@ -380,7 +380,7 @@ export default function FoundationBooking() {
           </Form.Item>
         </Form>
       </Popup>
-      <Popup visible={visiblePop} position='right' showCloseButton onClose={closePop}
+      <Popup visible={visiblePop} destroyOnClose position='right' showCloseButton onClose={closePop}
              bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}>
         <div className={'pt-20 pb-10 px-1 h-full flex flex-col'}>
           <div className={'overflow-auto'}>
@@ -392,15 +392,15 @@ export default function FoundationBooking() {
               <Form.Item name={'branchId'} label={t('group.company')} rules={[
                 {required: true, message: t('group.company')},
               ]}>
-                <Checkbox.Group>
+                <Radio.Group>
                   <Space direction='horizontal' wrap>
                     {
                       branchAgents.map(ba => (
-                        <Checkbox value={ba.branch.id} key={ba.branch.id}>{ba.branch.code}</Checkbox>
+                        <Radio value={ba.branch.id} key={ba.branch.id}>{ba.branch.code}</Radio>
                       ))
                     }
                   </Space>
-                </Checkbox.Group>
+                </Radio.Group>
               </Form.Item>
               <Form.Item name={'branchIds'} label={t('group.applicableCompanies')}>
                 <Checkbox.Group>

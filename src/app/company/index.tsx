@@ -156,7 +156,7 @@ export default function Company() {
       }} onClick={() => setCompanyVisible(true)}>
         <AddOutline fontSize={22} />
       </FloatingBubble>
-      <Popup visible={companyVisible} position='bottom' onMaskClick={closeCompanyVisible}>
+      <Popup visible={companyVisible} destroyOnClose position='bottom' onMaskClick={closeCompanyVisible}>
         <div className={'p-3 my-2 text-center'}>
           {
             companyVisible && (

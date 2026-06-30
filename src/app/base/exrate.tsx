@@ -132,7 +132,7 @@ export default function BaseExrate() {
             <Loading />
         }
       </div>
-      <Popup visible={visible} onMaskClick={closeVisible}>
+      <Popup visible={visible} destroyOnClose onMaskClick={closeVisible}>
         <Form form={exrateForm} mode={'card'} onFinish={onExrateFormFinish} footer={
           <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
             {t('common.submit')}

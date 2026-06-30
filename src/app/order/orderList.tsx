@@ -509,7 +509,7 @@ export default function OrderList(){
             <Loading />
         }
         <Log ref={logRef} />
-        <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+        <Popup visible={visiblePopSearch} destroyOnClose position='right' onMaskClick={closeFilter}
                bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
           <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
             <Grid columns={2} gap={8}>

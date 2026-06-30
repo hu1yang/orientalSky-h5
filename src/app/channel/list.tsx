@@ -135,7 +135,7 @@ export default function ChannelList(){
                       <div className={'px-2'}>
                         {
                           item.expandSettings.map(expandSetting => (
-                            <CardText key={expandSetting.indexId} label={expandSetting.name} style={'items-start'} value={expandSetting.value} labelStyle={'text-[1.1rem]! w-50!'} valueStyle={'text-right text-[1.3rem]!'} />
+                            <CardText key={expandSetting.value} label={expandSetting.name} style={'items-start'} value={expandSetting.value} labelStyle={'text-[1.1rem]! w-50!'} valueStyle={'text-right text-[1.3rem]!'} />
                           ))
                         }
                       </div>

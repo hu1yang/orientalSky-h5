@@ -505,7 +505,7 @@ export default function FinanceRechargePayment() {
           setPictureList('')
         }}
       />
-      <Popup visible={urSurePayVisible}  onMaskClick={closeSurePay} bodyStyle={{
+      <Popup visible={urSurePayVisible} destroyOnClose onMaskClick={closeSurePay} bodyStyle={{
         borderTopLeftRadius: '8px',
         borderTopRightRadius: '8px',
         height: '90vh',
@@ -575,7 +575,7 @@ export default function FinanceRechargePayment() {
           </Button>
         </div>
       </Popup>
-      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+      <Popup visible={visiblePopSearch} destroyOnClose position='right' onMaskClick={closeFilter}
              bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
         <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
           <Grid columns={2} gap={8}>

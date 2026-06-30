@@ -517,7 +517,7 @@ export default function User() {
             <Loading/>
         }
       </div>
-      <Popup visible={userVisible} position='bottom' onMaskClick={closeUserVisible}>
+      <Popup visible={userVisible} destroyOnClose position='bottom' onMaskClick={closeUserVisible}>
         <Form form={userForm} layout='vertical' onFinish={finishForm} footer={
           <Button block type='submit' color='primary' size='middle' loading={buttonLoading}>
             {t('common.submit')}
@@ -526,7 +526,7 @@ export default function User() {
           {renderFormFiled()}
         </Form>
       </Popup>
-      <Popup visible={userAddVisible} position='bottom' onMaskClick={closeUserAddVisible}>
+      <Popup visible={userAddVisible} destroyOnClose position='bottom' onMaskClick={closeUserAddVisible}>
         <div className={'p-3 my-2 text-center'}>
           <span className={'text-[1.4rem] mb-20'}>{t('group.userAdd')}</span>
         </div>

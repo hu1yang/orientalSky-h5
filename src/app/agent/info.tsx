@@ -834,7 +834,7 @@ export default function AgentInfo() {
           }
         </PullToRefresh>
       </div>
-      <Popup visible={infoVisible} position='bottom' onMaskClick={closeInfoVisible}>
+      <Popup visible={infoVisible} position='bottom' destroyOnClose onMaskClick={closeInfoVisible}>
         <div className={'p-3 my-2 text-center'}>
           <span className={'text-[1.4rem] mb-20'}>{popupTitle}</span>
         </div>

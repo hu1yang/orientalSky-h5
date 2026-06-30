@@ -386,7 +386,7 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
   }
 
   return (
-    <Popup visible={visiblePop} position='right' showCloseButton onClose={closePop}
+    <Popup visible={visiblePop} position='right' destroyOnClose showCloseButton onClose={closePop}
            bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}>
       <div className={'pt-0 h-full flex flex-col'}>
         <div className={'h-[40px] text-center leading-[40px]'}>

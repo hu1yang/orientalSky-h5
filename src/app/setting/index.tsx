@@ -84,7 +84,8 @@ export default function Setting() {
         <div className={'mb-5'}>
           <h3 className={'mb-2 font-medium text-(--text)'}>{t('common.routerProcurement')}</h3>
           <List mode={'card'} className={'m-auto!'}>
-            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/foundation/booking')}}>{t('order.purchasingAccount')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/foundation/booking')}}>{t('common.routerBookingAccountConfiguration')}</List.Item>
+            <List.Item prefix={<i className={'iconfont icon-caigoudan text-(--text)! text-[1.6rem]!'} />} onClick={() => {navigate('/foundation/payment')}}>{t('common.routerPaymentAccountConfiguration')}</List.Item>
           </List>
         </div>
         <div className={'mb-5'}>

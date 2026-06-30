@@ -196,7 +196,7 @@ export default function ChannelBalance() {
             <Loading />
         }
       </div>
-      <Popup visible={balanceVisible} position='bottom' onMaskClick={closeCompanyVisible}>
+      <Popup visible={balanceVisible} destroyOnClose position='bottom' onMaskClick={closeCompanyVisible}>
         <div className={'p-3 my-2 text-center'}>
           <span className={'text-[1.4rem] mb-20'}>{
             t('common.routerChannelBalance')

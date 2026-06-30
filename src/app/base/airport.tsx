@@ -32,7 +32,6 @@ export default function BaseAirport() {
     return 'EName'
   },[i18n.language])
 
-  const divRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwipeActionRef>(null);
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
 
@@ -84,12 +83,6 @@ export default function BaseAirport() {
   }
 
   const closeVisible = () => {
-    if(divRef.current){
-      divRef.current.scrollTo({
-        top: 0,
-        behavior: 'smooth' // 或 'auto'
-      });
-    }
     setVisible(false)
     setLoadingBtn(false)
     airportForm.resetFields()
@@ -237,7 +230,7 @@ export default function BaseAirport() {
             <Loading />
         }
       </div>
-      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+      <Popup visible={visiblePopSearch} position='right' destroyOnClose onMaskClick={closeFilter}
              bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
         <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
           <Grid columns={2} gap={8}>
@@ -265,9 +258,9 @@ export default function BaseAirport() {
           </Form.Item>
         </Form>
       </Popup>
-      <Popup visible={visible} position='right' showCloseButton onClose={closeVisible} bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}>
+      <Popup visible={visible} position='right' destroyOnClose showCloseButton onClose={closeVisible} bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}>
         <div className={'pt-20 pb-10 px-1 h-full flex flex-col'}>
-          <div ref={divRef} className={'overflow-auto'}>
+          <div className={'overflow-auto'}>
             <Form form={airportForm} mode={'card'} onFinish={onAirportFormFinish} footer={
               <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
                 {t('common.submit')}

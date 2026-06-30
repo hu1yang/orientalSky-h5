@@ -191,7 +191,7 @@ export default function BaseNation(){
             <Loading />
         }
       </div>
-      <Popup visible={visible} onMaskClick={closeVisible}>
+      <Popup visible={visible} destroyOnClose onMaskClick={closeVisible}>
         <Form form={nationForm} mode={'card'} onFinish={onNationFormFinish} footer={
           <Button block type='submit' color='primary' size='middle' loading={loadingBtn}>
             {t('common.submit')}

@@ -236,7 +236,7 @@ export const updatePaymentAccountGroup = (form:IPaymentForm) => axios.patch<Comm
 export const updatePaymentExpandsGroup = (form:ExpandsSettingFormGroup) => axios.patch<CommonResponseGroup,ExpandsSettingFormGroup>('/groupApi/Configs/UpdatePaymentExpands',form)
 
 // 删除支付账户
-export const deletePaymentAccountGroup = (id:string) => axios.patch<CommonResponseGroup>(`/groupApi/Configs/DeletePaymentAccount/${id}`)
+export const deletePaymentAccountGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeletePaymentAccount/${id}`)
 
 
 

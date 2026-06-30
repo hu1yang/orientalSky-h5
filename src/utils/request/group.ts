@@ -32,7 +32,6 @@ import {
     type IChannelAccount,
     type IPaymentForm,
     type RechargePaymentForm,
-    type UploadAgentReceiptsFormGroup,
     type RevokeAgentPaymentFormGroup,
     type IPageInfo,
     type ISearchQuotePoliciesGroup,
@@ -95,8 +94,7 @@ import type {
     UpOrderAmounts, UpOrderAppendAmounts,
     UpOrderRCAmounts, VoidingStatus,
 } from "@/types/order.ts";
-import type {CommonResponseAgent, FeessSetting, TradeRecord, UploadAgentReceiptsForm} from "@/types/agent.ts";
-import type { UploadRequestOptions } from "element-plus/es/components/upload/src/upload";
+import type {CommonResponseAgent, FeessSetting, TradeRecord} from "@/types/agent.ts";
 import type {CommonResponseUpload, DocForm, DocListItem, DocSearch, Document} from "@/types/common.ts";
 
 export const getFeessSettingGroup  = (id:string) => axios.get<FeessSetting>(`/groupApi/Configs/GetFeessSetting/${id}`)
@@ -186,7 +184,13 @@ export const downloadAgentReceiptGroup = (id:string) => axios.get<Blob>(`/groupA
 export const deleteAgentReceiptGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteAgentReceipt/${id}`)
 
 // 上传代理充值记录凭证
-export const uploadAgentReceiptsGroup = (form:UploadAgentReceiptsFormGroup) => {
+export const uploadAgentReceiptsGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('Id', form.id)
     formData.append('Remarks', form.remarks)
@@ -275,7 +279,13 @@ export const downloadAccountReceiptGroup = (id:string) => axios.get<Blob>(`/grou
 export const deleteAccountReceiptFileGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteAccountReceipt/${id}`)
 
 // 上传充值记录凭据
-export const uploadAccountReceiptsGroup = (form:UploadAgentReceiptsFormGroup) => {
+export const uploadAccountReceiptsGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('Id', form.id)
     formData.append('Remarks', form.remarks)
@@ -411,12 +421,16 @@ export const addProfitPolicyGroup = (form:IProfitPoliciesItemForm) => axios.post
 export const updateProfitPolicyGroup = (form:IProfitPoliciesItemForm) => axios.patch<CommonResponseGroup,IProfitPoliciesItemForm>(`/groupApi/Policies/UpdateProfitPolicy`,form)
 export const deleteProfitPolicyGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Policies/DeleteProfitPolicy/${id}`)
 
-export const importProfitPoliciesGroup = (form:UploadRequestOptions) => {
+export const importProfitPoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/ImportProfitPolicies`,formData,'post')
 }
-export const deleteProfitPoliciesGroup = (form:UploadRequestOptions) => {
+export const deleteProfitPoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/DeleteProfitPolicies`,formData,'post')
@@ -431,14 +445,18 @@ export const addQuotePolicyGroup = (form:IQuotePoliciesFormGroup) => axios.post<
 export const updateQuotePolicyGroup = (form:IQuotePoliciesFormGroup) => axios.patch<CommonResponseGroup,IQuotePoliciesFormGroup>(`/groupApi/Policies/UpdateQuotePolicy`,form)
 
 // 导入散客政策
-export const importQuotePoliciesGroup = (form:UploadRequestOptions) => {
+export const importQuotePoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/ImportQuotePolicies`,formData,'post')
 }
 
 // 删除散客政策
-export const deleteQuotePoliciesGroup = (form:UploadRequestOptions) => {
+export const deleteQuotePoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/DeleteQuotePolicies`,formData,'post')
@@ -576,7 +594,13 @@ export const appendAppendPaymentGroup = (id:string,form:PaymentOrder) => axios.p
 // 辅营上传下载
 export const downloadAppendFileGroup = (id:string) => axios.get<Blob>(`/groupApi/Orders/DownloadAppendFile/${id}`,{},{responseType: 'blob'})
 export const deleteAppendFileGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Orders/DeleteAppendFile/${id}`)
-export const uploadAppendFilesGroup = (form:UploadAgentReceiptsForm,flag:boolean) => {
+export const uploadAppendFilesGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+},flag:boolean) => {
     const formData = new FormData()
     formData.append('AppendId', form.id)
     formData.append('Remarks', form.remarks)
@@ -599,7 +623,13 @@ export const getRefundInfosGroup = (id:string) => axios.get<IRefund[]>(`/groupAp
 export const getRefundInfoGroup = (id:string) => axios.get<IRefund>(`/groupApi/Orders/GetRefundInfo/${id}`)
 export const downloadRefundFileGroup = (id:string) => axios.get<Blob>(`/groupApi/Orders/DownloadRefundFile/${id}`,{},{responseType: 'blob'})
 export const deleteRefundFileGroup = (id:string) => axios.del<CommonResponseAgent>(`/groupApi/Orders/DeleteRefundFile/${id}`)
-export const uploadRefundFilesGroup = (form:UploadAgentReceiptsForm) => {
+export const uploadRefundFilesGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('RefundId', form.id)
     formData.append('Remarks', form.remarks)
@@ -621,7 +651,13 @@ export const getChangeInfoGroup = (id:string) => axios.get<IChange>(`/groupApi/O
 
 export const downloadChangeFileGroup = (id:string) => axios.get<Blob>(`/groupApi/Orders/DownloadChangeFile/${id}`,{},{responseType: 'blob'})
 export const deleteChangeFileGroup = (id:string) => axios.del<CommonResponseAgent>(`/groupApi/Orders/DeleteChangeFile/${id}`)
-export const uploadChangeFilesGroup = (form:UploadAgentReceiptsForm) => {
+export const uploadChangeFilesGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('ChangeId', form.id)
     formData.append('Remarks', form.remarks)

@@ -364,7 +364,7 @@ export default function FoundationPayment (){
               <Form.Item name={'accountCode'} label={t('order.accountCode')}>
                 <Input placeholder={t('order.accountCode')} type={'password'} />
               </Form.Item>
-              <Form.Item name={'accountType'} label={t('foundation.accountType')} rules={[
+              <Form.Item name={'accountType'} label={t('foundation.accountType')} disabled={paymentForm.getFieldValue('id')} rules={[
                 {required: true, message: t('foundation.accountType')},
               ]}>
                 <Radio.Group>

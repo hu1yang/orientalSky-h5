@@ -234,83 +234,71 @@ export default function AgentInfo() {
           if(!agentDetail?.agentId){
             response = await addAgentSettingGroup({
               ...val,
-              agentId:infoForm.getFieldValue('agentId')
             })
           }else{
             response = await updateAgentSettingGroup({
               ...val,
-              id:infoForm.getFieldValue('id')
             })
           }
           break
         case 'feessSettings':
-          if (infoForm.getFieldValue('id')){
+          if (val.id){
             response = await updateFeessSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addFeessSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'scaleSettings':
-          if (infoForm.getFieldValue('id')) {
+          if (val.id) {
             response = await updateScaleSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addScaleSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'pushProviders':
-          if (infoForm.getFieldValue('id')) {
+          if (val.id) {
             response = await updateDataProviderGroup({
               ...val,
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addDataProviderGroup({
               ...val,
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'dataAccessers':
-          if (infoForm.getFieldValue('id')) {
+          if (val.id) {
             response = await updateDataAccesserGroup({
               ...val,
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addDataAccesserGroup({
               ...val,
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'topupSettings':
-          if(infoForm.getFieldValue('id')){
+          if(val.id){
             response = await updateTopupSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addTopupSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
@@ -843,6 +831,9 @@ export default function AgentInfo() {
             {t('common.submit')}
           </Button>
         }>
+          <Form.Item hidden name={'agentId'} />
+          <Form.Item hidden name={'id'} />
+          <Form.Item hidden name={'agentSettingId'} />
           <div className={'max-h-[60vh] overflow-y-auto'}>
             {renderFormFiled()}
           </div>

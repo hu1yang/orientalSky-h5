@@ -44,8 +44,8 @@ export default function Company() {
   const [companyVisible, setCompanyVisible] = useState(false)
   const [buttonLoading, setButtonLoading] = useState(false)
   const [companyForm] = Form.useForm();
-
-
+  const branchIdCompanyForm = Form.useWatch('branchId',companyForm)
+  const countryNameCompanyForm = Form.useWatch('countryName',companyForm)
 
   const closeCompanyVisible = () => {
     setCompanyVisible(false)
@@ -55,16 +55,11 @@ export default function Company() {
   const finishForm = async (val: IBranch) => {
     setButtonLoading(true)
     try {
-      const branchId = companyForm.getFieldValue('branchId')
-      const form = {
-        ...val,
-        branchId
-      }
       let response
-      if(branchId){
-        response = await updateBranchGroup(form)
+      if(val.branchId){
+        response = await updateBranchGroup(val)
       }else{
-        response = await createBranchGroup(form)
+        response = await createBranchGroup(val)
       }
       if(response.succeeded){
         Toast.show({
@@ -94,7 +89,7 @@ export default function Company() {
       localAddress: branch.localAddress,
       country: branch.country,
       countryName: `${country?.countryEName}(${country?.countryCName})`,
-      description: branch.description,
+      description: branch.description ,
     })
     setCompanyVisible(true)
   }
@@ -161,7 +156,7 @@ export default function Company() {
           {
             companyVisible && (
               <span className={'text-[1.4rem] mb-20'}>{
-                companyForm.getFieldValue('branchId') ? t('group.updateBranch') : t('group.createBranch')
+                branchIdCompanyForm ? t('group.updateBranch') : t('group.createBranch')
               }</span>
             )
           }
@@ -171,6 +166,8 @@ export default function Company() {
             {t('common.submit')}
           </Button>
         }>
+          <Form.Item hidden name={'branchId'} />
+          <Form.Item hidden name={'countryName'} />
           <Form.Item label={t('group.companyCode')} name={'code'} rules={[
             { required: true, message: t('group.companyCode') },
           ]}>
@@ -209,7 +206,7 @@ export default function Company() {
                 ]}
               >
                 <div onClick={actions.open}>
-                  {companyForm.getFieldValue('countryName') || t('airport.countryCode')}
+                  {countryNameCompanyForm || t('airport.countryCode')}
                 </div>
               </Form.Item>
             )}

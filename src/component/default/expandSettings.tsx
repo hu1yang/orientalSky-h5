@@ -20,6 +20,8 @@ export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
   const [visible, setVisible] = useState(false)
   const [loadingBtn, setLoadingBtn] = useState(false)
   const [expendForm] = Form.useForm()
+  const expandId = Form.useWatch('id',expendForm)
+  const expandSettings = Form.useWatch('expandSettings',expendForm)
 
   const closePop = () => {
     setLoadingBtn(false)
@@ -45,6 +47,7 @@ export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
     <Popup
       visible={visible}
       position='right'
+      destroyOnClose
       showCloseButton
       onClose={closePop}
       bodyStyle={{width: '100vw', backgroundColor: 'var(--bg)'}}
@@ -64,14 +67,14 @@ export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
       }}>
         <Form.Item name={'id'} hidden>
         </Form.Item>
-        <Form.Array name={'expandSettings'} onAdd={operation => operation.add({ indexId: expendForm.getFieldValue('id') })} renderAdd={() => (
+        <Form.Array name={'expandSettings'} onAdd={operation => operation.add({ indexId: expandId })} renderAdd={() => (
           <div className={'flex justify-center items-center'}>
             <AddCircleOutline/>
             <span className={'ml-2'}>{t('common.addBtn')}</span>
           </div>
         )} renderHeader={({ index }, { remove }) => (
           <div>
-            <span>{expendForm.getFieldValue('expandSettings').find((_,b) => b === index).name || '--'}</span>
+            <span>{expandSettings?.find((_,b) => b === index).name || '--'}</span>
             <Button fill='none' color={'danger'} size={'mini'} onClick={() => remove(index)} style={{ float: 'right' }}>
               {t('common.delete')}
             </Button>

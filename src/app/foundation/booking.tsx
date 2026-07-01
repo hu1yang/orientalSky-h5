@@ -130,7 +130,7 @@ export default function FoundationBooking() {
   }
 
   const onFinish = async (val) => {
-    const id = form.getFieldValue('id')
+    const id = val.id
     setLoadingBtn(true)
     try{
       let response
@@ -389,6 +389,7 @@ export default function FoundationBooking() {
                 {t('common.submit')}
               </Button>
             }>
+              <Form.Item name={'id'} hidden />
               <Form.Item name={'branchId'} label={t('group.company')} rules={[
                 {required: true, message: t('group.company')},
               ]}>

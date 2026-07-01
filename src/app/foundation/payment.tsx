@@ -58,6 +58,7 @@ export default function FoundationPayment (){
   const [visiblePop, setVisiblePop] = useState(false)
   const [loadingBtn, setLoadingBtn] = useState(false)
   const [paymentForm] = Form.useForm()
+  const paymentFormId = Form.useWatch('id',paymentForm)
 
 
   const edSettingRef = useRef<{
@@ -364,7 +365,7 @@ export default function FoundationPayment (){
               <Form.Item name={'accountCode'} label={t('order.accountCode')}>
                 <Input placeholder={t('order.accountCode')} type={'password'} />
               </Form.Item>
-              <Form.Item name={'accountType'} label={t('foundation.accountType')} disabled={paymentForm.getFieldValue('id')} rules={[
+              <Form.Item name={'accountType'} label={t('foundation.accountType')} disabled={paymentFormId} rules={[
                 {required: true, message: t('foundation.accountType')},
               ]}>
                 <Radio.Group>

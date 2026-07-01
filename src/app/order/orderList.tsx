@@ -158,10 +158,12 @@ const auxiliarySearch = {
     bookingNumber:''
 }
 
+type IPathType = 'ticket'|'refund'|'change'|'auxiliary'
+
 const ListCard = memo(({listValue, getlogFnc, pathType, resetDataFnc}: {
   listValue: IOrderManual | IOrderRefund | IOrderChange | IOrderAuxiliary
   getlogFnc: (id: string) => void
-  pathType:'ticket'|'refund'|'change'|'auxiliary'
+  pathType: IPathType
   resetDataFnc: () => void
 }) => {
   const {t} = useTranslation()
@@ -496,7 +498,7 @@ export default function OrderList(){
               <PullToRefresh onRefresh={resetData}>
                 {
                   listValue.length ? listValue.map(item => (
-                    <ListCard key={item.id} listValue={item} getlogFnc={getlog} pathType={pathType} resetDataFnc={resetData} />
+                    <ListCard key={item.id} listValue={item} getlogFnc={getlog} pathType={pathType as IPathType} resetDataFnc={resetData} />
                   )) : <NoData />
                 }
               </PullToRefresh>

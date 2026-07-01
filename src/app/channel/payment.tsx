@@ -58,11 +58,7 @@ export default function ChannelPayment() {
   const inFormFinish = async (val) => {
     setLoadingBtn(true)
     try {
-      const form = {
-        ...val,
-        id:inForm.getFieldValue('id')
-      }
-      const response = await updatePayedInvokerGroup(form)
+      const response = await updatePayedInvokerGroup(val)
       result(response)
       if(response.succeed){
         closePop()
@@ -160,6 +156,7 @@ export default function ChannelPayment() {
         }
       </div>
       <Popup
+        destroyOnClose
         visible={visible}
         onMaskClick={closePop}
       >
@@ -171,6 +168,7 @@ export default function ChannelPayment() {
           '--border-top':'0',
           '--border-bottom':'0',
         }}>
+          <Form.Item hidden name={'id'} />
           <Form.Item label={t('order.isEnabled')} name={'isEnabled'} rules={[
             { required: true, message: t('order.isEnabled') },
           ]}>

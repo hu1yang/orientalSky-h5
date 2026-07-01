@@ -1,5 +1,5 @@
 import {Suspense, useEffect, useState} from "react";
-import {Outlet, useMatches, useNavigate} from "react-router";
+import {Outlet, useLocation, useMatches, useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {setBranchAgents, setBranchMore, setChannel} from "@/store/modules/base.ts";
 import {setIdentity} from "@/store/modules/tool.ts";
@@ -17,6 +17,7 @@ export default function Layout({noDefault}:{
   noDefault?: boolean
 }){
   const navigate = useNavigate();
+  const {pathname} = useLocation()
   const matches = useMatches()
   const currentRoute = matches[matches.length - 1]
   const title = currentRoute?.handle?.title || ''
@@ -49,6 +50,13 @@ export default function Layout({noDefault}:{
   const onBack = () => {
     navigate(-1)
   }
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 或 'auto'
+    });
+  }, [pathname]);
 
   useEffect(() => {
     const init = async () => {

@@ -28,16 +28,21 @@ export default function Setting() {
   },[identity?.branchIds,groupMap])
 
   const logout = async () => {
-    const response = await userSignOut()
-    if(response.succeeded){
-      Cookie.remove('token')
+    Dialog.confirm({
+      content: t('common.exitAccountTip'),
+      onConfirm: async () => {
+        const response = await userSignOut()
+        if(response.succeeded){
+          Cookie.remove('token')
 
-      localStorage.removeItem('identity')
-      dispatch(removeLogin())
-      setTimeout(() => {
-        navigate('/login')
-      },200)
-    }
+          localStorage.removeItem('identity')
+          dispatch(removeLogin())
+          setTimeout(() => {
+            navigate('/login')
+          },200)
+        }
+      },
+    })
   }
 
   return (

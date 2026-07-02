@@ -5,7 +5,21 @@ import Cookie from "js-cookie";
 import {removeLogin} from "@/store/modules/tool.ts";
 import {useDispatch} from "react-redux";
 
-import {Button, Card, Divider, Form, Grid, Input, Loading, Popup, PullToRefresh, Space, Tag, Toast} from "antd-mobile";
+import {
+  Button,
+  Card,
+  Dialog,
+  Divider,
+  Form,
+  Grid,
+  Input,
+  Loading,
+  Popup,
+  PullToRefresh,
+  Space,
+  Tag,
+  Toast
+} from "antd-mobile";
 import {
   getUserEntityGroup,
   personalUpdatePassword,
@@ -151,16 +165,21 @@ export default function Personal(){
   }
 
   const logout = async () => {
-    const response = await userSignOut()
-    if(response.succeeded){
-      Cookie.remove('token')
+    Dialog.confirm({
+      content: t('common.exitAccountTip'),
+      onConfirm: async () => {
+        const response = await userSignOut()
+        if(response.succeeded){
+          Cookie.remove('token')
 
-      localStorage.removeItem('identity')
-      dispatch(removeLogin())
-      setTimeout(() => {
-        navigate('/login')
-      },200)
-    }
+          localStorage.removeItem('identity')
+          dispatch(removeLogin())
+          setTimeout(() => {
+            navigate('/login')
+          },200)
+        }
+      },
+    })
   }
 
   useEffect(()=>{

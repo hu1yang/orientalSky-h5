@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
             }
           },
           {
-            path:'/data/retrieval',
+            path:'data/retrieval',
             element: <RetrievalLoad />,
             handle:{
               routerType: 'dashboard'

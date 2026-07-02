@@ -13,7 +13,6 @@ import {
   appendRejectGroup,
   getAppendInfoGroup,
   rejectAppendAmountsGroup,
-  setAppendAttachedGroup
 } from "@/utils/request/group.ts";
 import {useDetailData} from "@/context/order/detailContext.tsx";
 import {result} from "@/utils/public.ts";
@@ -69,22 +68,6 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
     if(amountRef.current){
       amountRef.current.openSurePop(auxiliaryTab)
     }
-  }
-
-  const executeAmount = () => {
-    const message = t('order.auxiliaryTips', { tc:`${auxiliaryDetail?.confirmed?.netPaymentAmount}USD` })
-    Dialog.confirm({
-      content: message,
-      onConfirm: async () => {
-        const resposne = await setAppendAttachedGroup(auxiliaryTab)
-        result(resposne)
-        if(resposne.succeed){
-          getDetail()
-        }else{
-          throw new Error()
-        }
-      }
-    })
   }
 
   const rejectAuxiliary = () => {
@@ -188,9 +171,7 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
             {
               auxiliaryList.map(auxiliary => (
                 <Tabs.Tab key={auxiliary.id} title={`${auxiliary.id}(${t('common.'+statusAuxiliaryArs[auxiliary.status])})`}>
-                  <PassengerCard passengers={auxiliaryPassenger} status={'auxiliary'} />
-                  <SegmentCard itineraryList={auxiliaryItineraries} status={'auxiliary'} />
-                  <Card title={t('order.auxiliaryConfirmed')}>
+                  <Card title={t('order.auxiliaryConfirmed')} className={'mb-5'}>
                     {
                       auxiliary.appendForAttachTypes.map((appendForAttachType,appendForAttachTypeIndex) => (
                         <React.Fragment key={appendForAttachTypeIndex}>
@@ -246,15 +227,17 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
                       )
                     }
                   </Card>
+                  <PassengerCard passengers={auxiliaryPassenger} status={'auxiliary'} />
+                  <SegmentCard itineraryList={auxiliaryItineraries} status={'auxiliary'} />
                   {
                     auxiliary.status !== 'cancelled' && (
-                      <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5'}>
+                      <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5 bottom-2'}>
                         <Grid.Item span={['confirmed','appendPaid'].includes(auxiliary.status)?1:2}>
                           {
                             ['appendPaid','attached'].includes(auxiliary.status)?
                               <Button block disabled={auxiliary.status !== 'appendPaid'} style={{
                                 '--background-color':'var(--warning-color)'
-                              }} onClick={executeAmount}>
+                              }} onClick={sureAmount}>
                                 {
                                   !['appendPaid'].includes(auxiliary.status) ? t('common.'+ statusAuxiliaryArs[auxiliary.status]) : t('order.executeAuxiliaryEd')
                                 }

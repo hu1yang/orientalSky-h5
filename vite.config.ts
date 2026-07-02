@@ -15,6 +15,7 @@ export default defineConfig((config) => {
       }
     },
     server: {
+      host: `h5.group.com`,
       port: 8083,
       proxy: {
         '/identityApi': {

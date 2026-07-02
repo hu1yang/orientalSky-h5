@@ -9,6 +9,7 @@ import {normalizeParams} from "@/utils/public.ts";
 import {Toast} from "antd-mobile";
 import {store} from "@/store";
 import {removeLogin} from "@/store/modules/tool.ts";
+import {router} from "@/router.tsx";
 
 
 
@@ -103,11 +104,15 @@ instance.interceptors.response.use(
                     })
                     break
                 case 401:
+                    Cookie.remove('token')
                     store.dispatch(removeLogin())
                     Toast.show({
                         icon: 'fail',
                         content: '401',
                     })
+                    setTimeout(() => {
+                        router.navigate('/login');
+                    }, 200)
                     break;
                 case 403:
                     // 权限不足

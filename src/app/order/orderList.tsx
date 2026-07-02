@@ -1,19 +1,19 @@
 import {memo, useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {useLocation, useNavigate, useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
 
 import {
   Button,
-  Card,
+  Card, Dialog,
   Divider, Form,
   Grid,
   InfiniteScroll, Input,
   Loading, Popup,
   PullToRefresh,
   Radio,
-  SearchBar,
+  SearchBar, Segmented,
   Space,
   Tag,
   Toast
@@ -29,7 +29,7 @@ import {
   statusArsChange,
   statusArsRefund
 } from "@/utils/order.ts";
-import {copyText} from "@/utils/public.ts";
+import {copyText, result} from "@/utils/public.ts";
 
 import type {
   IOrderAuxiliary,
@@ -42,6 +42,9 @@ import type {
   IOrderAuxiliarySearchForm
 } from "@/types/order.ts";
 import {
+  changeAppendLockedByGroup,
+  changeChangeLockedByGroup,
+  changeOrderLockedByGroup, changeRefundLockedByGroup,
   getAppendsListGroup,
   getChangesListGroup,
   getOperationLogsOrderGroup,
@@ -52,8 +55,9 @@ import {
 import {selectAgentMap} from "@/store/modules/base.ts";
 import Log from "@/component/default/log.tsx";
 import type {OrderInfo} from "@/types/group.ts";
-import AgentSearch from "@/component/default/agentSearch.tsx";
 import NoData from "@/component/default/noData.tsx";
+import DefaultSelect from "@/component/form/defaultSelect.tsx";
+import type {RootState} from "@/store";
 
 
 
@@ -154,10 +158,13 @@ const auxiliarySearch = {
     bookingNumber:''
 }
 
-const ListCard = memo(({listValue, getlogFnc, pathType}: {
+type IPathType = 'ticket'|'refund'|'change'|'auxiliary'
+
+const ListCard = memo(({listValue, getlogFnc, pathType, resetDataFnc}: {
   listValue: IOrderManual | IOrderRefund | IOrderChange | IOrderAuxiliary
   getlogFnc: (id: string) => void
-  pathType:'ticket'|'refund'|'change'|'auxiliary'
+  pathType: IPathType
+  resetDataFnc: () => void
 }) => {
   const {t} = useTranslation()
   const navigate = useNavigate()
@@ -183,6 +190,42 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
     }
   }
 
+  const locked = async (id: string, val: boolean, lockedBy: string | null) => {
+    const runLockAction = async () => {
+      let response
+      switch (pathType){
+        case "ticket":
+          response = await changeOrderLockedByGroup(id, val);
+          break
+        case "refund":
+          response = await changeRefundLockedByGroup(id, val);
+          break
+        case 'change':
+          response = await changeChangeLockedByGroup(id, val);
+          break
+        case 'auxiliary':
+          response = await changeAppendLockedByGroup(id, val);
+          break
+      }
+      if(!response) return
+      result(response);
+      if (response.succeed) {
+        resetDataFnc()
+      }
+    };
+
+    if(lockedBy){
+      const response = await Dialog.confirm({
+        content: t('order.locakNameTips', { name: lockedBy }),
+      })
+      if(response){
+        await runLockAction();
+      }
+    } else {
+      await runLockAction();
+    }
+  }
+
   return (
     <Card className={'mb-2'}
           title={
@@ -205,7 +248,6 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
                   }
 
                 </div>
-
                 <CouponOutline color={'var(--active-color)'} fontSize={14} />
               </div>
               <Tag round
@@ -213,7 +255,7 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
             </div>
           }
           extra={
-            <Button size={'mini'} fill='none'>
+            <Button size={'mini'} fill='none' onClick={() => locked(listValue.id,!!listValue.lockedBy ? false : true,listValue.lockedBy)}>
               <Space style={{
                 display:'flex',
                 alignItems:'stretch'
@@ -281,11 +323,12 @@ const ListCard = memo(({listValue, getlogFnc, pathType}: {
 })
 
 export default function OrderList(){
-  const location = useLocation()
-  const {pathname} = location
-  const {status} = useParams()
+  const navigate = useNavigate()
+  const {orderType} = useParams()
   const {t} = useTranslation()
   const agentMap = useSelector(selectAgentMap)
+  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const agentArr = branchAgents.map(b => b?.agents).flat()
 
   const [hasMore, setHasMore] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -299,17 +342,20 @@ export default function OrderList(){
   const [searchFormData, setSearchFormData] = useState<IOrderManualSearchForm | IOrderRefundSearchForm | IOrderChangeSearchForm | IOrderAuxiliarySearchForm | null>(null)
   const [listValue, setListValue] = useState<(IOrderManual | IOrderRefund | IOrderChange | IOrderAuxiliary)[]>([])
 
-  const pathType = useMemo(()=>{
-    if(pathname.includes('order/ticket')){
-      return 'ticket'
-    } else if(pathname.includes('order/refund')){
-      return 'refund'
-    } else if(pathname.includes('order/change')){
-      return 'change'
-    }else{
-      return 'auxiliary'
+  const pathType = useMemo(() => {
+    if (
+      orderType &&
+      ['ticket', 'refund', 'change', 'auxiliary'].includes(orderType)
+    ) {
+      return orderType
     }
-  },[pathname])
+
+    return 'ticket'
+  }, [orderType])
+
+  const changeSegmented = (val: string | number) => {
+    navigate(`/order/${String(val)}`)
+  }
 
   const logRef = useRef<{
     showLog:(logList:OrderInfo[]) => void
@@ -417,6 +463,10 @@ export default function OrderList(){
 
   useEffect(() => {
     const changeData = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // 或 'auto'
+      });
       setLoading(true)
       resetData()
     }
@@ -425,76 +475,89 @@ export default function OrderList(){
 
 
   return (
-    <div className="p-2">
-      <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
-        <SearchBar className={'flex-1'} placeholder={t('order.orderNo')}
-                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
-                   onSearch={searchFilter} onClear={() => searchFilter('')}/>
-        <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
-          <FilterOutline fontSize={18} color={'var(--active-color)'} />
-        </Button>
+    <section className={'containerMain'}>
+      <div className={'w-full mb-2 bg-(--bg) sticky top-(--header-height) left-0 z-9'}>
+        <Segmented block options={[
+          {label: t('common.routerTicketing'), value: 'ticket'},
+          {label: t('common.routerRefund'), value: 'refund'},
+          {label: t('common.routerChange'), value: 'change'},
+          {label: t('common.routerAuxiliary'), value: 'auxiliary'}
+        ]} value={pathType} onChange={changeSegmented}/>
+        <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
+          <SearchBar className={'flex-1'} placeholder={t('order.orderNo')}
+                     style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
+                     onSearch={searchFilter} onClear={() => searchFilter('')}/>
+          <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+            <FilterOutline fontSize={18} color={'var(--active-color)'} />
+          </Button>
+        </div>
       </div>
-      {
-        !loading ? <>
-            <PullToRefresh onRefresh={resetData}>
-              {
-                listValue.length ? listValue.map(item => (
-                  <ListCard key={item.id} listValue={item} getlogFnc={getlog} pathType={pathType} />
-                )) : <NoData />
-              }
-            </PullToRefresh>
-            {
-              !!listValue.length && (
-                <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
-              )
-            }
-          </>:
-          <Loading />
-      }
-      <Log ref={logRef} />
-      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
-             bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
-        <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
-          <Grid columns={2} gap={8}>
-            <Grid.Item>
-              <Button block size='small' onClick={resetSearchFilter}>
-                {t('group.reset')}
-              </Button>
-            </Grid.Item>
-            <Grid.Item>
-              <Button block type='submit' color='primary' size='small'>
-                {t('common.search')}
-              </Button>
-            </Grid.Item>
-          </Grid>
-        }>
-          <Form.Item label={t('foundation.agent')} name={'agentId'}>
-            <AgentSearch />
-          </Form.Item>
-          <Form.Item label={t('order.ticketNumber')} name={'ticketNumber'}>
-            <Input placeholder={t('order.ticketNumber')} />
-          </Form.Item>
-          {
-            pathType === 'ticket' &&
-              <Form.Item label={t('group.bookingNumber')} name={'bookingNumber'}>
-                  <Input placeholder={t('group.bookingNumber')} />
-              </Form.Item>
-          }
-
-          <Form.Item label={t('order.orderStatus')} name={'status'}>
-            <Radio.Group>
-              <Space direction='vertical' wrap>
-                <Radio value={''}>{t('common.routerTicketingAll')}</Radio>
+      <div className="p-2">
+        {
+          !loading ? <>
+              <PullToRefresh onRefresh={resetData}>
                 {
-                  Object.entries(statusMap[pathType]).map(([key, value]) => (
-                    <Radio key={key} value={key}>{t('common.'+value)}</Radio>
-                  ))
+                  listValue.length ? listValue.map(item => (
+                    <ListCard key={item.id} listValue={item} getlogFnc={getlog} pathType={pathType as IPathType} resetDataFnc={resetData} />
+                  )) : <NoData />
                 }
-              </Space>
-            </Radio.Group>
-          </Form.Item>
-        </Form>
-      </Popup>
-    </div>
-    )
+              </PullToRefresh>
+              {
+                !!listValue.length && (
+                  <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+                )
+              }
+            </>:
+            <Loading />
+        }
+        <Log ref={logRef} />
+        <Popup visible={visiblePopSearch} destroyOnClose position='right' onMaskClick={closeFilter}
+               bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
+          <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
+            <Grid columns={2} gap={8}>
+              <Grid.Item>
+                <Button block size='small' onClick={resetSearchFilter}>
+                  {t('group.reset')}
+                </Button>
+              </Grid.Item>
+              <Grid.Item>
+                <Button block type='submit' color='primary' size='small'>
+                  {t('common.search')}
+                </Button>
+              </Grid.Item>
+            </Grid>
+          }>
+            <Form.Item label={t('foundation.agent')} name={'agentId'}>
+              <DefaultSelect options={agentArr.map(item => ({
+                label: item.code,
+                value: item.id,
+              }))} multiple={false} placeholder={t('foundation.agent')} />
+            </Form.Item>
+            <Form.Item label={t('order.ticketNumber')} name={'ticketNumber'}>
+              <Input placeholder={t('order.ticketNumber')} />
+            </Form.Item>
+            {
+              pathType === 'ticket' &&
+                <Form.Item label={t('group.bookingNumber')} name={'bookingNumber'}>
+                    <Input placeholder={t('group.bookingNumber')} />
+                </Form.Item>
+            }
+
+            <Form.Item label={t('order.orderStatus')} name={'status'}>
+              <Radio.Group>
+                <Space direction='vertical' wrap>
+                  <Radio value={''}>{t('common.routerTicketingAll')}</Radio>
+                  {
+                    Object.entries(statusMap[pathType]).map(([key, value]) => (
+                      <Radio key={key} value={key}>{t('common.'+value)}</Radio>
+                    ))
+                  }
+                </Space>
+              </Radio.Group>
+            </Form.Item>
+          </Form>
+        </Popup>
+      </div>
+    </section>
+  )
 }

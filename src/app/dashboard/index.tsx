@@ -145,7 +145,9 @@ export default function Home(){
       ])
       dateChartsRef.current.setChart({
         titleTips:[t('home.salesAmount'), t('home.flightSegmentsnumber')],
-        title:t('home.todayTotalTurnover'),
+        title:pathname === '/'
+          ? t('home.todayTotalTurnover')
+          : t('home.totalTurnover'),
         xData:amountData,
         barData:amountTotalAmount,
         lineData:amountTotalSegments,
@@ -252,13 +254,28 @@ export default function Home(){
       if(response){
         setDataValue(response)
       }
+    } catch {
+      setDataValue({
+        counts:{
+          totalSegments: 0,
+          totalOrders: 0,
+          totalAmount: 0,
+          totalProfit: 0
+        },
+        branches:[],
+        agents:[],
+        flights:[],
+        dates:[],
+        channels:[],
+        hours:[],
+      })
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    const initData = async () => {
+    const initData = () => {
       const local = pathname === '/'
         ? dayjs().toDate()
         : [dayjs().subtract(7, 'day').startOf('day').toDate(), dayjs().endOf('day').toDate()]

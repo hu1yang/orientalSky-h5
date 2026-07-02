@@ -39,9 +39,11 @@ import type {
 } from "@/types/group.ts";
 import type {IExchangeRateAgent} from "@/types/agent.ts";
 import {result} from "@/utils/public.ts";
-import AgentSearch from "@/component/default/agentSearch.tsx";
 import {changedTypeArr} from "@/utils/common.ts";
 import NoData from "@/component/default/noData.tsx";
+import type {RootState} from "@/store";
+import DefaultSelect from "@/component/form/defaultSelect.tsx";
+import Log from "@/component/default/log.tsx";
 
 type IAgentPayment = AgentPayment & {
   branchCode: string
@@ -52,10 +54,12 @@ type IUrUserObj = { accountInfo:IAgentPayment,accountPrice:GroupBalance,totalAmo
 const statusArr = ['pending', 'reviewed', 'confirmed', 'rejected', 'cancelled']
 
 const { Step } = Steps
-export default function AgentRechargePayment() {
+export default function FinanceRechargePayment() {
   const {t} = useTranslation()
   const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
+  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const agentArr = branchAgents.map(b => b?.agents).flat()
 
   const [hasMore, setHasMore] = useState(false)
   const pageRef = useRef(0)
@@ -89,6 +93,10 @@ export default function AgentRechargePayment() {
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [urSureForm] = Form.useForm()
 
+  const logRef = useRef<{
+    showLog: (logList: OrderInfo[]) => void
+  } | null>(null);
+
   const loadMore = async () => {
     const nextPage = pageRef.current + 1
     pageRef.current = nextPage
@@ -100,7 +108,7 @@ export default function AgentRechargePayment() {
     setVisiblePopSearch(false)
   }
 
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val: ISearchRechargeForm) => {
     setSearchFormData(prevState => ({
       ...prevState,
       ...val,
@@ -212,11 +220,12 @@ export default function AgentRechargePayment() {
     })
   }
 
-  const reviewPayment = (row:IAgentPayment) => {
+  const reviewPayment = async (row:IAgentPayment) => {
     let remarks = ''
+    const agentInfo = await getAgentAccountGroup(row.agentId)
     const exchangeRateInfo = exchangeRates.find(ex => ex.currencyCode === row.currency)
     if(!exchangeRateInfo) return
-    const accountInfo = exchangeRates.find(ex => ex.currencyCode === 'USD')
+    const accountInfo = exchangeRates.find(ex => ex.currencyCode === (agentInfo.currency ?? 'USD'))
     Dialog.confirm({
       content: (
         <div className={'w-full flex flex-col justify-start'}>
@@ -258,6 +267,19 @@ export default function AgentRechargePayment() {
     })
   }
 
+  const getlog = (id: string) => {
+    getOperationLogsGroup({page:0,pageSize:50},id).then(res => {
+      if (res.length) {
+        if (logRef) {
+          logRef.current?.showLog(res)
+        }
+      } else {
+        Toast.show({
+          content: 'No Data',
+        })
+      }
+    })
+  }
   const getLog = (id:string) => {
     getOperationLogsGroup({page:0,pageSize:40},id).then((res) => {
       setLogList(res)
@@ -268,6 +290,7 @@ export default function AgentRechargePayment() {
     return response
   }
   const rechargePrice = async (totalAmount:number,rechargeCurrency:string,accountCurrency:string) => {
+    if(rechargeCurrency == accountCurrency) return totalAmount
     const rechargeInfo = await getCurrencyTarget(rechargeCurrency)
     const accountInfo = await getCurrencyTarget(accountCurrency)
     return (totalAmount / (rechargeInfo.cashSellingRate / accountInfo.cashSellingRate))
@@ -333,19 +356,23 @@ export default function AgentRechargePayment() {
   }, []);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 或 'auto'
+    });
     getData(0,true)
   }, [searchFormData]);
   return (
     <section className={'containerMain'}>
+      <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('order.transactionSerialNumber')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
+                   onSearch={searchFilter} onClear={() => searchFilter('')}/>
+        <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+          <FilterOutline fontSize={18} color={'var(--active-color)'} />
+        </Button>
+      </div>
       <div className={'p-2'}>
-        <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
-          <SearchBar className={'flex-1'} placeholder={t('order.transactionSerialNumber')}
-                     style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
-                     onSearch={searchFilter} onClear={() => searchFilter('')}/>
-          <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
-            <FilterOutline fontSize={18} color={'var(--active-color)'} />
-          </Button>
-        </div>
         {
           !loading? <>
               <PullToRefresh onRefresh={resetData}>
@@ -356,21 +383,20 @@ export default function AgentRechargePayment() {
                             <div className={'flex items-center'}>
                               <BillOutline fontSize={20} color={'var(--warning-color)'} />
                               <span className={'text-[1.1rem] ml-2 font-normal'}>
-                        {item.agentCode}
-                      </span>
+                          {item.agentCode}
+                        </span>
                             </div>
                           }
                           extra={
                             <Tag round color={item.status === 'pending' ? 'warning' : item.status === 'reviewed' ? 'success' : 'primary'}>{t('order.'+item.status)}</Tag>
                           }
                           key={item.id}>
-                      <div></div>
                       <div className={'text-left'}>
                         <div>
                           <div className={'mb-2'}>
-                            <span className={'text-[1.6rem] text-(--success-color)'}>
-                              {item.totalAmount.toLocaleString()}
-                            </span>
+                              <span className={'text-[1.6rem] text-(--success-color)'}>
+                                {item.totalAmount.toLocaleString()}
+                              </span>
                             <span className={'text-(--price-color) text-[1.8rem] ml-2'}>{item.currency}/<span className={'text-[1.2rem]'}>{item.exchangeRate}</span></span>
                           </div>
                           {
@@ -378,17 +404,17 @@ export default function AgentRechargePayment() {
                               <>
                                 <div className={'flex'}>
                                   <div>
-                            <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.beforeBalance.toLocaleString()}
-                              <em className={'text-[1rem] ml-1'}>USD</em>
-                            </span>
+                              <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.beforeBalance.toLocaleString()}
+                                <em className={'text-[1rem] ml-1'}>USD</em>
+                              </span>
                                   </div>
                                   <span className={'text-[1rem] ml-3'}>{t('order.beforeBalance')}</span>
                                 </div>
                                 <div className={'flex'}>
                                   <div>
-                            <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.currentBalance.toLocaleString()}
-                              <em className={'text-[1rem] ml-1'}>USD</em>
-                            </span>
+                              <span className={'text-[1.4rem] text-(--warning-color)'}>{item.agentHistory.currentBalance.toLocaleString()}
+                                <em className={'text-[1rem] ml-1'}>USD</em>
+                              </span>
                                   </div>
                                   <span className={'text-[1rem] ml-3'}>{t('order.currentBalance')}</span>
                                 </div>
@@ -446,6 +472,8 @@ export default function AgentRechargePayment() {
                                               onClick={() => openPaymentSure(item)}>{t('common.surePayment')}</Button>
                                     )
                                   }
+                                  <Button shape='rounded' size={'small'} color={'warning'}
+                                          onClick={() => getlog(item.id)}>{t('common.routerLog')}</Button>
                                 </Space>
                               </div>
                             </>
@@ -464,7 +492,6 @@ export default function AgentRechargePayment() {
             </>:
             <Loading />
         }
-
       </div>
       <ImageViewer
         classNames={{
@@ -478,7 +505,7 @@ export default function AgentRechargePayment() {
           setPictureList('')
         }}
       />
-      <Popup visible={urSurePayVisible}  onMaskClick={closeSurePay} bodyStyle={{
+      <Popup visible={urSurePayVisible} destroyOnClose onMaskClick={closeSurePay} bodyStyle={{
         borderTopLeftRadius: '8px',
         borderTopRightRadius: '8px',
         height: '90vh',
@@ -548,7 +575,7 @@ export default function AgentRechargePayment() {
           </Button>
         </div>
       </Popup>
-      <Popup visible={visiblePopSearch} position='right' onMaskClick={closeFilter}
+      <Popup visible={visiblePopSearch} destroyOnClose position='right' onMaskClick={closeFilter}
              bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
         <Form form={searchForm} mode={'card'} onFinish={onSearchFinish} footer={
           <Grid columns={2} gap={8}>
@@ -565,13 +592,16 @@ export default function AgentRechargePayment() {
           </Grid>
         }>
           <Form.Item label={t('foundation.agent')} name={'agentId'}>
-            <AgentSearch />
+            <DefaultSelect options={agentArr.map(item => ({
+              label: item.code,
+              value: item.id,
+            }))} multiple={false} placeholder={t('foundation.agent')} />
           </Form.Item>
           <Form.Item label={t('order.isSure')} name={'unLinked'}>
             <Radio.Group>
               <Space direction='vertical'>
-                <Radio>{t('common.open')}</Radio>
-                <Radio>{t('common.close')}</Radio>
+                <Radio value={true}>{t('common.open')}</Radio>
+                <Radio value={false}>{t('common.close')}</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>
@@ -599,6 +629,7 @@ export default function AgentRechargePayment() {
           </Form.Item>
         </Form>
       </Popup>
+      <Log ref={logRef} />
     </section>
   )
 }

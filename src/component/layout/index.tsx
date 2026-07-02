@@ -1,5 +1,5 @@
 import {Suspense, useEffect, useState} from "react";
-import {Outlet, useMatches, useNavigate} from "react-router";
+import {Outlet, useLocation, useMatches, useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {setBranchAgents, setBranchMore, setChannel} from "@/store/modules/base.ts";
 import {setIdentity} from "@/store/modules/tool.ts";
@@ -17,6 +17,7 @@ export default function Layout({noDefault}:{
   noDefault?: boolean
 }){
   const navigate = useNavigate();
+  const {pathname} = useLocation()
   const matches = useMatches()
   const currentRoute = matches[matches.length - 1]
   const title = currentRoute?.handle?.title || ''
@@ -51,6 +52,13 @@ export default function Layout({noDefault}:{
   }
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 或 'auto'
+    });
+  }, [pathname]);
+
+  useEffect(() => {
     const init = async () => {
       if (!Cookie.get('token')) {
         navigate('/login')
@@ -71,7 +79,7 @@ export default function Layout({noDefault}:{
         {
           noDefault ?
             <Header />:
-            <div className={'lg:w-(--container-width) w-full h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-99'}>
+            <div className={'lg:w-(--container-width) w-full h-(--header-height) bg-(--bg) fixed left-[50%] transform-[translateX(-50%)] top-0 z-999'}>
               <NavBar onBack={onBack} style={{lineHeight: 1.6}}>{t(title)}</NavBar>
             </div>
         }

@@ -1,7 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import Cookie from "js-cookie";
 import type {IIdentity, IPrincipal} from "@/types/identity.ts";
-import {router} from "@/router.tsx";
 
 
 const token = Cookie.get('token')
@@ -30,11 +29,8 @@ const toolSlice = createSlice({
       localStorage.setItem('identity', JSON.stringify(state.identity))
     },
     removeLogin(state) {
-      Cookie.remove('token')
-      router.navigate('/login')
       state.token = ''
       state.identity = null
-      localStorage.removeItem('identity')
     }
   }
 })

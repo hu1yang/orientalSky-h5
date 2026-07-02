@@ -32,7 +32,6 @@ import {
     type IChannelAccount,
     type IPaymentForm,
     type RechargePaymentForm,
-    type UploadAgentReceiptsFormGroup,
     type RevokeAgentPaymentFormGroup,
     type IPageInfo,
     type ISearchQuotePoliciesGroup,
@@ -70,7 +69,9 @@ import {
     type IChannelSettingsBalance, type IFindBalanceAccountsForm, type IPaymentAccount, type IBalanceAccountForm,
     type ValidSearchForm, type ValidList, type TeamPolicy, type ITeamdSegmentsForm, type ICabin, type ITeamdValences,
     type ITeamdInStocksForm, type ITeamRoutingForm, type TeamPoliciesGroup, type ITeamdFight,
-    type ConfirmationChannelForm, type ICountries, type DashboardScaleForm, type DashboardScale, type ChannelCode
+    type ConfirmationChannelForm, type ICountries, type DashboardScaleForm, type DashboardScale, type ChannelCode,
+    type TopupSettingsFormGroup, type IChannelPayedSettings, type IPayedSettingUpdate, type IPayedInvokerUpdate,
+    type IChannelPayedSettingsSearch, type ITopupPaymentsList
 } from "@/types/group.ts";
 import type {
     AppendConsult, AppendConsultForm, AppendReplenishLogForm,
@@ -93,8 +94,7 @@ import type {
     UpOrderAmounts, UpOrderAppendAmounts,
     UpOrderRCAmounts, VoidingStatus,
 } from "@/types/order.ts";
-import type {CommonResponseAgent, FeessSetting, TradeRecord, UploadAgentReceiptsForm} from "@/types/agent.ts";
-import type { UploadRequestOptions } from "element-plus/es/components/upload/src/upload";
+import type {CommonResponseAgent, FeessSetting, TradeRecord} from "@/types/agent.ts";
 import type {CommonResponseUpload, DocForm, DocListItem, DocSearch, Document} from "@/types/common.ts";
 
 export const getFeessSettingGroup  = (id:string) => axios.get<FeessSetting>(`/groupApi/Configs/GetFeessSetting/${id}`)
@@ -106,6 +106,15 @@ export const getAgentSettingGroup = (id:string) => axios.get<AgentSettingGroup>(
 
 // 添加代理接口授权
 export const addDataAccesserGroup = (form:DataAccessersFormGroup) => axios.post<CommonResponseGroup,DataAccessersFormGroup>('/groupApi/Configs/AddDataAccesser',form)
+
+export const addTopupSettingGroup = (form:TopupSettingsFormGroup) => axios.post<CommonResponseGroup,TopupSettingsFormGroup>(`/groupApi/Configs/AddTopupSetting`,form)
+export const updateTopupSettingGroup = (form:TopupSettingsFormGroup) => axios.patch<CommonResponseGroup,TopupSettingsFormGroup>(`/groupApi/Configs/UpdateTopupSetting`,form)
+export const deleteTopupSettingGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteTopupSetting/${id}`)
+
+export const getTopupPaymentsGroup = ({page,pageSize}:{page:number,pageSize:number},form: IChannelPayedSettingsSearch) => axios.post<ITopupPaymentsList[],IChannelPayedSettingsSearch>(`/groupApi/Configs/GetTopupPayments/${page}/${pageSize}`,form)
+export const exportTopupPaymentsGroup = (form: IChannelPayedSettingsSearch) => axios.post<Blob,IChannelPayedSettingsSearch>(`/groupApi/Configs/ExportTopupPayments`,form,{responseType: 'blob'})
+
+
 
 // 更新代理接口授权
 export const updateDataAccesserGroup = (form:DataAccessersFormGroup) => axios.patch<CommonResponseGroup,DataAccessersFormGroup>('/groupApi/Configs/UpdateDataAccesser',form)
@@ -175,7 +184,13 @@ export const downloadAgentReceiptGroup = (id:string) => axios.get<Blob>(`/groupA
 export const deleteAgentReceiptGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteAgentReceipt/${id}`)
 
 // 上传代理充值记录凭证
-export const uploadAgentReceiptsGroup = (form:UploadAgentReceiptsFormGroup) => {
+export const uploadAgentReceiptsGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('Id', form.id)
     formData.append('Remarks', form.remarks)
@@ -225,7 +240,7 @@ export const updatePaymentAccountGroup = (form:IPaymentForm) => axios.patch<Comm
 export const updatePaymentExpandsGroup = (form:ExpandsSettingFormGroup) => axios.patch<CommonResponseGroup,ExpandsSettingFormGroup>('/groupApi/Configs/UpdatePaymentExpands',form)
 
 // 删除支付账户
-export const deletePaymentAccountGroup = (id:string) => axios.patch<CommonResponseGroup>(`/groupApi/Configs/DeletePaymentAccount/${id}`)
+export const deletePaymentAccountGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeletePaymentAccount/${id}`)
 
 
 
@@ -264,7 +279,13 @@ export const downloadAccountReceiptGroup = (id:string) => axios.get<Blob>(`/grou
 export const deleteAccountReceiptFileGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Configs/DeleteAccountReceipt/${id}`)
 
 // 上传充值记录凭据
-export const uploadAccountReceiptsGroup = (form:UploadAgentReceiptsFormGroup) => {
+export const uploadAccountReceiptsGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('Id', form.id)
     formData.append('Remarks', form.remarks)
@@ -341,6 +362,13 @@ export const deleteQueryWaypointGroup = (id:string) => axios.del<CommonResponseG
 
 // 获取渠道基础配置信息
 export const getChannelSettingsGroup = () => axios.get<IChannelSettings[]>('/groupApi/Configs/GetChannelSettings')
+export const getPayedSettingsGroup = () => axios.get<IChannelPayedSettings[]>('/groupApi/Configs/GetPayedSettings')
+export const updatePayedSettingGroup = (form: IPayedSettingUpdate) => axios.patch<CommonResponseGroup,IPayedSettingUpdate>('/groupApi/Configs/UpdatePayedSetting',form)
+export const updatePayedInvokerGroup = (form: IPayedInvokerUpdate) => axios.patch<CommonResponseGroup,IPayedInvokerUpdate>('/groupApi/Configs/UpdatePayedInvoker',form)
+export const updatePayedSettingExpandsGroup = (form: ExpandsSettingFormGroup) => axios.patch<CommonResponseGroup,ExpandsSettingFormGroup>('/groupApi/Configs/UpdatePayedSettingExpands',form)
+export const updatePayedInvokerExpandsGroup = (form: ExpandsSettingFormGroup) => axios.patch<CommonResponseGroup,ExpandsSettingFormGroup>('/groupApi/Configs/UpdatePayedInvokerExpands',form)
+
+
 export const getChannelBalancesGroup = () => axios.get<IChannelSettingsBalance[]>(`/groupApi/Configs/GetChannelBalances`)
 export const updateChannelSettingGroup = (form:{id:string,isEnabled:boolean}) => axios.patch<CommonResponseGroup,{id:string,isEnabled:boolean}>(`/groupApi/Configs/UpdateChannelSetting`,form)
 export const updateInvokeProviderGroup = (form:{id:string,isEnabled:boolean,timeoutSeconds:string}) => axios.patch<CommonResponseGroup,{id:string,isEnabled:boolean,timeoutSeconds:string}>(`/groupApi/Configs/UpdateInvokeProvider`,form)
@@ -393,12 +421,16 @@ export const addProfitPolicyGroup = (form:IProfitPoliciesItemForm) => axios.post
 export const updateProfitPolicyGroup = (form:IProfitPoliciesItemForm) => axios.patch<CommonResponseGroup,IProfitPoliciesItemForm>(`/groupApi/Policies/UpdateProfitPolicy`,form)
 export const deleteProfitPolicyGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Policies/DeleteProfitPolicy/${id}`)
 
-export const importProfitPoliciesGroup = (form:UploadRequestOptions) => {
+export const importProfitPoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/ImportProfitPolicies`,formData,'post')
 }
-export const deleteProfitPoliciesGroup = (form:UploadRequestOptions) => {
+export const deleteProfitPoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/DeleteProfitPolicies`,formData,'post')
@@ -413,14 +445,18 @@ export const addQuotePolicyGroup = (form:IQuotePoliciesFormGroup) => axios.post<
 export const updateQuotePolicyGroup = (form:IQuotePoliciesFormGroup) => axios.patch<CommonResponseGroup,IQuotePoliciesFormGroup>(`/groupApi/Policies/UpdateQuotePolicy`,form)
 
 // 导入散客政策
-export const importQuotePoliciesGroup = (form:UploadRequestOptions) => {
+export const importQuotePoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/ImportQuotePolicies`,formData,'post')
 }
 
 // 删除散客政策
-export const deleteQuotePoliciesGroup = (form:UploadRequestOptions) => {
+export const deleteQuotePoliciesGroup = (form:{
+    file: File
+}) => {
     const formData = new FormData()
     formData.append('excelFile',form.file)
     return axios.axiosFormData<CommonResponseGroup>(`/groupApi/Policies/DeleteQuotePolicies`,formData,'post')
@@ -558,7 +594,13 @@ export const appendAppendPaymentGroup = (id:string,form:PaymentOrder) => axios.p
 // 辅营上传下载
 export const downloadAppendFileGroup = (id:string) => axios.get<Blob>(`/groupApi/Orders/DownloadAppendFile/${id}`,{},{responseType: 'blob'})
 export const deleteAppendFileGroup = (id:string) => axios.del<CommonResponseGroup>(`/groupApi/Orders/DeleteAppendFile/${id}`)
-export const uploadAppendFilesGroup = (form:UploadAgentReceiptsForm,flag:boolean) => {
+export const uploadAppendFilesGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+},flag:boolean) => {
     const formData = new FormData()
     formData.append('AppendId', form.id)
     formData.append('Remarks', form.remarks)
@@ -581,7 +623,13 @@ export const getRefundInfosGroup = (id:string) => axios.get<IRefund[]>(`/groupAp
 export const getRefundInfoGroup = (id:string) => axios.get<IRefund>(`/groupApi/Orders/GetRefundInfo/${id}`)
 export const downloadRefundFileGroup = (id:string) => axios.get<Blob>(`/groupApi/Orders/DownloadRefundFile/${id}`,{},{responseType: 'blob'})
 export const deleteRefundFileGroup = (id:string) => axios.del<CommonResponseAgent>(`/groupApi/Orders/DeleteRefundFile/${id}`)
-export const uploadRefundFilesGroup = (form:UploadAgentReceiptsForm) => {
+export const uploadRefundFilesGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('RefundId', form.id)
     formData.append('Remarks', form.remarks)
@@ -603,7 +651,13 @@ export const getChangeInfoGroup = (id:string) => axios.get<IChange>(`/groupApi/O
 
 export const downloadChangeFileGroup = (id:string) => axios.get<Blob>(`/groupApi/Orders/DownloadChangeFile/${id}`,{},{responseType: 'blob'})
 export const deleteChangeFileGroup = (id:string) => axios.del<CommonResponseAgent>(`/groupApi/Orders/DeleteChangeFile/${id}`)
-export const uploadChangeFilesGroup = (form:UploadAgentReceiptsForm) => {
+export const uploadChangeFilesGroup = (form:{
+    id: string
+    remarks: string
+    formFiles: {
+        file: File
+    }[]
+}) => {
     const formData = new FormData()
     formData.append('ChangeId', form.id)
     formData.append('Remarks', form.remarks)
@@ -830,7 +884,7 @@ export const bookingDetailGroup = (id:string) => axios.post<CommonResponseOrder>
 
 
 // 采购单辅营查询
-export const appendConsultGroup = (id:string,form:{seekTypes:ISeekType[]}) => axios.post<AppendConsult,{seekTypes:ISeekType[]}>(`/groupApi/Service/AppendConsult/${id}`,form)
+export const appendConsultGroup = (id:string,form:{seekTypes:ISeekType[]}) => axios.post<AppendConsult,{seekTypes:ISeekType[]}>(`/groupApi/Service/AppendSeeking/${id}`,form)
 export const bookingAppendGroup = (id:string,form:AppendConsultForm) => axios.patch<CommonResponseGroup,AppendConsultForm>(`/groupApi/Service/BookingAppend/${id}`,form)
 
 

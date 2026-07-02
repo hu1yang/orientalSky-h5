@@ -23,7 +23,7 @@ export default memo(function PriceConfirmation({confirmed, currency, type, total
   },[type])
 
   return (
-    <Card title={titleTip}>
+    <Card title={titleTip} className={'mb-5'}>
       {
         !!confirmed.amounts.length && (
           confirmed.amounts.map((amount, amountIndex) => (

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5176536 */
-  src: url('iconfont.woff2?t=1779954934718') format('woff2'),
-       url('iconfont.woff?t=1779954934718') format('woff'),
-       url('iconfont.ttf?t=1779954934718') format('truetype');
+  src: url('iconfont.woff2?t=1782379488430') format('woff2'),
+       url('iconfont.woff?t=1782379488430') format('woff'),
+       url('iconfont.ttf?t=1782379488430') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,90 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-huilv01:before {
+  content: "\e69a";
+}
+
+.icon-huobihuishuai:before {
+  content: "\e62e";
+}
+
+.icon-icon-exchange_rate:before {
+  content: "\e75d";
+}
+
+.icon-duozhongzhifu:before {
+  content: "\e7ac";
+}
+
+.icon-liebiao:before {
+  content: "\e88f";
+}
+
+.icon-daohangdian:before {
+  content: "\ea8e";
+}
+
+.icon-ziyuan:before {
+  content: "\e615";
+}
+
+.icon-liebiao_o:before {
+  content: "\eb7c";
+}
+
+.icon-jichang:before {
+  content: "\e6ee";
+}
+
+.icon-plane-trip-international:before {
+  content: "\e69d";
+}
+
+.icon-jichang-:before {
+  content: "\e60c";
+}
+
+.icon-huishuai:before {
+  content: "\e6b9";
+}
+
+.icon-huishuaizhuanhuan:before {
+  content: "\e675";
+}
+
+.icon-nation:before {
+  content: "\e600";
+}
+
+.icon-hangdianbianji:before {
+  content: "\e69b";
+}
+
+.icon-jichangguibinting:before {
+  content: "\e60d";
+}
+
+.icon-plane-trip-international1:before {
+  content: "\e6a4";
+}
+
+.icon-huishuai1:before {
+  content: "\e73e";
+}
+
+.icon-hangdianfeihang:before {
+  content: "\e633";
+}
+
+.icon-a-yinhangkadaizhifuzhifu:before {
+  content: "\e63f";
+}
+
+.icon-huizhihangdian:before {
+  content: "\e624";
 }
 
 .icon-chongzhi0101:before {

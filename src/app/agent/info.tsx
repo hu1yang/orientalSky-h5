@@ -1,4 +1,4 @@
-import {memo, type RefObject, useEffect, useMemo, useRef, useState} from "react";
+import {memo, type RefObject, useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import type {RootState} from "@/store";
@@ -26,18 +26,21 @@ import CardText from "@/component/card/cardText.tsx";
 
 import {
   addAgentSettingGroup, addDataAccesserGroup, addDataProviderGroup, addFeessSettingGroup, addScaleSettingGroup,
+  addTopupSettingGroup,
   deleteAgentSettingGroup, deleteDataAccesserGroup, deleteDataProviderGroup, deleteFeessSettingGroup,
-  deleteScaleSettingGroup,
-  getAgentSettingGroup,
+  deleteScaleSettingGroup, deleteTopupSettingGroup,
+  getAgentSettingGroup, getExchangeRatesGroup, getPayedSettingsGroup,
   updateAgentSettingGroup,
-  updateDataAccesserGroup, updateDataProviderGroup, updateFeessSettingGroup, updateScaleSettingGroup
+  updateDataAccesserGroup, updateDataProviderGroup, updateFeessSettingGroup, updateScaleSettingGroup,
+  updateTopupSettingGroup
 } from "@/utils/request/group.ts";
-import type { AgentSettingGroup, CommonResponseGroup } from "@/types/group.ts";
+import type {AgentSettingGroup, CommonResponseGroup, IChannelPayedSettings, IExchangeRate} from "@/types/group.ts";
 import {selectAgentMap} from "@/store/modules/base.ts";
 
 import MobileField from "@/component/form/mobileField.tsx";
 import {result} from "@/utils/public.ts";
-import type {DataAccessersAgent, FeessSetting, PushProvider, ScaleSetting} from "@/types/agent.ts";
+import type {DataAccessersAgent, FeessSetting, PushProvider, ScaleSetting, TopupSettings} from "@/types/agent.ts";
+import DefaultSelect from "@/component/form/defaultSelect.tsx";
 
 
 const DefaultButton = memo(({title,color='primary',onClick}:{title:string,color?:"default" | "primary" | "success" | "warning" | "danger" | undefined,onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;}) => <Button size='mini' color={color} fill='none' className={'!px-1'} onClick={onClick}>{title}</Button>)
@@ -46,13 +49,16 @@ type IAgentSettingGroup = AgentSettingGroup & {
   branchCode: string
   agentCode:string
 }
-type DialogType = 'feessSettings'|'scaleSettings'|'pushProviders'|'agentSetting'|'dataAccessers'
+type DialogType = 'feessSettings'|'scaleSettings'|'pushProviders'|'agentSetting'|'dataAccessers'|'topupSettings'
 
 const providerTypeValue = ['notifyEvents', 'issuedTicket', 'rejectTicket', 'refundTicket', 'rejectRefund', 'changeTicket', 'rejectChange','appendTicket','rejectAppend', 'issuedAmount', 'rejectAmount']
 
 export default function AgentInfo() {
   const {t} = useTranslation()
   const {id} = useParams()
+
+  const [exchangeRates, setExchangeRates] = useState<IExchangeRate[]>([])
+  const [channelPayed, setChannelPayed] = useState<IChannelPayedSettings[]>([])
 
   const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
@@ -65,14 +71,21 @@ export default function AgentInfo() {
   const [infoVisible, setInfoVisible] = useState(false)
   const [infoForm] = Form.useForm()
 
-  const channelMemo = useMemo(() => {
-    return channel.map(item => ({
-      label:item.channelName,
-      value:item.channelCode,
-    }))
-  },[channel])
 
-  const changeInfo = (type:DialogType,row:IAgentSettingGroup|FeessSetting|ScaleSetting|PushProvider|DataAccessersAgent|null = null) => {
+  const getExchange = () => {
+    if(!exchangeRates.length){
+      getExchangeRatesGroup().then(res => {
+        setExchangeRates(res)
+      })
+    }
+  }
+  const getPayed = () => {
+    getPayedSettingsGroup().then(res => {
+      setChannelPayed(res)
+    })
+  }
+
+  const changeInfo = (type:DialogType,row:IAgentSettingGroup|FeessSetting|ScaleSetting|PushProvider|DataAccessersAgent|TopupSettings|null = null) => {
     setInfoVisible(true)
     setTypeForm(type)
     switch (type){
@@ -176,6 +189,34 @@ export default function AgentInfo() {
           }
         }
         break
+      case 'topupSettings':
+        {
+          if(row) {
+            const detail = {...row} as TopupSettings
+            infoForm.setFieldsValue({
+              id:detail.id,
+              agentSettingId: agentDetail?.id,
+              isEnabled: detail.isEnabled,
+              issuedDate: dayjs(detail.issuedDate).toDate(),
+              minPaymentAmount: detail.minPaymentAmount,
+              maxPaymentAmount: detail.maxPaymentAmount,
+              minServiceFees: detail.minServiceFees,
+              maxServiceFees: detail.maxServiceFees,
+              serviceFeeRate: detail.serviceFeeRate,
+              paymentCodes: detail.paymentCodes,
+              currencyCodes: detail.currencyCodes,
+            })
+          }else{
+            infoForm.setFieldsValue({
+              agentSettingId: agentDetail?.id,
+              isEnabled: true,
+              issuedDate: dayjs().toDate(),
+            })
+          }
+          getExchange()
+          getPayed()
+        }
+      break
     }
   }
 
@@ -193,68 +234,71 @@ export default function AgentInfo() {
           if(!agentDetail?.agentId){
             response = await addAgentSettingGroup({
               ...val,
-              agentId:infoForm.getFieldValue('agentId')
             })
           }else{
             response = await updateAgentSettingGroup({
               ...val,
-              id:infoForm.getFieldValue('id')
             })
           }
           break
         case 'feessSettings':
-          if (infoForm.getFieldValue('id')){
+          if (val.id){
             response = await updateFeessSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addFeessSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'scaleSettings':
-          if (infoForm.getFieldValue('id')) {
+          if (val.id) {
             response = await updateScaleSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addScaleSettingGroup({
               ...val,
               issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'pushProviders':
-          if (infoForm.getFieldValue('id')) {
+          if (val.id) {
             response = await updateDataProviderGroup({
               ...val,
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addDataProviderGroup({
               ...val,
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
             })
           }
           break
         case 'dataAccessers':
-          if (infoForm.getFieldValue('id')) {
+          if (val.id) {
             response = await updateDataAccesserGroup({
               ...val,
-              id:infoForm.getFieldValue('id')
             })
           }else{
             response = await addDataAccesserGroup({
               ...val,
-              agentSettingId:infoForm.getFieldValue('agentSettingId')
+            })
+          }
+          break
+        case 'topupSettings':
+          if(val.id){
+            response = await updateTopupSettingGroup({
+              ...val,
+              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
+            })
+          }else{
+            response = await addTopupSettingGroup({
+              ...val,
+              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
             })
           }
           break
@@ -293,6 +337,9 @@ export default function AgentInfo() {
             case "scaleSettings":
               response = await deleteScaleSettingGroup(id)
               break
+            case "topupSettings":
+              response = await deleteTopupSettingGroup(id)
+              break
           }
           result(response)
           if(response.succeed){
@@ -322,6 +369,9 @@ export default function AgentInfo() {
         break
       case 'dataAccessers':
         name = t('base.dataAccessers')
+        break
+      case 'topupSettings':
+        name = t('base.topupSettings')
         break
     }
     return name
@@ -373,11 +423,13 @@ export default function AgentInfo() {
             <Form.Item label={t('base.channelCodes')} name={'channelCodes'} rules={[
               { required: true, message: t('base.channelCodes') },
             ]}>
-              <Selector columns={3} multiple options={channelMemo} />
+              <Selector columns={3} multiple options={channel.map(item => ({
+                label:item.channelName,
+                value:item.channelCode,
+              }))} />
             </Form.Item>
           </>
         )
-        break
       case 'feessSettings':
         return (
           <>
@@ -412,7 +464,6 @@ export default function AgentInfo() {
             </Form.Item>
           </>
         )
-        break
       case 'scaleSettings':
         return (
           <>
@@ -438,7 +489,6 @@ export default function AgentInfo() {
             </Form.Item>
           </>
         )
-        break
       case 'pushProviders':
         return (
           <>
@@ -473,7 +523,6 @@ export default function AgentInfo() {
             </Form.Item>
           </>
         )
-      break
       case 'dataAccessers':
         return (
           <>
@@ -486,7 +535,49 @@ export default function AgentInfo() {
             </Form.Item>
           </>
         )
-        break
+      case 'topupSettings':
+        return (
+          <>
+            {renderIsEnabled()}
+            <Form.Item label={t('base.issuedDate')} name={'issuedDate'} trigger='onConfirm'
+                       onClick={(_, datePickerRef: RefObject<DatePickerRef>) => {
+                         datePickerRef.current?.open()
+                       }}>
+              <DatePicker>
+                {value =>
+                  value ? dayjs(value).format('YYYY-MM-DD') : t('base.issuedDate')
+                }
+              </DatePicker>
+            </Form.Item>
+            <Form.Item label={t('base.minPaymentAmount')} name={'minPaymentAmount'}>
+              <Input type={'number'} />
+            </Form.Item>
+            <Form.Item label={t('base.maxPaymentAmount')} name={'maxPaymentAmount'}>
+              <Input type={'number'} />
+            </Form.Item>
+            <Form.Item label={t('base.minServiceFees')} name={'minServiceFees'}>
+              <Input type={'number'} />
+            </Form.Item>
+            <Form.Item label={t('base.maxServiceFees')} name={'maxServiceFees'}>
+              <Input type={'number'} />
+            </Form.Item>
+            <Form.Item label={t('base.serviceFeeRate')} name={'serviceFeeRate'}>
+              <Input type={'number'} />
+            </Form.Item>
+            <Form.Item label={t('base.paymentCodes')} name={'paymentCodes'}>
+              <DefaultSelect options={channelPayed.map(item => ({
+                label: item.paymentName,
+                value: item.id,
+              }))} multiple={true} placeholder={t('base.paymentCodes')} />
+            </Form.Item>
+            <Form.Item label={t('foundation.currency')} name={'currencyCodes'}>
+              <DefaultSelect options={exchangeRates.map(item => ({
+                label: item.currencyCode,
+                value: item.currencyCode,
+              }))} multiple={true} placeholder={t('foundation.currency')} />
+            </Form.Item>
+          </>
+        )
     }
   }
 
@@ -517,7 +608,7 @@ export default function AgentInfo() {
           {
             !loading?
               <>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }}
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }}
                       extra={
                         <Space>
                           <DefaultButton title={t('group.renew')} onClick={() => changeInfo('agentSetting',agentDetail)} />
@@ -542,7 +633,7 @@ export default function AgentInfo() {
                     </Space>
                   } />
                 </Card>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.feessSettings')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.feessSettings')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('feessSettings',null)} />
                 }>
                   {
@@ -587,8 +678,55 @@ export default function AgentInfo() {
                     ))
                   }
                 </Card>
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.topupSettings')}</span>} extra={
+                  <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('topupSettings',null)} />
+                }>
+                  {
+                    agentDetail?.topupSettings.map(topupSetting => (
+                      <Grid columns={2} gap={8} key={topupSetting.id}>
+                        <Grid.Item>
+                          <div className={'flex items-center'}>
+                            <DownFill className={'rotate-270 mr-2 text-(--text)'} fontSize={'.9rem'} />
+                            <span className={'mr-2'}>{topupSetting.id}</span>
+                            <Tag round color={topupSetting.isEnabled ? 'success' : 'danger'}>{topupSetting.isEnabled ? t('base.enabled') : t('base.disabled')}</Tag>
+                          </div>
+                        </Grid.Item>
+                        <Grid.Item>
+                          <Space justify={'end'} block>
+                            <DefaultButton title={t('group.renew')} onClick={() => changeInfo('topupSettings',topupSetting)} />
+                            <DefaultButton title={t('common.delete')} color={'danger'} onClick={() => delBase('topupSettings',topupSetting.id)} />
+                          </Space>
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.startDate')} value={topupSetting.issuedDate} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.minPaymentAmount')} value={topupSetting.minPaymentAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.maxPaymentAmount')} value={topupSetting.maxPaymentAmount} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.minServiceFees')} value={topupSetting.minServiceFees} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.maxServiceFees')} value={topupSetting.maxServiceFees} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.serviceFeeRate')} value={topupSetting.serviceFeeRate} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('base.paymentCodes')} value={topupSetting.paymentCodes.join(',')} valueStyle={'break-all'} style={'items-start'} />
+                        </Grid.Item>
+                        <Grid.Item>
+                          <CardText label={t('foundation.currency')} value={topupSetting.currencyCodes.join(',')} labelStyle={'w-[50px]'} valueStyle={'break-all'} style={'items-start'} />
+                        </Grid.Item>
+                      </Grid>
+                    ))
+                  }
+                </Card>
 
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.scaleSettings')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.scaleSettings')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('scaleSettings',null)} />
                 }>
                   {
@@ -625,7 +763,7 @@ export default function AgentInfo() {
                   }
 
                 </Card>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.pushProviders')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.pushProviders')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('pushProviders',null)} />
                 }>
                   {
@@ -655,7 +793,7 @@ export default function AgentInfo() {
                     ))
                   }
                 </Card>
-                <Card className={'mb-2'} style={{ borderRadius: '4px' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.dataAccessers')}</span>} extra={
+                <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.dataAccessers')}</span>} extra={
                   <DefaultButton title={t('common.add')} color={'warning'} onClick={() => changeInfo('dataAccessers',null)} />
                 }>
                   {
@@ -684,7 +822,7 @@ export default function AgentInfo() {
           }
         </PullToRefresh>
       </div>
-      <Popup visible={infoVisible} position='bottom' onMaskClick={closeInfoVisible}>
+      <Popup visible={infoVisible} position='bottom' destroyOnClose onMaskClick={closeInfoVisible}>
         <div className={'p-3 my-2 text-center'}>
           <span className={'text-[1.4rem] mb-20'}>{popupTitle}</span>
         </div>
@@ -693,7 +831,12 @@ export default function AgentInfo() {
             {t('common.submit')}
           </Button>
         }>
-          {renderFormFiled()}
+          <Form.Item hidden name={'agentId'} />
+          <Form.Item hidden name={'id'} />
+          <Form.Item hidden name={'agentSettingId'} />
+          <div className={'max-h-[60vh] overflow-y-auto'}>
+            {renderFormFiled()}
+          </div>
         </Form>
       </Popup>
     </section>

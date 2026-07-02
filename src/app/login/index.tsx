@@ -9,6 +9,7 @@ import {generateCompanyCode} from "@/utils/public.ts";
 import {getCaptcha, userSignin} from "@/utils/request/identity.ts";
 import {setLogin} from "@/store/modules/tool.ts";
 import Cookie from "js-cookie";
+import {EyeInvisibleOutline, EyeOutline} from "antd-mobile-icons";
 
 export default function Login(){
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Login(){
 
   const initRef = useRef(false);
 
+  const [passWordVisible, setPassWordVisible] = useState(false)
 
   const [catchaImg, setCatchaImg] = useState<string|null>(null)
   const [loadingBtn, setLoadingBtn] = useState(false)
@@ -110,11 +112,19 @@ export default function Login(){
             ]}>
               <Input className='bg-transparent text-white' placeholder={t('login.enterUserName')} />
             </Form.Item>
-            <Form.Item name={'password'} rules={[
+            <Form.Item name={'password'} extra={
+              <div className={'p-[4px]'}>
+                {!passWordVisible ? (
+                  <EyeInvisibleOutline className={'text-[1.7rem]'} onClick={() => setPassWordVisible(true)} />
+                ) : (
+                  <EyeOutline className={'text-[1.7rem]'} onClick={() => setPassWordVisible(false)} />
+                )}
+              </div>
+            } rules={[
               {required: true, message: t('login.enterPassWord')},
               { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,32}$/, message: t('login.enterPassWordTip') },
             ]}>
-              <Input className='bg-transparent text-white' placeholder={t('login.enterPassWord')} type={'password'} />
+              <Input className='bg-transparent text-white' placeholder={t('login.enterPassWord')} type={passWordVisible ? 'text' : 'password'} />
             </Form.Item>
             <Form.Item name={'captchaCode'} extra={
               <div className={''} onClick={getCaptchaFnc}>

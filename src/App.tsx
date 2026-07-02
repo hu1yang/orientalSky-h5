@@ -1,3 +1,4 @@
+import {useMemo} from "react";
 import {router} from "@/router.tsx";
 import {RouterProvider} from "react-router"
 import {Provider} from "react-redux";
@@ -8,7 +9,6 @@ import {useTranslation} from "react-i18next";
 import zhCN from 'antd-mobile/es/locales/zh-CN'
 import enUS from 'antd-mobile/es/locales/en-US'
 import ruRU from 'antd-mobile/es/locales/ru-RU'
-import {useMemo} from "react";
 function App() {
   const {i18n} = useTranslation()
   console.warn(i18n.language)

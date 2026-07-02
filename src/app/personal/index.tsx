@@ -1,15 +1,41 @@
 import {useEffect, useMemo, useState} from "react";
+import {useNavigate} from "react-router";
+import dayjs from "dayjs";
+import Cookie from "js-cookie";
+import {removeLogin} from "@/store/modules/tool.ts";
+import {useDispatch} from "react-redux";
 
-import {Button, Card, Divider, Form, Grid, Input, Loading, Popup, PullToRefresh, Space, Tag, Toast} from "antd-mobile";
-import {getUserEntityGroup, personalUpdatePassword, UpdateUserInfoGroup} from "@/utils/request/identity.ts";
+import {
+  Button,
+  Card,
+  Dialog,
+  Divider,
+  Form,
+  Grid,
+  Input,
+  Loading,
+  Popup,
+  PullToRefresh,
+  Space,
+  Tag,
+  Toast
+} from "antd-mobile";
+import {
+  getUserEntityGroup,
+  personalUpdatePassword,
+  UpdateUserInfoGroup,
+  userSignOut
+} from "@/utils/request/identity.ts";
 import type {UserResponse} from "@/types/identity.ts";
 import {useTranslation} from "react-i18next";
 import CardText from "@/component/card/cardText.tsx";
-import dayjs from "dayjs";
 import MobileField from "@/component/form/mobileField.tsx";
+
 
 export default function Personal(){
   const {t} = useTranslation();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [loading, setLoading] = useState(true)
   const [userDetail, setUserDetail] = useState<UserResponse|null>(null)
@@ -138,6 +164,24 @@ export default function Personal(){
 
   }
 
+  const logout = async () => {
+    Dialog.confirm({
+      content: t('common.exitAccountTip'),
+      onConfirm: async () => {
+        const response = await userSignOut()
+        if(response.succeeded){
+          Cookie.remove('token')
+
+          localStorage.removeItem('identity')
+          dispatch(removeLogin())
+          setTimeout(() => {
+            navigate('/login')
+          },200)
+        }
+      },
+    })
+  }
+
   useEffect(()=>{
     getData()
   },[])
@@ -147,7 +191,7 @@ export default function Personal(){
         {
           !loading ?
             <PullToRefresh onRefresh={getData}>
-              <Card className={'mb-2'} style={{borderRadius: '4px'}} title={<span
+              <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }} title={<span
                 className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('base.baseInfo')}</span>}>
                 <CardText label={t('personal.realName')} value={userDetail?.user.actualName}/>
                 <CardText label={t('personal.username')} value={userDetail?.user.userName}/>
@@ -191,11 +235,14 @@ export default function Personal(){
                   </Grid.Item>
                 </Grid>
               </Card>
+              <div className={'mt-5'}>
+                <Button block size={'small'} color='primary' onClick={logout}>{t('common.exitAccount')}</Button>
+              </div>
             </PullToRefresh> :
             <Loading/>
         }
       </div>
-      <Popup visible={infoVisible} position='bottom' onMaskClick={closeInfoVisible} style={{minHeight: '80vh'}}>
+      <Popup visible={infoVisible} destroyOnClose position='bottom' onMaskClick={closeInfoVisible} style={{minHeight: '80vh'}}>
         <div className={'p-3 my-2 text-center'}>
           <span className={'text-[1.4rem] mb-20'}>{popupTitle}</span>
         </div>

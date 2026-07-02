@@ -8,7 +8,9 @@ import {
   HomeLoad,
   AgentRechargePaymentLoad,
   AgentInfoLoad,
-  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad
+  OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad,
+  ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad, BaseNation, BaseAirport, BaseWaypoint, BaseExrate,
+  AgentRechargePaymentOnlineLoad, FoundationPaymentLoad, AgentUserLoad
 } from "./routerMenu.ts";
 
 
@@ -19,7 +21,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path:'/',
-        element: <SegmentedTab type={'dashboard'} />,
+        element: <SegmentedTab />,
         children:[
           {
             path: '/',
@@ -36,7 +38,7 @@ export const router = createBrowserRouter([
             }
           },
           {
-            path:'/data/retrieval',
+            path:'data/retrieval',
             element: <RetrievalLoad />,
             handle:{
               routerType: 'dashboard'
@@ -45,38 +47,11 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        path:'/order/',
-        element: <SegmentedTab type={'order'} />,
-        children:[
-          {
-            path:'ticket/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          },
-          {
-            path:'refund/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          },
-          {
-            path:'change/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          },
-          {
-            path:'auxiliary/:status?',
-            element: <OrderListLoad />,
-            handle:{
-              routerType: 'order'
-            }
-          }
-        ]
+        path:'/order/:orderType',
+        element: <OrderListLoad />,
+        handle:{
+          routerType: 'order'
+        }
       },
       {
         path:'/group/agent',
@@ -116,17 +91,17 @@ export const router = createBrowserRouter([
             }
           },
           {
-            path: 'rechargePayment',
-            element: <AgentRechargePaymentLoad/>,
+            path: 'user/:branchId?',
+            element: <UserLoad />,
             handle: {
-              title: 'common.routerRechargePaymentRecord'
+              title: 'common.routerCompanyUser'
             }
           },
           {
-            path:'foundation/booking',
-            element: <FoundationBookingLoad />,
+            path: 'agentUser/:agentId',
+            element: <AgentUserLoad />,
             handle: {
-              title: 'common.routerBookingAccountConfiguration'
+              title: 'common.routerAgencyUser'
             }
           },
           {
@@ -152,7 +127,103 @@ export const router = createBrowserRouter([
           },
         ]
       },
-
+      {
+        path: 'finance/',
+        children:[
+          {
+            path: 'rechargePayment',
+            element: <AgentRechargePaymentLoad/>,
+            handle: {
+              title: 'common.routerRechargePaymentRecord'
+            }
+          },
+          {
+            path: 'rechargePaymentOnline',
+            element: <AgentRechargePaymentOnlineLoad/>,
+            handle: {
+              title: 'common.routerRechargePaymentOnline'
+            }
+          },
+        ]
+      },
+      {
+        path:'channel/',
+        children: [
+          {
+            path:'payment',
+            element: <ChannelPaymentLoad />,
+            handle:{
+              title: 'common.routerChannelPayment'
+            }
+          },
+          {
+            path:'list',
+            element: <ChannelListLoad />,
+            handle:{
+              title: 'common.routerChannelList'
+            }
+          },
+          {
+            path: 'balance',
+            element: <ChannelBalanceLoad />,
+            handle:{
+              title: 'common.routerChannelBalance'
+            }
+          }
+        ]
+      },
+      {
+        path: 'foundation/',
+        children: [
+          {
+            path:'booking',
+            element: <FoundationBookingLoad />,
+            handle: {
+              title: 'common.routerBookingAccountConfiguration'
+            }
+          },
+          {
+            path:'payment',
+            element: <FoundationPaymentLoad />,
+            handle: {
+              title: 'common.routerPaymentAccountConfiguration'
+            }
+          }
+        ]
+      },
+      {
+        path: 'base/',
+        children: [
+          {
+            path:'nation',
+            element: <BaseNation />,
+            handle:{
+              title: 'common.routerNation'
+            }
+          },
+          {
+            path:'airport',
+            element: <BaseAirport />,
+            handle: {
+              title: 'common.routerAirport'
+            }
+          },
+          {
+            path:'waypoints',
+            element: <BaseWaypoint />,
+            handle: {
+              title: 'common.routerWaypoints'
+            }
+          },
+          {
+            path:'exchangeRate',
+            element: <BaseExrate />,
+            handle: {
+              title: 'common.routerExrate'
+            }
+          }
+        ]
+      }
     ]
   },
   {

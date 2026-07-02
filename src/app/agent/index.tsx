@@ -157,6 +157,7 @@ export default function Index() {
                       <div className={'flex justify-end'}>
                         <Space justify={'end'}>
                           <Button shape='rounded' size={'small'} onClick={() => resetHistory(item.id)}>{t('quote.resetVerificationHistory')}</Button>
+                          <Button shape='rounded' color={'warning'} size={'small'} onClick={() => navigate(`/group/agentUser/${item.id}`)}>{t('common.routerUserList')}</Button>
                           <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/group/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
                         </Space>
                       </div>

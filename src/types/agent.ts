@@ -33,6 +33,16 @@ export interface FeessSetting {
     createdTime: string;
 }
 
+export type TopupSettings = Pick<FeessSetting, 'id'|'agentSettingId'|'isEnabled'|'issuedDate'|'operator'|'updatedTime'|'createdTime'> & {
+    minPaymentAmount: number|string;
+    maxPaymentAmount: number|string;
+    minServiceFees: number|string;
+    maxServiceFees: number|string;
+    serviceFeeRate: number|string;
+    paymentCodes: string[]
+    currencyCodes: string[]
+}
+
 
 export type IproviderType = 'notifyEvents'| 'issuedTicket'| 'rejectTicket'| 'refundTicket'| 'rejectRefund'| 'changeTicket'| 'rejectChange'| 'issuedAmount'| 'rejectAmount'
 export interface PushProvider {
@@ -94,6 +104,7 @@ export interface AgentSetting extends AddAgentSettingForm {
     scaleSettings: ScaleSetting[];
     expandSettings: ExpandsSetting[];
     dataAccessers: DataAccessersAgent[]
+    topupSettings: TopupSettings[]
 }
 export type ChangedType = 'income'|'outlay'|unknown; // 如有更多类型可在此扩展
 export type PaymentType = 'orderPaying'| 'rejectTicket'| 'orderVoided'| 'orderRefund'| 'rejectRefund'| 'orderChange'| 'rejectChange'| 'compensatory'| 'assistIncome'| 'assistOutlay'| 'reCommission'| 'otherReasons'|unknown; // 如有固定枚举建议列出

@@ -8,6 +8,7 @@ export const RetrievalLoad = lazy(() => import('@/app/dashboard/retrieval.tsx'))
 
 export const AgentLoad = lazy(() => import('@/app/agent/index'));
 export const AgentInfoLoad = lazy(() => import('@/app/agent/info.tsx'));
+export const AgentUserLoad = lazy(() => import('@/app/agent/user.tsx'));
 
 export const FoundationBookingLoad = lazy(() => import('@/app/foundation/booking.tsx'));
 export const FoundationPaymentLoad = lazy(() => import('@/app/foundation/payment.tsx'));

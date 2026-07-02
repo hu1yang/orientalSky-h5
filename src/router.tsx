@@ -10,7 +10,7 @@ import {
   AgentInfoLoad,
   OrderListLoad, OrderDetailLoad, RetrievalLoad, LoginLoad, SettingLoad, PersonalLoad, CompanyLoad, UserLoad,
   ChannelListLoad, ChannelBalanceLoad, ChannelPaymentLoad, BaseNation, BaseAirport, BaseWaypoint, BaseExrate,
-  AgentRechargePaymentOnlineLoad, FoundationPaymentLoad
+  AgentRechargePaymentOnlineLoad, FoundationPaymentLoad, AgentUserLoad
 } from "./routerMenu.ts";
 
 
@@ -97,7 +97,13 @@ export const router = createBrowserRouter([
               title: 'common.routerCompanyUser'
             }
           },
-
+          {
+            path: 'agentUser/:agentId',
+            element: <AgentUserLoad />,
+            handle: {
+              title: 'common.routerAgencyUser'
+            }
+          },
           {
             path: 'agentDetail/:id',
             element: <AgentInfoLoad/>,

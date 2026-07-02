@@ -168,7 +168,7 @@ export type AssemblyDataForm = Omit<AssemblyData, 'routeValidateKeys'> & {
 }
 
 export type AssemblyDataSubmitForm = Omit<AssemblyData, 'routeValidateKeys'> & {
-    userRouteKeyInfos: RouteValidateKeyWithSelected[]
+    userRouteKeyInfos: RouteValidateKey[]
 }
 
 export interface AuthorizationRoute extends RouteValidateKey{

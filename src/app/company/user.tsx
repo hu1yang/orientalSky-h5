@@ -151,7 +151,11 @@ export default function User() {
   const getDepartmentValue = async (id: string) => {
     if (departmentValue.length && branchId) return
     const response = await getDepartments(id)
-    setDepartmentValue(response)
+    if(response.length){
+      setDepartmentValue(response)
+    }else{
+      closeUserVisible()
+    }
   }
 
   const getRoutePermissions = async (id: string) => {
@@ -244,9 +248,8 @@ export default function User() {
               <SearchBar
                 className={'mt-2 mx-2'}
                 placeholder={t('common.search')}
-                defaultValue={searchText}
-                onSearch={setSearchText}
-                onClear={() => setSearchText('')}
+                value={searchText}
+                onChange={setSearchText}
               />
               {
                 routesMap.map(routes => (

@@ -42,6 +42,17 @@ export default defineConfig((config) => {
     },
     build: {
       outDir: `build/h5`,
+      minify: 'oxc',
+      rolldownOptions: {
+        output: {
+          minify: {
+            compress: {
+              dropConsole: true,
+              dropDebugger: true,
+            }
+          }
+        }
+      }
     }
   }
 })

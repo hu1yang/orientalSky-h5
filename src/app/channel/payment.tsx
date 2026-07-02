@@ -81,7 +81,6 @@ export default function ChannelPayment() {
           groupCode: info
         }
       })
-      console.log(result)
       setChannelList(result)
     } finally {
       setLoading(false)

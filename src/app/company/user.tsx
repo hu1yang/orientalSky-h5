@@ -154,6 +154,10 @@ export default function User() {
     if(response.length){
       setDepartmentValue(response)
     }else{
+      Toast.show({
+        icon: 'fail',
+        content: t('common.noPermissions'),
+      })
       closeUserVisible()
     }
   }

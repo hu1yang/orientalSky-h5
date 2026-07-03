@@ -5,7 +5,12 @@ import {selectGroupMap} from "@/store/modules/base.ts";
 
 import {Button, Card, Divider, Form, Input, List, Loading, Popup, PullToRefresh, Radio, Space, Tag} from "antd-mobile";
 import {getPayedSettingsGroup, updatePayedInvokerGroup, updatePayedSettingExpandsGroup} from "@/utils/request/group.ts";
-import type {ExpandsSettingFormGroup, IChannelPayedSettings, IPayedInvokers} from "@/types/group.ts";
+import type {
+  ExpandsSettingFormGroup,
+  IChannelPayedSettings,
+  IPayedInvokers,
+  IPayedInvokerUpdate
+} from "@/types/group.ts";
 import CardText from "@/component/card/cardText.tsx";
 import ExpandSettingsForm from "@/component/default/expandSettings.tsx";
 import dayjs from "dayjs";
@@ -55,7 +60,7 @@ export default function ChannelPayment() {
     setVisible(true)
   }
 
-  const inFormFinish = async (val) => {
+  const inFormFinish = async (val: IPayedInvokerUpdate) => {
     setLoadingBtn(true)
     try {
       const response = await updatePayedInvokerGroup(val)
@@ -168,13 +173,16 @@ export default function ChannelPayment() {
           '--border-bottom':'0',
         }}>
           <Form.Item hidden name={'id'} />
-          <Form.Item label={t('order.isEnabled')} name={'isEnabled'} rules={[
+          <Form.Item label={t('order.isEnabled')} name={'isEnabled'} getValueProps={(value) => ({
+            value: value !== undefined ? String(value) : undefined
+          })}
+                     normalize={(value) => value === 'true'} rules={[
             { required: true, message: t('order.isEnabled') },
           ]}>
             <Radio.Group>
               <Space>
-                <Radio value={true}>true</Radio>
-                <Radio value={false}>false</Radio>
+                <Radio value={"true"}>true</Radio>
+                <Radio value={"false"}>false</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>

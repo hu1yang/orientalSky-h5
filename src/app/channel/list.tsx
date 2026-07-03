@@ -69,7 +69,7 @@ export default function ChannelList(){
     setVisible(true)
   }
 
-  const inFormFinish = async (val) => {
+  const inFormFinish = async (val:{id:string,isEnabled:boolean,timeoutSeconds:string}) => {
     setLoadingBtn(true)
     try {
       const response = await updateInvokeProviderGroup(val)
@@ -190,13 +190,18 @@ export default function ChannelList(){
           '--border-bottom':'0',
         }}>
           <Form.Item hidden name={'id'} />
-          <Form.Item label={t('order.isEnabled')} name={'isEnabled'} rules={[
-            { required: true, message: t('order.isEnabled') },
-          ]}>
+          <Form.Item label={t('order.isEnabled')} name={'isEnabled'}
+                     getValueProps={(value) => ({
+                       value: value !== undefined ? String(value) : undefined
+                     })}
+                     normalize={(value) => value === 'true'}
+                     rules={[
+                       {required: true, message: t('order.isEnabled')},
+                     ]}>
             <Radio.Group>
               <Space>
-                <Radio value={true}>true</Radio>
-                <Radio value={false}>false</Radio>
+                <Radio value="true">true</Radio>
+                <Radio value="false">false</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>

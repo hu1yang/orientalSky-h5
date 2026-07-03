@@ -2,7 +2,6 @@ import {memo, type RefObject, useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import type {RootState} from "@/store";
-
 import {useSelector} from "react-redux";
 import dayjs from "dayjs";
 
@@ -34,7 +33,13 @@ import {
   updateDataAccesserGroup, updateDataProviderGroup, updateFeessSettingGroup, updateScaleSettingGroup,
   updateTopupSettingGroup
 } from "@/utils/request/group.ts";
-import type {AgentSettingGroup, CommonResponseGroup, IChannelPayedSettings, IExchangeRate} from "@/types/group.ts";
+import type {
+  AddAgentSettingFormGroup,
+  AgentSettingGroup,
+  CommonResponseGroup, DataAccessersFormGroup, FeessSettingFormGroup,
+  IChannelPayedSettings,
+  IExchangeRate, PushProviderFormGroup, ScaleSettingFormGroup, TopupSettingsFormGroup
+} from "@/types/group.ts";
 import {selectAgentMap} from "@/store/modules/base.ts";
 
 import MobileField from "@/component/form/mobileField.tsx";
@@ -50,6 +55,8 @@ type IAgentSettingGroup = AgentSettingGroup & {
   agentCode:string
 }
 type DialogType = 'feessSettings'|'scaleSettings'|'pushProviders'|'agentSetting'|'dataAccessers'|'topupSettings'
+
+type FormType = AddAgentSettingFormGroup|FeessSettingFormGroup|ScaleSettingFormGroup|PushProviderFormGroup|DataAccessersFormGroup|TopupSettingsFormGroup
 
 const providerTypeValue = ['notifyEvents', 'issuedTicket', 'rejectTicket', 'refundTicket', 'rejectRefund', 'changeTicket', 'rejectChange','appendTicket','rejectAppend', 'issuedAmount', 'rejectAmount']
 
@@ -225,81 +232,69 @@ export default function AgentInfo() {
     setTypeForm(null)
     infoForm.resetFields()
   }
-  const finishForm = async (val) => {
+  const finishForm = async (val: FormType) => {
     setButtonLoading(true)
     try{
       let response:CommonResponseGroup|null = null
       switch (typeForm){
         case 'agentSetting':
           if(!agentDetail?.agentId){
-            response = await addAgentSettingGroup({
-              ...val,
-            })
+            response = await addAgentSettingGroup(val as AddAgentSettingFormGroup)
           }else{
-            response = await updateAgentSettingGroup({
-              ...val,
-            })
+            response = await updateAgentSettingGroup(val as AddAgentSettingFormGroup)
           }
           break
         case 'feessSettings':
           if (val.id){
             response = await updateFeessSettingGroup({
               ...val,
-              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-            })
+              issuedDate:dayjs((val as FeessSettingFormGroup).issuedDate).format('YYYY-MM-DD'),
+            } as FeessSettingFormGroup)
           }else{
             response = await addFeessSettingGroup({
               ...val,
-              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-            })
+              issuedDate:dayjs((val as FeessSettingFormGroup).issuedDate).format('YYYY-MM-DD'),
+            } as FeessSettingFormGroup)
           }
           break
         case 'scaleSettings':
           if (val.id) {
             response = await updateScaleSettingGroup({
               ...val,
-              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-            })
+              issuedDate:dayjs((val as ScaleSettingFormGroup).issuedDate).format('YYYY-MM-DD'),
+            } as ScaleSettingFormGroup)
           }else{
             response = await addScaleSettingGroup({
               ...val,
-              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-            })
+              issuedDate:dayjs((val as ScaleSettingFormGroup).issuedDate).format('YYYY-MM-DD'),
+            } as ScaleSettingFormGroup)
           }
           break
         case 'pushProviders':
           if (val.id) {
-            response = await updateDataProviderGroup({
-              ...val,
-            })
+            response = await updateDataProviderGroup(val as PushProviderFormGroup)
           }else{
-            response = await addDataProviderGroup({
-              ...val,
-            })
+            response = await addDataProviderGroup(val as PushProviderFormGroup)
           }
           break
         case 'dataAccessers':
           if (val.id) {
-            response = await updateDataAccesserGroup({
-              ...val,
-            })
+            response = await updateDataAccesserGroup(val as DataAccessersFormGroup)
           }else{
-            response = await addDataAccesserGroup({
-              ...val,
-            })
+            response = await addDataAccesserGroup(val as DataAccessersFormGroup)
           }
           break
         case 'topupSettings':
           if(val.id){
             response = await updateTopupSettingGroup({
               ...val,
-              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-            })
+              issuedDate:dayjs((val as TopupSettingsFormGroup).issuedDate).format('YYYY-MM-DD'),
+            } as TopupSettingsFormGroup)
           }else{
             response = await addTopupSettingGroup({
               ...val,
-              issuedDate:dayjs(val.issuedDate).format('YYYY-MM-DD'),
-            })
+              issuedDate:dayjs((val as TopupSettingsFormGroup).issuedDate).format('YYYY-MM-DD'),
+            } as TopupSettingsFormGroup)
           }
           break
       }
@@ -379,11 +374,18 @@ export default function AgentInfo() {
 
   const renderIsEnabled = () => {
     return (
-      <Form.Item label={t('base.isEnabled')} name={'isEnabled'} >
+      <Form.Item label={t('base.isEnabled')} name={'isEnabled'}
+         getValueProps={(value) => ({
+           value: value !== undefined ? String(value) : undefined
+         })}
+         normalize={(value) => value === 'true'}
+         rules={[
+           {required: true, message: t('order.isEnabled')},
+         ]}>
         <Radio.Group>
           <Space>
             {
-              [{label:t('common.open'),value:true},{label:t('common.close'),value:false}].map(radio => (
+              [{label:t('common.open'),value:'true'},{label:t('common.close'),value:'false'}].map(radio => (
                 <Radio value={radio.value}  style={{
                   '--icon-size': '18px',
                   '--font-size': '14px',

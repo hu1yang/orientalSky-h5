@@ -160,6 +160,12 @@ const auxiliarySearch = {
 
 type IPathType = 'ticket'|'refund'|'change'|'auxiliary'
 
+type SearchFormData =
+  | IOrderManualSearchForm
+  | IOrderRefundSearchForm
+  | IOrderChangeSearchForm
+  | IOrderAuxiliarySearchForm
+
 const ListCard = memo(({listValue, getlogFnc, pathType, resetDataFnc}: {
   listValue: IOrderManual | IOrderRefund | IOrderChange | IOrderAuxiliary
   getlogFnc: (id: string) => void
@@ -255,7 +261,7 @@ const ListCard = memo(({listValue, getlogFnc, pathType, resetDataFnc}: {
             </div>
           }
           extra={
-            <Button size={'mini'} fill='none' onClick={() => locked(listValue.id,!!listValue.lockedBy ? false : true,listValue.lockedBy)}>
+            <Button size={'mini'} fill='none' onClick={() => locked(listValue.id,listValue.lockedBy ? false : true,listValue.lockedBy)}>
               <Space style={{
                 display:'flex',
                 alignItems:'stretch'
@@ -339,7 +345,7 @@ export default function OrderList(){
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
   const [searchForm] = Form.useForm()
 
-  const [searchFormData, setSearchFormData] = useState<IOrderManualSearchForm | IOrderRefundSearchForm | IOrderChangeSearchForm | IOrderAuxiliarySearchForm | null>(null)
+  const [searchFormData, setSearchFormData] = useState<SearchFormData | null>(null)
   const [listValue, setListValue] = useState<(IOrderManual | IOrderRefund | IOrderChange | IOrderAuxiliary)[]>([])
 
   const pathType = useMemo(() => {
@@ -421,11 +427,11 @@ export default function OrderList(){
     }
   }
 
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val: Partial<SearchFormData>) => {
     setSearchFormData(prevState => ({
-      ...prevState,
+      ...(prevState ?? {}),
       ...val,
-    }))
+    }) as SearchFormData)
     closeFilter()
   }
 
@@ -548,7 +554,7 @@ export default function OrderList(){
                 <Space direction='vertical' wrap>
                   <Radio value={''}>{t('common.routerTicketingAll')}</Radio>
                   {
-                    Object.entries(statusMap[pathType]).map(([key, value]) => (
+                    Object.entries(statusMap[pathType as keyof typeof statusMap]).map(([key, value]) => (
                       <Radio key={key} value={key}>{t('common.'+value)}</Radio>
                     ))
                   }

@@ -30,13 +30,22 @@ import {
   updateUserBranchs, updateUserDepartments,
   updateUserRoles, updateUserRoutings,
 } from "@/utils/request/identity.ts";
-import type {AssemblyDataForm, Department, Role, UserLogInfo, UserResponse} from "@/types/identity.ts";
+
 import CardText from "@/component/card/cardText.tsx";
 import {getAuthorizableRoutingGroup} from "@/utils/request/group.ts";
 import NoData from "@/component/default/noData.tsx";
 import LogLogin from "@/component/default/logLogin.tsx";
 import MobileField from "@/component/form/mobileField.tsx";
+
 import {AddOutline} from "antd-mobile-icons";
+import type {GroupAssemblyData} from "@/types/agent.ts";
+import type {
+  AssemblyData,
+  Department, IUserForm,
+  Role,
+  UserLogInfo,
+  UserResponse
+} from "@/types/identity.ts";
 
 export default function User() {
   const {branchId} = useParams()
@@ -55,13 +64,12 @@ export default function User() {
     departmentId: '',
     phoneNumber: ''
   })
-  const [searchForm] = Form.useForm()
   const [userVisible, setUserVisible] = useState(false)
   const [buttonLoading, setButtonLoading] = useState(false)
   const [typeForm, setTypeForm] = useState<'role' | 'branch' | 'department' | 'permissions' | 'password'>('role')
   const [roleValue, setRoleValue] = useState<Role[]>([])
   const [departmentValue, setDepartmentValue] = useState<Department[]>([])
-  const [routesValue, setRoutesValue] = useState<AssemblyDataForm[]>([])
+  const [routesValue, setRoutesValue] = useState<(AssemblyData|GroupAssemblyData)[]>([])
   const [searchText, setSearchText] = useState('')
   const [userForm] = Form.useForm()
 
@@ -79,14 +87,14 @@ export default function User() {
     companyAddForm.resetFields()
   }
 
-  const finishAddForm = async (val) => {
+  const finishAddForm = async (val: IUserForm) => {
     const form = {
       ...val,
       branchIds: [val.branchIds],
     }
     setButtonLoading(true)
     try {
-      const response = await createUser(form)
+      const response = await createUser(form as IUserForm)
       if (response.succeeded) {
         Toast.show({
           icon: 'success',
@@ -298,7 +306,14 @@ export default function User() {
     }
   }
 
-  const finishForm = async (val) => {
+  const finishForm = async (val: {
+    userId:string
+    newRoleIds:string[]
+    newDepartmentIds:string[]
+    newBranchIds:string[]
+    newPassword:string
+    permissions:string[]
+  }) => {
     setButtonLoading(true)
     try {
       const form = {
@@ -311,7 +326,7 @@ export default function User() {
           response = await updateUserRoles(form)
           break
         case 'branch':
-          response = await updateUserBranchs(form)
+          response = await updateUserBranchs(form as {userId:string,newBranchIds:string[]})
           break
         case 'department':
           response = await updateUserDepartments(form)

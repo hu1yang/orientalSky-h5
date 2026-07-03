@@ -484,11 +484,18 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
                     showCount
                   />
                 </Form.Item>
-                <Form.Item name={'sureNow'} label={t('order.sureNow')}>
+                <Form.Item name={'sureNow'} label={t('order.sureNow')}
+                           getValueProps={(value) => ({
+                             value: value !== undefined ? String(value) : undefined
+                           })}
+                           normalize={(value) => value === 'true'}
+                           rules={[
+                             {required: true, message: t('order.isEnabled')},
+                           ]}>
                   <Radio.Group>
                     <Space>
-                      <Radio value={true}>true</Radio>
-                      <Radio value={false}>false</Radio>
+                      <Radio value={"true"}>true</Radio>
+                      <Radio value={"false"}>false</Radio>
                     </Space>
                   </Radio.Group>
                 </Form.Item>

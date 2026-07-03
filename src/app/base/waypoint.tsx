@@ -17,7 +17,6 @@ import {
   Space,
   Tag
 } from "antd-mobile";
-import type {IWayPoints} from "@/types/group.ts";
 import {
   addQueryWaypointGroup,
   deleteQueryWaypointGroup,
@@ -28,7 +27,12 @@ import CardText from "@/component/card/cardText.tsx";
 import {result} from "@/utils/public.ts";
 import {AddOutline, FilterOutline} from "antd-mobile-icons";
 
+import type {IAddWayPoints, IWayPoints} from "@/types/group.ts";
 
+type ISearch = {
+  iataCode:string
+  channelCode:string
+}
 export default function BaseWaypoints() {
   const {t} = useTranslation()
   const {channel} = useSelector((state: RootState) => state.baseInfo);
@@ -38,7 +42,7 @@ export default function BaseWaypoints() {
 
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
   const [searchForm] = Form.useForm()
-  const [searchFormData, setSearchFormData] = useState({
+  const [searchFormData, setSearchFormData] = useState<ISearch>({
     iataCode:'',
     channelCode:''
   })
@@ -60,7 +64,7 @@ export default function BaseWaypoints() {
     setVisiblePopSearch(false)
   }
 
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val: ISearch) => {
     setSearchFormData(prevState => ({
       ...prevState,
       ...val,
@@ -84,7 +88,9 @@ export default function BaseWaypoints() {
     setLoadingBtn(false)
   }
 
-  const onWaypointsFormFinish = async (val) => {
+  const onWaypointsFormFinish = async (val:IAddWayPoints & {
+    channelCode: string[]
+  }) => {
     setLoadingBtn(true)
     try {
       const form = {
@@ -286,7 +292,7 @@ export default function BaseWaypoints() {
           <Form.Item label={t('airport.travelIssuedDate')} name={'travelIssuedDate'} trigger='onConfirm' rules={[
             { required: true, message: t('airport.travelIssuedDate') },
           ]}
-                     onClick={(e, datePickerRef: RefObject<DatePickerRef>) => {
+                     onClick={(_, datePickerRef: RefObject<DatePickerRef>) => {
                        datePickerRef.current?.open()
                      }}>
             <DatePicker>
@@ -298,7 +304,7 @@ export default function BaseWaypoints() {
           <Form.Item label={t('airport.travelExpiryDate')} name={'travelExpiryDate'} trigger='onConfirm' rules={[
             { required: true, message: t('airport.travelExpiryDate') },
           ]}
-                     onClick={(e, datePickerRef: RefObject<DatePickerRef>) => {
+                     onClick={(_, datePickerRef: RefObject<DatePickerRef>) => {
                        datePickerRef.current?.open()
                      }}>
             <DatePicker>

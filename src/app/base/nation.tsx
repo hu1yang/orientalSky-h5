@@ -49,7 +49,7 @@ export default function BaseNation(){
     setVisible(true)
   }
 
-  const onNationFormFinish = async (val) => {
+  const onNationFormFinish = async (val: ICountries) => {
     setLoadingBtn(true)
     try{
       let response

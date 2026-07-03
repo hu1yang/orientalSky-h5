@@ -379,7 +379,7 @@ export default function Home(){
             </Grid.Item>
             <Grid.Item span={2}>
               <Card title={t('order.sequence')}>
-                <Radio.Group value={typesModel} onChange={v => setTypesModel(v)}>
+                <Radio.Group value={typesModel} onChange={v => setTypesModel(v as 'totalAmount'|'totalSegments')}>
                   <Space direction='horizontal'>
                     {
                       [{label:t('home.salesAmount'),value:'totalAmount'},{label:t('home.flightSegmentsnumber'),value:'totalSegments'}].map(item => (

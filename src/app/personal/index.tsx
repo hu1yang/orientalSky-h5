@@ -26,11 +26,11 @@ import {
   UpdateUserInfoGroup,
   userSignOut
 } from "@/utils/request/identity.ts";
-import type {UserResponse} from "@/types/identity.ts";
 import {useTranslation} from "react-i18next";
 import CardText from "@/component/card/cardText.tsx";
 import MobileField from "@/component/form/mobileField.tsx";
 
+import type {UpdatePass, UpdateUserInfo, UserResponse} from "@/types/identity.ts";
 
 export default function Personal(){
   const {t} = useTranslation();
@@ -46,15 +46,15 @@ export default function Personal(){
   const [infoForm] = Form.useForm()
 
 
-  const finishForm = async (val) => {
+  const finishForm = async (val: UpdatePass|UpdateUserInfo) => {
     setButtonLoading(true)
     let response
     switch (typeForm) {
       case 'password':
-        response = await personalUpdatePassword(val)
+        response = await personalUpdatePassword(val as UpdatePass)
         break
       case 'info':
-        response = await UpdateUserInfoGroup(val)
+        response = await UpdateUserInfoGroup(val as UpdateUserInfo)
         break
     }
     if(response.succeeded){

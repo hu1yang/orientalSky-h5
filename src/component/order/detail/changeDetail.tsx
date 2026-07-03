@@ -120,10 +120,10 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries, 
                     <Grid.Item>
                       <Button block style={{
                         '--background-color':'var(--success-color)'
-                      }} onClick={sureAmount}>金额确认</Button>
+                      }} onClick={sureAmount}>{t('order.tripAmount')}</Button>
                     </Grid.Item>
                     <Grid.Item>
-                      <Button block>金额驳回</Button>
+                      <Button block>{t('order.amountRejected')}</Button>
                     </Grid.Item>
                   </Grid>
                 </Tabs.Tab>

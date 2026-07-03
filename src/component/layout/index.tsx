@@ -20,7 +20,7 @@ export default function Layout({noDefault}:{
   const {pathname} = useLocation()
   const matches = useMatches()
   const currentRoute = matches[matches.length - 1]
-  const title = currentRoute?.handle?.title || ''
+  const title = (currentRoute as { handle?: { title?: string } } | undefined)?.handle?.title || ''
 
   const {t} = useTranslation()
 
@@ -48,7 +48,16 @@ export default function Layout({noDefault}:{
   }
 
   const onBack = () => {
-    navigate(-1)
+    try {
+      const canGoBack = window.history.state && window.history.state.idx > 0;
+      if (canGoBack) {
+        navigate(-1)
+      } else {
+        navigate('/')
+      }
+    } catch {
+      navigate('/')
+    }
   }
 
   useEffect(() => {

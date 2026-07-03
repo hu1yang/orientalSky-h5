@@ -115,7 +115,7 @@ export default function Setting() {
           <List mode={'card'} className={'m-auto!'}>
             <List.Item prefix={<i className={'iconfont icon-yuyan2 text-(--text)! text-[1.6rem]!'} />} onClick={() => {
               Dialog.show({
-                content: t('common.exitAccount'),
+                content: t('common.language'),
                 closeOnAction: true,
                 closeOnMaskClick: true,
                 actions: [

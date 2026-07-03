@@ -37,7 +37,6 @@ export default function BaseWaypoints() {
   const [loading, setLoading] = useState(true)
 
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
-  const [keyword, setKeyword] = useState('')
   const [searchForm] = Form.useForm()
   const [searchFormData, setSearchFormData] = useState({
     iataCode:'',
@@ -71,7 +70,6 @@ export default function BaseWaypoints() {
 
   const resetSearchFilter = () => {
     searchForm.resetFields()
-    setKeyword('')
     setSearchFormData({
       iataCode:'',
       channelCode:''
@@ -179,7 +177,7 @@ export default function BaseWaypoints() {
     <section className={'containerMain'}>
       <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
         <SearchBar className={'flex-1'} placeholder={t('airport.cityCode')}
-                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}}
                    onSearch={searchFilter} onClear={() => searchFilter('')}/>
         <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
           <FilterOutline fontSize={18} color={'var(--active-color)'} />

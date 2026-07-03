@@ -1,4 +1,4 @@
-import {type RefObject, useEffect, useState} from "react";
+import {type RefObject, useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
 
@@ -12,7 +12,7 @@ import {
   Input,
   Loading,
   Popup,
-  PullToRefresh,
+  PullToRefresh, SearchBar,
   Space
 } from "antd-mobile";
 import {deleteExchangeRateGroup, getExchangeRatesGroup, upsertExchangeRateGroup} from "@/utils/request/group.ts";
@@ -23,6 +23,8 @@ import {AddOutline} from "antd-mobile-icons";
 
 export default function BaseExrate() {
   const {t} = useTranslation()
+
+  const [keyword, setKeyword] = useState('')
 
   const [loading, setLoading] = useState(true)
   const [listValue, setListValue] = useState<IExchangeRate[]>([])
@@ -85,6 +87,13 @@ export default function BaseExrate() {
     })
   }
 
+  const listValueMemo = useMemo(() => {
+    const lowerKeyword = keyword.toLowerCase();
+    return listValue.filter(item => {
+      return item.currencyCode ? item.currencyCode.toLowerCase().includes(lowerKeyword) : false;
+    });
+  }, [keyword, listValue])
+
   const getData = async () => {
     try {
       const response = await getExchangeRatesGroup()
@@ -102,12 +111,16 @@ export default function BaseExrate() {
 
   return (
     <section className={'containerMain'}>
+      <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('order.currency')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} onSearch={setKeyword} onClear={() => setKeyword('')} />
+      </div>
       <div className={'p-2'}>
         {
           !loading ?
             <PullToRefresh onRefresh={getData}>
               {
-                listValue.map((item: IExchangeRate) => (
+                listValueMemo.map((item: IExchangeRate) => (
                   <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.currencyCode}</span>}
                         key={item.id}>
                     <div>
@@ -115,7 +128,7 @@ export default function BaseExrate() {
                       <CardText label={t('foundation.spotBuyingRate')} value={item.buyingRate} labelStyle={'w-50!'} />
                       <CardText label={t('foundation.cashBuyingRate')} value={item.cashBuyingRate} labelStyle={'w-50!'} />
                       <CardText label={t('foundation.spotSellingRate')} value={item.sellingRate} labelStyle={'w-50!'} />
-                      <CardText label={t('foundation.cashSellingRate')} value={item.sellingRate} labelStyle={'w-50!'} />
+                      <CardText label={t('foundation.cashSellingRate')} value={item.cashSellingRate} labelStyle={'w-50!'} />
                     </div>
                     <Divider/>
                     <div className={'flex justify-end'}>

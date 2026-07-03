@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectGroupMap} from "@/store/modules/base.ts";
@@ -13,7 +13,7 @@ import {
   List,
   Loading,
   Popup,
-  PullToRefresh,
+  PullToRefresh, SearchBar,
   Space,
   Tag
 } from "antd-mobile";
@@ -32,6 +32,9 @@ import DefaultSelect from "@/component/form/defaultSelect.tsx";
 
 export default function ChannelBalance() {
   const {t} = useTranslation()
+
+  const [keyword, setKeyword] = useState('')
+
   const [loading, setLoading] = useState(true)
   const [channelList, setChannelList] = useState<IChannelSettingsBalance[]>([])
   const groupMap = useSelector(selectGroupMap)
@@ -152,18 +155,30 @@ export default function ChannelBalance() {
     }
   }
 
+  const channelListMemo = useMemo(() => {
+    const lowerKeyword = keyword.toLowerCase();
+
+    return channelList.filter(item => {
+      return item.groupName ? item.groupName.toLowerCase().includes(lowerKeyword) : false;
+    });
+  }, [keyword, channelList]);
+
   useEffect(() => {
     getData()
   },[])
 
   return (
     <section className={'containerMain'}>
+      <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('order.channelName')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} onSearch={setKeyword} onClear={() => setKeyword('')} />
+      </div>
       <div className="p-2">
         {
           !loading?
             <PullToRefresh onRefresh={getData}>
               {
-                channelList.map((item) => (
+                channelListMemo.map((item) => (
                   <Card className={'mb-2'} key={item.id} style={{'--adm-card-border-radius': 'var(--rounder-radius)'}}
                         title={<span
                           className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.groupName}</span>}>

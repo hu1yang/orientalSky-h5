@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,7 +14,7 @@ import {
   Input,
   Loading, Picker,
   Popup,
-  PullToRefresh,
+  PullToRefresh, SearchBar,
   Space,
   TextArea, Toast
 } from "antd-mobile";
@@ -34,6 +34,9 @@ type ICompany = GroupBranch & {
 }
 export default function Company() {
   const navigate = useNavigate();
+
+  const [keyword, setKeyword] = useState('')
+
   const {t} = useTranslation();
   const dispatch = useDispatch()
   const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
@@ -112,18 +115,29 @@ export default function Company() {
     }
   }
 
+  const branchsMemo = useMemo(() => {
+    const lowerKeyword = keyword.toLowerCase();
+    return branchs.filter(item => {
+      return item.name ? item.name.toLowerCase().includes(lowerKeyword) : false;
+    });
+  }, [keyword, branchs]);
+
   useEffect(() => {
     getData()
   },[])
   return (
     <section className={'containerMain'}>
+      <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('group.companyName')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} onSearch={setKeyword} onClear={() => setKeyword('')} />
+      </div>
       <div className={'p-2'}>
         <PullToRefresh onRefresh={getData}>
           {
             !loading ?
-              branchs.map((branch) => (
+              branchsMemo.map((branch) => (
                 <Card className={'mb-2'} style={{ '--adm-card-border-radius': 'var(--rounder-radius)' }}  key={branch.id}
-                      title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{t('group.companyName')}({branch.name})</span>}>
+                      title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{branch.name}</span>}>
                   <CardText label={t('group.companyCode')} value={branch.code} />
                   <CardText label={t('group.companyAddress')} value={branch.localAddress} />
                   <CardText label={t('group.companyNamelocal')} value={branch.otherName} />

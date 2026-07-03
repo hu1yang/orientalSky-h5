@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
 
@@ -12,7 +12,7 @@ import {
   Loading,
   Popup,
   PullToRefresh,
-  Radio,
+  Radio, SearchBar,
   Space,
   Switch,
   Tag
@@ -31,6 +31,9 @@ import type {ExpandsSetting} from "@/types/agent.ts";
 
 export default function ChannelList(){
   const {t} = useTranslation()
+
+  const [keyword, setKeyword] = useState('')
+
   const [loading, setLoading] = useState(true)
   const [channelList, setChannelList] = useState<IChannelSettings[]>([])
 
@@ -89,18 +92,30 @@ export default function ChannelList(){
     }
   },[])
 
+  const channelListMemo = useMemo(() => {
+    const lowerKeyword = keyword.toLowerCase();
+
+    return channelList.filter(item => {
+      return item.channelCode ? item.channelCode.toLowerCase().includes(lowerKeyword) : false;
+    });
+  }, [keyword, channelList]);
+
   useEffect(()=>{
     getData()
   },[])
 
   return (
     <section className={'containerMain'}>
+      <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
+        <SearchBar className={'flex-1'} placeholder={t('order.channelName')}
+                   style={{'--background': '#e8e9ed', '--border-radius': '20px'}} onSearch={setKeyword} onClear={() => setKeyword('')} />
+      </div>
       <div className={'p-2'}>
         {
           !loading?
             <PullToRefresh onRefresh={getData}>
               {
-                channelList.map((item) => (
+                channelListMemo.map((item) => (
                   <Card className={'mb-2'} key={item.id} style={{'--adm-card-border-radius': 'var(--rounder-radius)'}}
                         extra={
                           <Switch

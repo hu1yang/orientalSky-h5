@@ -82,9 +82,7 @@ export const getPermissionRoles = () => axios.get<Role[]>('/identityApi/GroupAcc
 
 
 // 创建用户
-export const createUser = (form:IUserForm) => axios.post<CommonResponse,IUserForm>('/identityApi/GroupManager/CreateUser',{
-    ...form
-})
+export const createUser = (form:IUserForm) => axios.post<CommonResponse,IUserForm>('/identityApi/GroupManager/CreateUser',form)
 
 // 用户锁定设置
 export const updateLockout = (userId:string) => axios.patch<CommonResponse,{userId:string}>('/identityApi/GroupManager/UpdateLockout',{userId})

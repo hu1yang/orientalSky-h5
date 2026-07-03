@@ -16,7 +16,7 @@ import {
   Space
 } from "antd-mobile";
 import {deleteExchangeRateGroup, getExchangeRatesGroup, upsertExchangeRateGroup} from "@/utils/request/group.ts";
-import type {IExchangeRate} from "@/types/group.ts";
+import type {IExchangeRate, IExchangeRateForm} from "@/types/group.ts";
 import CardText from "@/component/card/cardText.tsx";
 import {result} from "@/utils/public.ts";
 import {AddOutline} from "antd-mobile-icons";
@@ -55,7 +55,7 @@ export default function BaseExrate() {
     setVisible(false)
   }
 
-  const onExrateFormFinish = async (val) => {
+  const onExrateFormFinish = async (val:IExchangeRateForm) => {
     setLoadingBtn(true)
     try {
       const form = {
@@ -187,7 +187,7 @@ export default function BaseExrate() {
             <Input type={'number'} />
           </Form.Item>
           <Form.Item label={t('foundation.publishTime')} name={'publishTime'} trigger='onConfirm'
-                     onClick={(e, datePickerRef: RefObject<DatePickerRef>) => {
+                     onClick={(_, datePickerRef: RefObject<DatePickerRef>) => {
                        datePickerRef.current?.open()
                      }}>
             <DatePicker precision='minute'>

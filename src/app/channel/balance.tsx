@@ -17,7 +17,13 @@ import {
   Space,
   Tag
 } from "antd-mobile";
-import type {IChannelSettingsBalance, IExchangeRate, IPaymentAccount} from "@/types/group.ts";
+import type {
+  IBalanceAccountForm,
+  IChannelBalanceForm,
+  IChannelSettingsBalance,
+  IExchangeRate,
+  IPaymentAccount
+} from "@/types/group.ts";
 import {
   addChannelBalanceGroup,
   deleteChannelBalanceGroup, findBalanceAccountsGroup,
@@ -96,7 +102,7 @@ export default function ChannelBalance() {
     balanceForm.resetFields()
   }
 
-  const finishForm = async (val) => {
+  const finishForm = async (val: IChannelBalanceForm|IBalanceAccountForm) => {
     setButtonLoading(true)
 
     try {
@@ -107,16 +113,16 @@ export default function ChannelBalance() {
           id: balanceForm.getFieldValue('id') || ''
         }
         if(form.id){
-          response = await updateChannelBalanceGroup(form)
+          response = await updateChannelBalanceGroup(form as IChannelBalanceForm)
         }else{
-          response = await addChannelBalanceGroup(form)
+          response = await addChannelBalanceGroup(form as IChannelBalanceForm)
         }
       }else{
         const form = {
           ...val,
           balanceId: balanceForm.getFieldValue('balanceId') || ''
         }
-        response = await upsertBalanceSettingsGroup(form)
+        response = await upsertBalanceSettingsGroup(form as IBalanceAccountForm)
       }
 
       result(response)
@@ -256,7 +262,7 @@ export default function ChannelBalance() {
             ]}>
               <DefaultSelect options={balanceAccountList.map(item => ({
                 label: `${item.accountName}-${item.remarks}`,
-                value: item.id,
+                value: item.id!,
                 description: item.remarks
               }))} multiple={true} placeholder={t('order.paymentName')} />
             </Form.Item>

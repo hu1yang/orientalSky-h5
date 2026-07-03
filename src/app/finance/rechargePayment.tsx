@@ -597,11 +597,18 @@ export default function FinanceRechargePayment() {
               value: item.id,
             }))} multiple={false} placeholder={t('foundation.agent')} />
           </Form.Item>
-          <Form.Item label={t('order.isSure')} name={'unLinked'}>
+          <Form.Item label={t('order.isSure')} name={'unLinked'}
+                     getValueProps={(value) => ({
+                       value: value !== undefined ? String(value) : undefined
+                     })}
+                     normalize={(value) => value === 'true'}
+                     rules={[
+                       {required: true, message: t('order.isEnabled')},
+                     ]}>
             <Radio.Group>
               <Space direction='vertical'>
-                <Radio value={true}>{t('common.open')}</Radio>
-                <Radio value={false}>{t('common.close')}</Radio>
+                <Radio value={"true"}>{t('common.open')}</Radio>
+                <Radio value={"false"}>{t('common.close')}</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>

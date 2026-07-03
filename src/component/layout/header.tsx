@@ -3,8 +3,7 @@ import {useSelector} from "react-redux";
 import type {RootState} from "@/store";
 import {useTranslation} from "react-i18next";
 
-import {Avatar, Button, Space} from "antd-mobile";
-import {BellOutline} from "antd-mobile-icons";
+import {Avatar} from "antd-mobile";
 
 export default function Header() {
   const location = useLocation()

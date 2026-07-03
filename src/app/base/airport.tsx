@@ -12,7 +12,7 @@ import {
   SwipeAction,
   type SwipeActionRef
 } from "antd-mobile";
-import type {IGetGlobalAirports, IGetGlobalAirportsForm} from "@/types/group.ts";
+import type {IAddGlobalAirportsForm, IGetGlobalAirports, IGetGlobalAirportsForm} from "@/types/group.ts";
 import {
   addGlobalAirportGroup,
   deleteGlobalAirportGroup,
@@ -63,7 +63,7 @@ export default function BaseAirport() {
     setVisiblePopSearch(false)
   }
 
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val: IGetGlobalAirportsForm) => {
     setSearchFormData(prevState => ({
       ...prevState,
       ...val,
@@ -88,7 +88,7 @@ export default function BaseAirport() {
     airportForm.resetFields()
   }
 
-  const onAirportFormFinish = async (val) => {
+  const onAirportFormFinish = async (val: IAddGlobalAirportsForm) => {
     setLoadingBtn(true)
     try {
       let response

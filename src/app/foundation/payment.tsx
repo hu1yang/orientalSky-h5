@@ -4,7 +4,7 @@ import type {RootState} from "@/store";
 import {useSelector} from "react-redux";
 import {selectGroupMap} from "@/store/modules/base.ts";
 
-import type {ExpandsSettingFormGroup, IPayment, IPaymentForm} from "@/types/group.ts";
+import type {ExpandsSettingFormGroup, IPayment, IPaymentForm, ISearchBooking} from "@/types/group.ts";
 import {
   addPaymentAccountGroup, deletePaymentAccountGroup,
   getPaymentAccountsGroup,
@@ -47,7 +47,7 @@ export default function FoundationPayment (){
   const [keyword, setKeyword] = useState('')
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
   const [searchForm] = Form.useForm()
-  const [searchFormData, setSearchFormData] = useState({
+  const [searchFormData, setSearchFormData] = useState<ISearchBooking>({
     id: '',
     branchId: '',
     isEnabled: null,
@@ -130,7 +130,7 @@ export default function FoundationPayment (){
     })
   }
 
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val:ISearchBooking) => {
     setSearchFormData(prevState => ({
       ...prevState,
       ...val,
@@ -239,7 +239,7 @@ export default function FoundationPayment (){
                         <div className={'mb-4'}>
                           <div className={'mb-2 flex justify-between items-center'}>
                             <span className={'text-(--text)'}>{t('group.extensionSettings')}</span>
-                            <Button color='primary' size={'mini'} fill='none' onClick={() => openSetting(item.id,item.expandSettings)}>
+                            <Button color='primary' size={'mini'} fill='none' onClick={() => openSetting(item.id as string,item.expandSettings)}>
                               {t('common.edit')}
                             </Button>
                           </div>
@@ -318,11 +318,15 @@ export default function FoundationPayment (){
               </Space>
             </Radio.Group>
           </Form.Item>
-          <Form.Item name={'isEnabled'} label={t('order.isEnabled')}>
+          <Form.Item label={t('order.isEnabled')} name={'isEnabled'}
+                     getValueProps={(value) => ({
+                       value: value !== undefined ? String(value) : undefined
+                     })}
+                     normalize={(value) => value === 'true'}>
             <Radio.Group>
               <Space>
-                <Radio value={true}>true</Radio>
-                <Radio value={false}>false</Radio>
+                <Radio value="true">true</Radio>
+                <Radio value="false">false</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>
@@ -351,11 +355,15 @@ export default function FoundationPayment (){
                   </Space>
                 </Radio.Group>
               </Form.Item>
-              <Form.Item name={'isEnabled'} label={t('order.isEnabled')}>
+              <Form.Item label={t('order.isEnabled')} name={'isEnabled'}
+                         getValueProps={(value) => ({
+                           value: value !== undefined ? String(value) : undefined
+                         })}
+                         normalize={(value) => value === 'true'}>
                 <Radio.Group>
                   <Space>
-                    <Radio value={true}>true</Radio>
-                    <Radio value={false}>false</Radio>
+                    <Radio value="true">true</Radio>
+                    <Radio value="false">false</Radio>
                   </Space>
                 </Radio.Group>
               </Form.Item>

@@ -89,11 +89,13 @@ function DatePicker({ selectionModeValue = 'single', value, changeDate }: DatePi
       >
         <CalendarPickerView
           ref={dateRef}
-          selectionMode={selectionModeValue}
-          value={value} // 💡 核心优化：直接绑定父级的 value，去除多余的本地 state 同步
           max={nowDate}
           min={oneYearAgo}
           onChange={changePickerDate}
+          {...(selectionModeValue === 'single'
+              ? { selectionMode: 'single', value: value as Date }
+              : { selectionMode: 'range', value: value as [Date, Date] }
+          )}
         />
       </Popup>
     </>

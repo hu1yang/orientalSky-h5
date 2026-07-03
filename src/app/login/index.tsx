@@ -10,6 +10,7 @@ import {getCaptcha, userSignin} from "@/utils/request/identity.ts";
 import {setLogin} from "@/store/modules/tool.ts";
 import Cookie from "js-cookie";
 import {EyeInvisibleOutline, EyeOutline} from "antd-mobile-icons";
+import type {ILogin} from "@/types/identity.ts";
 
 export default function Login(){
   const navigate = useNavigate();
@@ -38,13 +39,13 @@ export default function Login(){
     })
   }
 
-  const finishForm = async (val) => {
+  const finishForm = async (val: ILogin) => {
     try {
       setLoadingBtn(true)
       const captchaId = loginForm.getFieldValue('captchaId')
       const formData = {
+        ...val,
         captchaId,
-        ...val
       }
       const response = await userSignin(formData)
       if(response.succeeded && response.principal){

@@ -26,7 +26,7 @@ import {
   updateChannelSettingsGroup
 } from "@/utils/request/group.ts";
 
-import type {ExpandsSettingFormGroup, IBooking, ISearchBooking} from "@/types/group.ts";
+import type {ExpandsSettingFormGroup, IBooking, IChannelAccount, ISearchBooking} from "@/types/group.ts";
 import {result} from "@/utils/public.ts";
 import MobileField from "@/component/form/mobileField.tsx";
 import {FilterOutline} from "antd-mobile-icons";
@@ -129,7 +129,7 @@ export default function FoundationBooking() {
     setVisiblePop(true)
   }
 
-  const onFinish = async (val) => {
+  const onFinish = async (val:IChannelAccount) => {
     const id = val.id
     setLoadingBtn(true)
     try{
@@ -218,7 +218,7 @@ export default function FoundationBooking() {
   const closeFilter = () => {
     setVisiblePopSearch(false)
   }
-  const onSearchFinish = (val) => {
+  const onSearchFinish = (val: ISearchBooking) => {
     setSearchFormData(prevState => ({
       ...prevState,
       ...val,
@@ -300,7 +300,7 @@ export default function FoundationBooking() {
                       <div className={'mb-4'}>
                         <div className={'mb-2 flex justify-between items-center'}>
                           <span className={'text-(--text)'}>{t('group.extensionSettings')}</span>
-                          <Button color='primary' size={'mini'} fill='none' onClick={() => openSetting(item.id,item.expandSettings)}>
+                          <Button color='primary' size={'mini'} fill='none' onClick={() => openSetting(item.id!,item.expandSettings)}>
                             {t('common.edit')}
                           </Button>
                         </div>

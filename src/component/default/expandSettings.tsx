@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {AddCircleOutline} from "antd-mobile-icons";
 import type {CommonResponseGroup, ExpandsSettingFormGroup} from "@/types/group.ts";
 import {result} from "@/utils/public.ts";
+import type {ExpandsSetting} from "@/types/agent.ts";
 
 export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
   axiosFnc: (form: ExpandsSettingFormGroup) => Promise<CommonResponseGroup>
@@ -74,7 +75,7 @@ export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
           </div>
         )} renderHeader={({ index }, { remove }) => (
           <div>
-            <span>{expandSettings?.find((_,b) => b === index).name || '--'}</span>
+            <span>{expandSettings?.find((_: ExpandsSetting,b:number) => b === index).name || '--'}</span>
             <Button fill='none' color={'danger'} size={'mini'} onClick={() => remove(index)} style={{ float: 'right' }}>
               {t('common.delete')}
             </Button>

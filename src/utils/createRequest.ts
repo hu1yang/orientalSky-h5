@@ -60,7 +60,7 @@ instance.interceptors.request.use(
             if (config.data instanceof FormData) {
                 config.data.append('timeStamp', date.toString())
             } else if (Array.isArray(config.data)) {
-
+                console.log(config.data)
             } else {
                 config.data = {
                     ...config.data,

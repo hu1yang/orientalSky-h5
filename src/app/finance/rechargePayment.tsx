@@ -290,7 +290,7 @@ export default function FinanceRechargePayment() {
     return response
   }
   const rechargePrice = async (totalAmount:number,rechargeCurrency:string,accountCurrency:string) => {
-    if(rechargeCurrency == accountCurrency) return totalAmount
+    if(rechargeCurrency === accountCurrency) return totalAmount
     const rechargeInfo = await getCurrencyTarget(rechargeCurrency)
     const accountInfo = await getCurrencyTarget(accountCurrency)
     return (totalAmount / (rechargeInfo.cashSellingRate / accountInfo.cashSellingRate))

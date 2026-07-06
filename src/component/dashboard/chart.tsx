@@ -41,9 +41,11 @@ const getBaseOption = ({
                          type
                        }: IBaseOption, satus: 'default' | 'retrieval') => {
 
+  // eslint-disable-next-line no-useless-assignment
   let tooltip = {}
+  // eslint-disable-next-line no-useless-assignment
   let series = []
-  if (satus == 'default') {
+  if (satus === 'default') {
     tooltip = {trigger: 'axis', axisPointer: {type: 'shadow'}}
     series = [
       {

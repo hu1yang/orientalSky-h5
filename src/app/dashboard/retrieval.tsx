@@ -18,7 +18,7 @@ interface IBaseOption {
   titleTips: string[]
   title: string
   xData: string[],
-  barData: (number|string)[],
+  barData: any[],
   lineData: number[],
   barColor: { offset: number, color: string }[],
   lineColor: string,

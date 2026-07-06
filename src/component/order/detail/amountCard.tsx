@@ -70,7 +70,7 @@ export default memo(function AmountCard({itineraryList, travelers, currency, tot
               {
                 itinerarie.amounts.map(amount => (
                   <span
-                    key={amount.familyCode}>{t('order.' + passengerTypes[amount.passengerType as 'adt' | 'chd' | 'inf'].toLocaleLowerCase())} ({amount?.commissionAmount ?? '--'}/{amount?.commissionRebate != null
+                    key={amount.familyCode}>{t('order.' + passengerTypes[amount.passengerType as 'adt' | 'chd' | 'inf'].toLocaleLowerCase())} ({amount?.commissionAmount ?? '--'}/{amount?.commissionRebate !== null
                     ? (Number(amount?.commissionRebate) * 100).toFixed(0) + '%'
                     : '--'})</span>
                 ))

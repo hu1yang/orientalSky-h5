@@ -231,7 +231,7 @@ export default memo(function AuxiliaryDetail({auxiliaryList, passengers, itinera
                   <SegmentCard itineraryList={auxiliaryItineraries} status={'auxiliary'} />
                   {
                     auxiliary.status !== 'cancelled' && (
-                      <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5 bottom-2'}>
+                      <Grid columns={2} gap={8} className={'sticky left-0 mt-5 bottom-2'}>
                         <Grid.Item span={['confirmed','appendPaid'].includes(auxiliary.status)?1:2}>
                           {
                             ['appendPaid','attached'].includes(auxiliary.status)?

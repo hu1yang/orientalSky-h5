@@ -116,7 +116,7 @@ export default memo(function ChangeDetail({changeList, passengers, itineraries, 
                       <PriceConfirmation confirmed={change.confirmed} currency={change.order?.currency || ''} type={'change'} totalPrice={totalPrice} />
                     )
                   }
-                  <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5'}>
+                  <Grid columns={2} gap={8} className={'sticky bottom-2 left-0 mt-5'}>
                     <Grid.Item>
                       <Button block style={{
                         '--background-color':'var(--success-color)'

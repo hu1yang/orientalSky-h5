@@ -2,8 +2,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
 
-import {Button, Card, Grid, Loading} from "antd-mobile";
-import {UndoOutline} from "antd-mobile-icons";
+import {Card, Grid, Loading, PullToRefresh} from "antd-mobile";
 import type {DashboardScale, DashboardTimers} from "@/types/group.ts";
 
 import {getDashboardScaleGroup} from "@/utils/request/group.ts";
@@ -258,53 +257,55 @@ export default function Retrieval(){
     <div>
       {
         !loading ?
-          <Grid columns={2} gap={8}>
-            <Grid.Item span={2}>
-              <Card title={t('home.totalQuery')} extra={<Button fill='none' onClick={getData}><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
-                <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.queryTimes.toLocaleString()}</span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={t('home.totalBookings')}>
-                <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.orderTimes.toLocaleString()}</span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={1}>
-              <Card title={t('home.realTimeQuery')}>
-                <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>{dataValue.times.realdTimes.toLocaleString()}</span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={1}>
-              <Card title={t('home.cacheTimeQuery')}>
-                <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>{dataValue.times.cacheTimes.toLocaleString()}</span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={t('group.agency')} extra={
-                <DatePicker value={localTime as [Date, Date]} changeDate={changeLocalTime} selectionModeValue={'range'} />
-              }>
-                <Charts ref={dateChartsRef} />
-                <Charts ref={agentChartsRef} />
-                <Charts ref={groupChartsRef} />
-              </Card>
-            </Grid.Item>
+          <PullToRefresh onRefresh={getData}>
+            <Grid columns={2} gap={8}>
+              <Grid.Item span={2}>
+                <Card title={t('home.totalQuery')}>
+                  <div className={'flex justify-start'}>
+                    <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.queryTimes.toLocaleString()}</span>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('home.totalBookings')}>
+                  <div className={'flex justify-start'}>
+                    <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.orderTimes.toLocaleString()}</span>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={1}>
+                <Card title={t('home.realTimeQuery')}>
+                  <div className={'flex justify-start'}>
+                    <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>{dataValue.times.realdTimes.toLocaleString()}</span>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={1}>
+                <Card title={t('home.cacheTimeQuery')}>
+                  <div className={'flex justify-start'}>
+                    <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>{dataValue.times.cacheTimes.toLocaleString()}</span>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('group.agency')} extra={
+                  <DatePicker value={localTime as [Date, Date]} changeDate={changeLocalTime} selectionModeValue={'range'} />
+                }>
+                  <Charts ref={dateChartsRef} />
+                  <Charts ref={agentChartsRef} />
+                  <Charts ref={groupChartsRef} />
+                </Card>
+              </Grid.Item>
 
-            <Grid.Item span={2}>
-              <Card title={t('common.routerChannels')}>
-                <Charts ref={airlineChartsAmtRef} />
-                <Charts ref={cDateChartsRef} />
-              </Card>
-            </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('common.routerChannels')}>
+                  <Charts ref={airlineChartsAmtRef} />
+                  <Charts ref={cDateChartsRef} />
+                </Card>
+              </Grid.Item>
 
-          </Grid>
+            </Grid>
+          </PullToRefresh>
           :
           <Loading />
       }

@@ -467,6 +467,19 @@ export default function OrderList(){
     }) as IOrderManualSearchForm | IOrderRefundSearchForm | IOrderChangeSearchForm | IOrderAuxiliarySearchForm)
   }
 
+  const placeholderTips = useMemo(() => {
+    switch (pathType){
+      case 'ticket':
+        return t('order.orderNo')
+      case 'refund':
+        return t('order.refundId')
+      case 'change':
+        return t('order.changeId')
+      case 'auxiliary':
+        return t('order.auxiliaryId')
+    }
+  },[pathType])
+
   useEffect(() => {
     const changeData = () => {
       window.scrollTo({
@@ -490,7 +503,7 @@ export default function OrderList(){
           {label: t('common.routerAuxiliary'), value: 'auxiliary'}
         ]} value={pathType} onChange={changeSegmented}/>
         <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
-          <SearchBar className={'flex-1'} placeholder={t('order.orderNo')}
+          <SearchBar className={'flex-1'} placeholder={placeholderTips}
                      style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
                      onSearch={searchFilter} onClear={() => searchFilter('')}/>
           <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>

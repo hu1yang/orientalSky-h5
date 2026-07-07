@@ -239,7 +239,7 @@ export default memo(forwardRef(function AuxiliaryAmount({resetDetailFnc}:{
       form.setFieldsValue({
         laborServiceFees:info.confirmed?.laborServiceFees,
         netPaymentAmount:info.confirmed?.netPaymentAmount,
-        remarks:info.confirmed?.remarks
+        remarks:info.confirmed?.remarks || ''
       })
     }else{
       form.setFieldsValue({
@@ -515,8 +515,8 @@ export default memo(forwardRef(function AuxiliaryAmount({resetDetailFnc}:{
               </div>
               <div className={'flex-1 h-0 p-[12px] pb-15 overflow-auto'}>
                 {
-                  detailInfo?.appendForAttachTypes.map(appendForAttachType => (
-                    <div className={'mb-5'} key={appendForAttachType.type}>
+                  detailInfo?.appendForAttachTypes.map((appendForAttachType,appendForAttachTypeIndex) => (
+                    <div className={'mb-5'} key={`${appendForAttachType.type}-${appendForAttachTypeIndex}`}>
                       <div className={'mb-2'}>
                         {
                           appendForAttachType.passengerNames?.map(passengerName => (

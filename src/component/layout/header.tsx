@@ -1,4 +1,4 @@
-import {useLocation} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {useSelector} from "react-redux";
 import type {RootState} from "@/store";
 import {useTranslation} from "react-i18next";
@@ -7,6 +7,7 @@ import {Avatar} from "antd-mobile";
 
 export default function Header() {
   const location = useLocation()
+  const navigate = useNavigate()
   const {pathname} = location
   const {identity} = useSelector((state: RootState) => state.toolInfo);
 
@@ -22,7 +23,7 @@ export default function Header() {
               <div className={'flex items-center'}>
                 <h2 className={'ml-4 !text-[1.4rem]'}>{t('common.setAccount')}</h2>
               </div>:
-              <div className={'flex items-center'}>
+              <div className={'flex items-center'} onClick={() => {navigate('/group/personal')}}>
                 <Avatar src='' style={{'--border-radius': '10px', '--size': '35px'}}/>
                 <h2 className={'ml-4 !text-[1.4rem]'}>{identity?.actualName || ''}</h2>
               </div>

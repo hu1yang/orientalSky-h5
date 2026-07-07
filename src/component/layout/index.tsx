@@ -1,12 +1,12 @@
 import {Suspense, useEffect, useState} from "react";
-import {Outlet, useLocation, useMatches, useNavigate} from "react-router";
+import {Outlet, type UIMatch, useLocation, useMatches, useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {setBranchAgents, setBranchMore, setChannel} from "@/store/modules/base.ts";
 import {setIdentity} from "@/store/modules/tool.ts";
 import {useTranslation} from "react-i18next";
 
 import Cookie from 'js-cookie'
-import {NavBar, SafeArea} from "antd-mobile";
+import {NavBar, SafeArea, SpinLoading} from "antd-mobile";
 import Header from "./header.tsx";
 import TabBarComponent from "./tabbar.tsx";
 
@@ -18,9 +18,9 @@ export default function Layout({noDefault}:{
 }){
   const navigate = useNavigate();
   const {pathname} = useLocation()
-  const matches = useMatches()
+  const matches = useMatches() as UIMatch<unknown, {title: string}>[]
   const currentRoute = matches[matches.length - 1]
-  const title = (currentRoute as { handle?: { title?: string } } | undefined)?.handle?.title || ''
+  const title = currentRoute?.handle?.title || ''
 
   const {t} = useTranslation()
 
@@ -80,6 +80,12 @@ export default function Layout({noDefault}:{
     init()
   }, [])
 
+  const loadingNode = (
+    <div className="h-[60vh] w-full flex items-center justify-center">
+      <SpinLoading color="primary" />
+    </div>
+  )
+
   return (
       <div className={`${!noDefault ? 'pt-(--header-height)':'py-(--header-height)'}`}>
         <div style={{ background: '#ace0ff' }}>
@@ -93,10 +99,9 @@ export default function Layout({noDefault}:{
             </div>
         }
         <main>
-          <Suspense fallback={<div>loading...</div>}>
+          <Suspense fallback={loadingNode}>
             {
-              loading ? <div>loading...</div> :
-                <Outlet />
+              loading ? loadingNode : <Outlet />
             }
           </Suspense>
         </main>

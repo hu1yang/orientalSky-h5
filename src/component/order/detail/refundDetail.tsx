@@ -197,7 +197,7 @@ export default memo(function RefundDetail({refundList, passengers, itineraries, 
                   <SegmentCard itineraryList={refundItineraries} status={'refund'} />
                   {
                     refund.status !== 'cancelled' && (
-                      <Grid columns={2} gap={8} className={'sticky bottom-0 left-0 mt-5 bottom-2'}>
+                      <Grid columns={2} gap={8} className={'sticky left-0 mt-5 bottom-2'}>
                         <Grid.Item span={['refundPaid','completed','executed'].includes(refund.status)?1:2}>
                           {
                             ['refundPaid','completed','executed'].includes(refund.status)?

@@ -131,7 +131,7 @@ const SegmentInfo = memo(({itinerarie, status, segmentsType = 'segments'}: {
 
 
   return (
-    <div>
+    <div className={`${(segmentsType === 'segments' && status === 'change') ? 'line-through':''}`}>
       <div className={'flex justify-between items-center mb-5'}>
         <p className={'text-[1.3rem] text-(--text)'}>
           {formatDateTime(firstSegment?.departureTime as string)} → {formatDateTime(lastSegment?.arrivalTime as string)}
@@ -139,7 +139,7 @@ const SegmentInfo = memo(({itinerarie, status, segmentsType = 'segments'}: {
         {
           status !== 'ticket' ?
             <span
-              className={`${status === 'refund' ? 'text-(--price-color)' : 'text-(--warning-color)'} text-[1.2rem] font-bold ${(segmentsType === 'segments' && status === 'change') && 'line-through !text-(--price-color)'}`}>
+              className={`${status === 'refund' ? 'text-(--price-color)' : 'text-(--success-color)'} text-[1.4rem] font-bold ${(segmentsType === 'segments' && status === 'change') ? 'line-through text-(--price-color)!':''}`}>
               {
                 status === 'change' ? (segmentsType === 'segments' ? i18n.t('order.rawData') : i18n.t('order.newData')) : i18n.t('order.'+status)
               }
@@ -218,8 +218,14 @@ export default memo(function SegmentCard({itineraryList, status = 'ticket'}: {
           <React.Fragment key={itinerarie.id}>
             {
               status === 'change' &&
-                <SegmentInfo key={`dataChangeSegments-${itinerarie.id}`} itinerarie={itinerarie} status={status}
-                             segmentsType={'changeSegments'}/>
+               <>
+                   <SegmentInfo key={`dataChangeSegments-${itinerarie.id}`} itinerarie={itinerarie} status={status}
+                                segmentsType={'changeSegments'}/>
+                   <Divider style={{
+                     borderStyle: 'dashed',
+                     margin: '8px 0'
+                   }} />
+               </>
             }
             <SegmentInfo key={`dataSegments-${itinerarie.id}`} itinerarie={itinerarie} status={status}
                          segmentsType={'segments'}/>

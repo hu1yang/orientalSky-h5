@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 import DatePicker from "@/component/Date/datePicker.tsx"
 import {useTranslation} from "react-i18next";
 
-import {Button, Card, Grid, Loading, Radio, Selector, Space} from "antd-mobile";
-import {UndoOutline} from "antd-mobile-icons"
+import {Card, Grid, Loading, PullToRefresh, Radio, Selector, Space, Switch} from "antd-mobile";
 
 import {getDashboardTodayGroup, getDashboardTotalGroup} from "@/utils/request/group.ts";
 import {getCssVar} from "@/utils/public.ts";
@@ -81,6 +80,7 @@ export default function Home(){
     channels:[],
     hours:[],
   })
+  const [isTravelDateTime, setIsTravelDateTime] = useState(false)
   const [localTime, setLocalTime] = useState<Date|Date[]|null>(null)
   const [tops, setTops] = useState<string>('10')
   const [typesModel, setTypesModel] = useState<'totalAmount'|'totalSegments'>('totalAmount')
@@ -247,7 +247,7 @@ export default function Home(){
         response = await getDashboardTotalGroup({
           minTime:dayjs((localTime as [Date,Date])[0]).format('YYYY-MM-DDTHH:mm:ssZ'),
           maxTime:dayjs((localTime as [Date,Date])[1]).format('YYYY-MM-DDTHH:mm:ssZ'),
-          agentIds:[],carrier:'',channelCodes:[],branchIds:[],isTravelDateTime:false
+          agentIds:[],carrier:'',channelCodes:[],branchIds:[],isTravelDateTime:isTravelDateTime
         })
       }
 
@@ -290,7 +290,7 @@ export default function Home(){
       getData()
     }
     initData()
-  },[localTime])
+  },[localTime,isTravelDateTime])
 
   useEffect(() => {
     setCanvas()
@@ -307,10 +307,20 @@ export default function Home(){
     <div>
       {
         !loading ?
-          <Grid columns={2} gap={8}>
-            <Grid.Item span={2}>
-              <Card title={t('home.totalTransaction')} extra={<Button fill='none' onClick={getData}><UndoOutline fontSize={18} color={'#eebe77'} /></Button>}>
-                <div className={'flex justify-start'}>
+          <PullToRefresh onRefresh={getData}>
+            <Grid columns={2} gap={8}>
+              <Grid.Item span={2}>
+                <Card title={t('home.totalTransaction')} extra={
+                  pathname !== '/' && (
+                    <Switch uncheckedText={t('common.orderDate')} style={{
+                      '--checked-color': 'var(--warning-color)',
+                      '--adm-color-background': 'var(--success-color)',
+                      '--adm-color-border': 'var(--success-color)',
+                      '--adm-color-weak': '#fff'
+                    }} checkedText={t('common.departureDate')} checked={isTravelDateTime} onChange={setIsTravelDateTime} />
+                  )
+                }>
+                  <div className={'flex justify-start'}>
                   <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
                     {(() => {
                       const totalAmount = dataValue.counts.totalAmount ?? 0;
@@ -318,12 +328,12 @@ export default function Home(){
                       return intPart
                     })()}
                   </span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={t('home.discountAmount')}>
-                <div className={'flex justify-start'}>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('home.discountAmount')}>
+                  <div className={'flex justify-start'}>
                   <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
                     {(() => {
                       const totalProfit = dataValue.counts.totalProfit ?? 0;
@@ -331,85 +341,86 @@ export default function Home(){
                       return intPart
                     })()}
                   </span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={1}>
-              <Card title={t('home.ticketing')}>
-                <div className={'flex justify-start'}>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={1}>
+                <Card title={t('home.ticketing')}>
+                  <div className={'flex justify-start'}>
                   <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>
                     {dataValue.counts.totalOrders.toLocaleString()}
                   </span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={1}>
-              <Card title={t('home.segment')}>
-                <div className={'flex justify-start'}>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={1}>
+                <Card title={t('home.segment')}>
+                  <div className={'flex justify-start'}>
                   <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>{
                     dataValue.counts.totalSegments.toLocaleString()
                   }</span>
-                </div>
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={
-                pathname === '/'
-                  ? t('home.todayTotalTurnover')
-                  : t('home.totalTurnover')
-              } extra={
-                pathname === '/' ?
-                <DatePicker value={localTime as Date} changeDate={changeLocalTime} selectionModeValue={'single'} />:
-                <DatePicker value={localTime as[Date, Date]} changeDate={changeLocalTime} selectionModeValue={'range'} />
-              }>
-                <Charts ref={pathname === '/'
-                  ? hourChartsRef
-                  : dateChartsRef} />
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={t('home.agent')}>
-                <Charts ref={agentChartsRef} />
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={t('home.airline')}>
-                <Charts ref={airlineChartsRef} />
-              </Card>
-            </Grid.Item>
-            <Grid.Item span={2}>
-              <Card title={t('order.sequence')}>
-                <Radio.Group value={typesModel} onChange={v => setTypesModel(v as 'totalAmount'|'totalSegments')}>
-                  <Space direction='horizontal'>
-                    {
-                      [{label:t('home.salesAmount'),value:'totalAmount'},{label:t('home.flightSegmentsnumber'),value:'totalSegments'}].map(item => (
-                        <Radio value={item.value}  style={{
-                          '--icon-size': '18px',
-                          '--font-size': '14px',
-                          '--gap': '6px',
-                        }}>{item.label}</Radio>
-                      ))
-                    }
-                  </Space>
-                </Radio.Group>
-                <Selector
-                  className={'mt-4'}
-                  options={topArr}
-                  value={[tops]}
-                  style={{
-                    '--padding': '4px 8px',
-                  }}
-                  onChange={v => {
-                    if (v.length) {
-                      setTops(v[0])
-                    }
-                  }}
-                />
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={
+                  pathname === '/'
+                    ? t('home.todayTotalTurnover')
+                    : t('home.totalTurnover')
+                } extra={
+                  pathname === '/' ?
+                    <DatePicker value={localTime as Date} changeDate={changeLocalTime} selectionModeValue={'single'} />:
+                    <DatePicker value={localTime as[Date, Date]} changeDate={changeLocalTime} selectionModeValue={'range'} />
+                }>
+                  <Charts ref={pathname === '/'
+                    ? hourChartsRef
+                    : dateChartsRef} />
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('home.agent')}>
+                  <Charts ref={agentChartsRef} />
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('home.airline')}>
+                  <Charts ref={airlineChartsRef} />
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card title={t('order.sequence')}>
+                  <Radio.Group value={typesModel} onChange={v => setTypesModel(v as 'totalAmount'|'totalSegments')}>
+                    <Space direction='horizontal'>
+                      {
+                        [{label:t('home.salesAmount'),value:'totalAmount'},{label:t('home.flightSegmentsnumber'),value:'totalSegments'}].map(item => (
+                          <Radio value={item.value}  style={{
+                            '--icon-size': '18px',
+                            '--font-size': '14px',
+                            '--gap': '6px',
+                          }}>{item.label}</Radio>
+                        ))
+                      }
+                    </Space>
+                  </Radio.Group>
+                  <Selector
+                    className={'mt-4'}
+                    options={topArr}
+                    value={[tops]}
+                    style={{
+                      '--padding': '4px 8px',
+                    }}
+                    onChange={v => {
+                      if (v.length) {
+                        setTops(v[0])
+                      }
+                    }}
+                  />
 
-                <Charts ref={segmentChartsRef} />
-              </Card>
-            </Grid.Item>
-          </Grid>
+                  <Charts ref={segmentChartsRef} />
+                </Card>
+              </Grid.Item>
+            </Grid>
+          </PullToRefresh>
           :
           <Loading />
       }

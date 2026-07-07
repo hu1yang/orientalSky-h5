@@ -1,4 +1,4 @@
-import {useMatches, useNavigate} from "react-router";
+import {type UIMatch, useMatches, useNavigate} from "react-router";
 
 import {TabBar} from "antd-mobile";
 import {useTranslation} from "react-i18next";
@@ -28,7 +28,7 @@ const tabs = [
 
 export default function TabBarComponent(){
   const {t} = useTranslation()
-  const matches = useMatches()
+  const matches = useMatches() as UIMatch<unknown, {routerType: string}>[]
   const navigate = useNavigate()
   const currentRoute = matches[matches.length - 1]
   const routerType = currentRoute?.handle?.routerType || ''

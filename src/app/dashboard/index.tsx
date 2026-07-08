@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import DatePicker from "@/component/Date/datePicker.tsx"
 import {useTranslation} from "react-i18next";
 
-import {Card, Grid, Loading, PullToRefresh, Radio, Selector, Space, Switch} from "antd-mobile";
+import {Card, Grid, Loading, PullToRefresh, Radio, Segmented, Selector, Space} from "antd-mobile";
 
 import {getDashboardTodayGroup, getDashboardTotalGroup} from "@/utils/request/group.ts";
 import {getCssVar} from "@/utils/public.ts";
@@ -312,12 +312,10 @@ export default function Home(){
               <Grid.Item span={2}>
                 <Card title={t('home.totalTransaction')} extra={
                   pathname !== '/' && (
-                    <Switch uncheckedText={t('common.orderDate')} style={{
-                      '--checked-color': 'var(--warning-color)',
-                      '--adm-color-background': 'var(--success-color)',
-                      '--adm-color-border': 'var(--success-color)',
-                      '--adm-color-weak': '#fff'
-                    }} checkedText={t('common.departureDate')} checked={isTravelDateTime} onChange={setIsTravelDateTime} />
+                    <Segmented block options={[
+                      {label:t('common.orderDate'),value:0},
+                      {label:t('common.departureDate'),value:1},
+                    ]} value={isTravelDateTime ? 1 : 0} onChange={(val) => setIsTravelDateTime(!!val)} />
                   )
                 }>
                   <div className={'flex justify-start'}>

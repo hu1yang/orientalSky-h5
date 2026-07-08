@@ -576,19 +576,19 @@ export default memo(forwardRef(function RCAmount({resetDetailFnc,type}: {
                     <Card>
                       <CardText label={t('order.airlineRefundAmount')} style={'mb-4'} value={
                         <div className={'w-full bg-(--bg) px-[10px] py-[5px] flex items-baseline rounded-(--rounder-radius) min-h-[24px]'}>
-                          <input value={airRefundPirce} onChange={(e) => setAirRefundPirce(e.target?.value)} type="number" className={'w-full outline-0 bg-transparent border-0 text-right mr-2 min-h-[1.5em] leading-1.5 text-[1.3rem]'} />
+                          <input value={airRefundPirce} onChange={(e) => setAirRefundPirce(e.target?.value)} type="number" className={'w-0 flex-1 outline-0 bg-transparent border-0 text-right mr-2 min-h-[1.5em] leading-1.5 text-[1.3rem]'} />
                           <span className={'text-(--text) text-[1rem]'}>{orderDetail?.currency}</span>
                         </div>
                       }/>
                       <CardText label={t('order.ticketingProfit')} style={'mb-4'} value={
                         <div className={'w-full bg-(--bg) px-[10px] py-[5px] flex items-baseline rounded-(--rounder-radius) min-h-[24px]'}>
-                          <input value={ticketingProfit} onChange={(e) => setTicketingProfit(e.target?.value)} type="number" className={'w-full outline-0 bg-transparent border-0 text-right mr-2 min-h-[1.5em] leading-1.5 text-[1.3rem]'} />
+                          <input value={ticketingProfit} onChange={(e) => setTicketingProfit(e.target?.value)} type="number" className={'w-0 flex-1 outline-0 bg-transparent border-0 text-right mr-2 min-h-[1.5em] leading-1.5 text-[1.3rem]'} />
                           <span className={'text-(--text) text-[1rem]'}>USD</span>
                         </div>
                       }/>
                       <CardText label={t('order.serviceFee')} style={'mb-4'} value={
                         <div className={'w-full bg-(--bg) px-[10px] py-[5px] flex items-baseline rounded-(--rounder-radius) min-h-[24px]'}>
-                          <input value={refundFeesAmount} onChange={(e) => setRefundFeesAmount(e.target?.value)} type="number" className={'w-full outline-0 bg-transparent border-0 text-right mr-2 min-h-[1.5em] leading-1.5 text-[1.3rem]'} />
+                          <input value={refundFeesAmount} onChange={(e) => setRefundFeesAmount(e.target?.value)} type="number" className={'w-0 flex-1 outline-0 bg-transparent border-0 text-right mr-2 min-h-[1.5em] leading-1.5 text-[1.3rem]'} />
                           <span className={'text-(--text) text-[1rem]'}>USD</span>
                         </div>
                       }/>

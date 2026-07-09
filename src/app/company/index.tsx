@@ -149,7 +149,7 @@ export default function Company() {
                   <Space justify={'end'} className={'w-full'}>
                     <Button size={'small'} disabled={!branch.authorization} color={'primary'} onClick={() => updateBranch(branch)}>{t('group.updateBranch')}</Button>
                     <Button size={'small'} disabled={!branch.authorization} color={'success'} onClick={() => navigate(`/group/user/${branch.id}`)}>{t('common.routerUserManagement')}</Button>
-                    <Button size={'small'} disabled={!branch.authorization} color={'warning'} onClick={() => navigate(`/group/agent/${branch.id}`)}>{t('common.routerAgency')}</Button>
+                    <Button size={'small'} disabled={!branch.authorization} color={'warning'} onClick={() => navigate(`/group/agents/${branch.id}`)}>{t('common.routerAgency')}</Button>
                   </Space>
                 </Card>
               ))

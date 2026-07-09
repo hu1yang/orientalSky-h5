@@ -4,11 +4,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {removeLogin} from "@/store/modules/tool.ts";
 import type {RootState} from "@/store";
 import {useTranslation} from "react-i18next";
+import Cookie from "js-cookie";
+import {socketService} from "@/utils/socket.ts";
 
 import {Avatar, Button, Dialog, List, Space, Tag} from "antd-mobile";
 import {selectGroupMap} from "@/store/modules/base.ts";
 import {userSignOut} from "@/utils/request/identity.ts";
-import Cookie from "js-cookie";
 
 export default function Setting() {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ export default function Setting() {
         const response = await userSignOut()
         if(response.succeeded){
           Cookie.remove('token')
+          socketService.close()
 
           localStorage.removeItem('identity')
           dispatch(removeLogin())

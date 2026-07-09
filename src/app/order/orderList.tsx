@@ -1,6 +1,9 @@
 import {memo, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import {useSelector} from "react-redux";
+import type {RootState} from "@/store";
+import {selectOrderAll} from "@/store/modules/menu.ts";
+import type { OrderCounts } from "@/store/modules/menu.ts";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs";
 
@@ -57,7 +60,7 @@ import Log from "@/component/default/log.tsx";
 import type {OrderInfo} from "@/types/group.ts";
 import NoData from "@/component/default/noData.tsx";
 import DefaultSelect from "@/component/form/defaultSelect.tsx";
-import type {RootState} from "@/store";
+
 
 
 
@@ -333,7 +336,10 @@ export default function OrderList(){
   const {orderType} = useParams()
   const {t} = useTranslation()
   const agentMap = useSelector(selectAgentMap)
+  const orderTotals = useSelector(selectOrderAll)
+
   const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
+  const {ticketOrder,changeOrder,refundOrder,auxiliaryOrder} = useSelector((state: RootState) => state.menuInfo);
   const agentArr = branchAgents.map(b => b?.agents).flat()
 
   const [hasMore, setHasMore] = useState(false)
@@ -480,6 +486,28 @@ export default function OrderList(){
     }
   },[pathType])
 
+  const typeNumber = useMemo<OrderCounts>(() => {
+    switch (pathType){
+      case 'ticket':
+        return ticketOrder
+      case 'refund':
+        return refundOrder
+      case 'auxiliary':
+        return auxiliaryOrder
+      case 'change':
+        return changeOrder
+      default:
+        return ticketOrder
+    }
+  },[pathType,ticketOrder,refundOrder,auxiliaryOrder,changeOrder])
+
+  const items = [
+    {label:t('common.routerTicketing'),value: 'ticket',number:orderTotals.ticketOrderTotal},
+    {label:t('common.routerRefund'),value: 'refund',number:orderTotals.refundOrderTotal},
+    {label:t('common.routerChange'),value: 'change',number:orderTotals.changeOrderTotal},
+    {label:t('common.routerAuxiliary'),value: 'auxiliary',number:orderTotals.auxiliaryOrderTotal},
+  ]
+
   useEffect(() => {
     const changeData = () => {
       window.scrollTo({
@@ -496,12 +524,15 @@ export default function OrderList(){
   return (
     <section className={'containerMain'}>
       <div className={'w-full mb-2 bg-(--bg) sticky top-(--header-height) left-0 z-9'}>
-        <Segmented block options={[
-          {label: t('common.routerTicketing'), value: 'ticket'},
-          {label: t('common.routerRefund'), value: 'refund'},
-          {label: t('common.routerChange'), value: 'change'},
-          {label: t('common.routerAuxiliary'), value: 'auxiliary'}
-        ]} value={pathType} onChange={changeSegmented}/>
+        <Segmented block options={items.map(item => ({
+          value: item.value,
+          label: (
+            <div>
+              <span>{item.label}</span>
+              <span className={'text-(--success-color)'}>{item.number}</span>
+            </div>
+          )
+        }))} value={pathType} onChange={changeSegmented}/>
         <div className={'flex items-center py-2 px-2 bg-(--bg)'}>
           <SearchBar className={'flex-1'} placeholder={placeholderTips}
                      style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
@@ -568,7 +599,9 @@ export default function OrderList(){
                   <Radio value={''}>{t('common.routerTicketingAll')}</Radio>
                   {
                     Object.entries(statusMap[pathType as keyof typeof statusMap]).map(([key, value]) => (
-                      <Radio key={key} value={key}>{t('common.'+value)}</Radio>
+                      <Radio key={key} value={key}>{t('common.'+value)}{
+                        !!(typeNumber as Record<string, number>)[key] && <Tag round color={'primary'} className={'ml-4'}>{(typeNumber as Record<string, number>)[key]}</Tag>
+                      }</Radio>
                     ))
                   }
                 </Space>

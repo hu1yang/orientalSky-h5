@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-
+import {useParams} from "react-router";
 import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
@@ -56,6 +56,7 @@ const statusArr = ['pending', 'reviewed', 'confirmed', 'rejected', 'cancelled']
 const { Step } = Steps
 export default function FinanceRechargePayment() {
   const {t} = useTranslation()
+  const {paymentId} = useParams()
   const [loading, setLoading] = useState(true)
   const agentMap = useSelector(selectAgentMap)
   const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
@@ -69,7 +70,7 @@ export default function FinanceRechargePayment() {
   const [searchForm] = Form.useForm()
   const [searchFormData, setSearchFormData] = useState<ISearchRechargeForm>({
     transactionId:'',
-    id:'',
+    id:paymentId || '',
     bankAccountCode:'',
     status:'',
     unLinked:null,
@@ -103,6 +104,12 @@ export default function FinanceRechargePayment() {
     await getData(nextPage)
   }
 
+  const openSearch = () => {
+    if(paymentId){
+      searchForm.setFieldValue('id',paymentId)
+    }
+    setVisiblePopSearch(true)
+  }
 
   const closeFilter = () => {
     setVisiblePopSearch(false)
@@ -352,6 +359,7 @@ export default function FinanceRechargePayment() {
   }
 
   useEffect(() => {
+
     getExchange()
   }, []);
 
@@ -368,7 +376,7 @@ export default function FinanceRechargePayment() {
         <SearchBar className={'flex-1'} placeholder={t('order.transactionSerialNumber')}
                    style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword}
                    onSearch={searchFilter} onClear={() => searchFilter('')}/>
-        <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+        <Button fill='none' className={'!ml-2'} onClick={openSearch}>
           <FilterOutline fontSize={18} color={'var(--active-color)'} />
         </Button>
       </div>
@@ -591,6 +599,9 @@ export default function FinanceRechargePayment() {
             </Grid.Item>
           </Grid>
         }>
+          <Form.Item label={t('group.rechargeID')} name={'id'}>
+            <Input placeholder={t('group.rechargeID')} />
+          </Form.Item>
           <Form.Item label={t('foundation.agent')} name={'agentId'}>
             <DefaultSelect options={agentArr.map(item => ({
               label: item.code,

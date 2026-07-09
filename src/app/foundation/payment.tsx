@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import type {RootState} from "@/store";
 import {useSelector} from "react-redux";
@@ -36,6 +37,8 @@ import {AddOutline, FilterOutline} from "antd-mobile-icons";
 
 export default function FoundationPayment (){
   const {t} = useTranslation()
+  const {id} = useParams()
+
   const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
   const groupMap = useSelector(selectGroupMap)
 
@@ -48,7 +51,7 @@ export default function FoundationPayment (){
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
   const [searchForm] = Form.useForm()
   const [searchFormData, setSearchFormData] = useState<ISearchBooking>({
-    id: '',
+    id: id || '',
     branchId: '',
     isEnabled: null,
     channelCode: '',
@@ -64,6 +67,13 @@ export default function FoundationPayment (){
   const edSettingRef = useRef<{
     addProp:(val: ExpandsSettingFormGroup) => void
   }|null>(null);
+
+  const openSearch = () => {
+    setVisiblePopSearch(true)
+    if(id){
+      searchForm.setFieldValue('id', id)
+    }
+  }
 
   const openSetting = (id:string,form:ExpandsSetting[]) => {
     if(edSettingRef.current){
@@ -210,7 +220,7 @@ export default function FoundationPayment (){
       <div className={'flex items-center py-2 px-2 z-99 sticky top-(--header-height) left-0 bg-(--bg)'}>
         <SearchBar className={'flex-1'} placeholder={t('order.channelId')}
                    style={{'--background': '#e8e9ed', '--border-radius': '20px'}} value={keyword} onChange={setKeyword} onSearch={searchFilter} onClear={() => searchFilter('')} />
-        <Button fill='none' className={'!ml-2'} onClick={() => setVisiblePopSearch(true)}>
+        <Button fill='none' className={'!ml-2'} onClick={openSearch}>
           <FilterOutline fontSize={18} color={'var(--active-color)'} />
         </Button>
       </div>

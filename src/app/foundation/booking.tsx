@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import type {RootState} from "@/store";
@@ -40,6 +41,8 @@ type IBookingC = IBooking & {
 
 export default function FoundationBooking() {
   const {t} = useTranslation()
+  const {id} = useParams()
+
   const {channel,branchMore,branchAgents} = useSelector((state: RootState) => state.baseInfo);
   const groupMap = useSelector(selectGroupMap)
 
@@ -49,9 +52,9 @@ export default function FoundationBooking() {
   const pageRef = useRef(0)
 
   const [visiblePopSearch, setVisiblePopSearch] = useState(false)
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState(id || '')
   const [searchFormData, setSearchFormData] = useState<ISearchBooking>({
-    id: '',
+    id: id || '',
     branchId: '',
     isEnabled: null,
     channelCode: '',

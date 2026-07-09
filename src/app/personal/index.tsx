@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import Cookie from "js-cookie";
 import {removeLogin} from "@/store/modules/tool.ts";
 import {useDispatch} from "react-redux";
+import {socketService} from "@/utils/socket.ts";
 
 import {
   Button,
@@ -170,6 +171,7 @@ export default function Personal(){
       onConfirm: async () => {
         const response = await userSignOut()
         if(response.succeeded){
+          socketService.close()
           Cookie.remove('token')
 
           localStorage.removeItem('identity')

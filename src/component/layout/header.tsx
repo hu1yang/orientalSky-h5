@@ -1,15 +1,25 @@
 import {useLocation, useNavigate} from "react-router";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "@/store";
+import {setNotifyVisible} from "@/store/modules/menu.ts";
 import {useTranslation} from "react-i18next";
 
-import {Avatar} from "antd-mobile";
+import {Avatar, Button, Space} from "antd-mobile";
+import {BellOutline} from "antd-mobile-icons";
 
 export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
   const {pathname} = location
   const {identity} = useSelector((state: RootState) => state.toolInfo);
+  const {notifyList} = useSelector((state: RootState) => state.menuInfo);
+  const dispatch = useDispatch()
+
+  const openNotify = () => {
+    if(notifyList.length > 0){
+      dispatch(setNotifyVisible(true))
+    }
+  }
 
   const {t} = useTranslation()
 
@@ -28,14 +38,17 @@ export default function Header() {
                 <h2 className={'ml-4 !text-[1.4rem]'}>{identity?.actualName || ''}</h2>
               </div>
           }
-
-          {/*<div className={'flex items-center'}>*/}
-          {/*  <Space>*/}
-          {/*    <Button color='default' fill='none' style={{padding: '4px 5px'}}>*/}
-          {/*      <BellOutline fontSize={18} />*/}
-          {/*    </Button>*/}
-          {/*  </Space>*/}
-          {/*</div>*/}
+          <div className={'flex items-center'}>
+            <Space>
+              {
+                !!notifyList.length && (
+                  <Button color='default' fill='none' style={{padding: '4px 5px'}} onClick={openNotify}>
+                    <BellOutline className={'[--from:#ff9f43] [--to:#ff6b6b] animate-pulse-color'} fontSize={18}/>
+                  </Button>
+                )
+              }
+            </Space>
+          </div>
         </div>
       </div>
     </div>

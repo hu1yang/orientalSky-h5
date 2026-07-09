@@ -130,3 +130,16 @@ p {
   padding-bottom: 0 !important;
 }
 
+@theme {
+  --animate-pulse-color: pulse-color .8s ease-in-out infinite;
+}
+
+@keyframes pulse-color {
+  0%,100% {
+    color: var(--from);
+  }
+
+  50% {
+    color: var(--to);
+  }
+}

@@ -5,11 +5,12 @@ import axios, {
     type InternalAxiosRequestConfig
 } from 'axios';
 import Cookie from 'js-cookie'
+import {router} from "@/router.tsx";
+import {socketService} from "@/utils/socket.ts";
 import {normalizeParams} from "@/utils/public.ts";
 import {Toast} from "antd-mobile";
 import {store} from "@/store";
 import {removeLogin} from "@/store/modules/tool.ts";
-import {router} from "@/router.tsx";
 
 
 
@@ -106,6 +107,7 @@ instance.interceptors.response.use(
                 case 401:
                     Cookie.remove('token')
                     store.dispatch(removeLogin())
+                    socketService.close()
                     Toast.show({
                         icon: 'fail',
                         content: '401',

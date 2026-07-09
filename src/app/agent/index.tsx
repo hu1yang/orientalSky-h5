@@ -38,11 +38,11 @@ export default function Index() {
 
 
   const [loading, setLoading] = useState(true)
-  const {id} = useParams()
+  const {id,agentId} = useParams()
 
   const [searchForm, setSearchForm] = useState<AgentsSearchForm>({
     branchId: id||'',
-    agentId: '',
+    agentId: agentId||'',
     code:'',
     country:'',
     groupCode:'',

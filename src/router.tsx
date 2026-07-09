@@ -119,7 +119,14 @@ export const router = createBrowserRouter([
             }
           },
           {
-            path:'agent/:id',
+            path:'agents/:id',
+            element: <AgentLoad/>,
+            handle:{
+              title: 'common.routerAgency'
+            }
+          },
+          {
+            path:'agent/:agentId',
             element: <AgentLoad/>,
             handle:{
               title: 'common.routerAgency'
@@ -131,7 +138,7 @@ export const router = createBrowserRouter([
         path: 'finance/',
         children:[
           {
-            path: 'rechargePayment',
+            path: 'rechargePayment/:paymentId?',
             element: <AgentRechargePaymentLoad/>,
             handle: {
               title: 'common.routerRechargePaymentRecord'
@@ -176,14 +183,14 @@ export const router = createBrowserRouter([
         path: 'foundation/',
         children: [
           {
-            path:'booking',
+            path:'booking/:id?',
             element: <FoundationBookingLoad />,
             handle: {
               title: 'common.routerBookingAccountConfiguration'
             }
           },
           {
-            path:'payment',
+            path:'payment/:id?',
             element: <FoundationPaymentLoad />,
             handle: {
               title: 'common.routerPaymentAccountConfiguration'

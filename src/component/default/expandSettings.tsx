@@ -89,12 +89,12 @@ export default forwardRef(function ExpandSettingsForm({axiosFnc,getData}:{
                 <Form.Item label={t('base.name')} name={[index, 'name']} rules={[
                   { required: true, message: t('base.name') },
                 ]}>
-                  <Input />
+                  <Input placeholder={t('base.name')} />
                 </Form.Item>
                 <Form.Item label={t('base.value')} name={[index, 'value']} rules={[
                   { required: true, message: t('base.value') },
                 ]}>
-                  <Input />
+                  <Input placeholder={t('base.value')} />
                 </Form.Item>
               </>
             ))

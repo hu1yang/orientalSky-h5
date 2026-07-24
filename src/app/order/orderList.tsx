@@ -61,9 +61,6 @@ import type {OrderInfo} from "@/types/group.ts";
 import NoData from "@/component/default/noData.tsx";
 import DefaultSelect from "@/component/form/defaultSelect.tsx";
 
-
-
-
 type StatusMap = {
   ticket: Record<ITicketStatus, string>
   refund: Record<IRefundStatus, string>

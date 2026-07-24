@@ -142,6 +142,7 @@ export default function BaseWaypoints() {
   }
 
   const resetData = async () => {
+    pageRef.current = 0
     getData(0,true)
   }
 

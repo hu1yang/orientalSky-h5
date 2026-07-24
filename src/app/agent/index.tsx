@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback, useRef} from "react";
 import {useNavigate, useParams} from "react-router";
 
 import {useTranslation} from "react-i18next";
@@ -15,6 +15,8 @@ import {
   Space,
   Tag
 } from "antd-mobile";
+import {AutoSizer, CellMeasurer, CellMeasurerCache, List, type ListRowRenderer, WindowScroller} from "react-virtualized"
+import "react-virtualized/styles.css"
 
 import CardText from "@/component/card/cardText.tsx";
 
@@ -72,7 +74,7 @@ export default function Index() {
     }))
   }
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     // setLoading(true)
     try {
       const response = await getAgentsCount(searchForm)
@@ -88,14 +90,84 @@ export default function Index() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchForm, agentMap])
+
+  const cacheRef = useRef(new CellMeasurerCache({
+    fixedWidth: true,
+    defaultHeight: 400,
+  }))
 
   useEffect(() => {
-    const initData = () => {
-      getData()
-    }
-    initData()
-  }, [searchForm]);
+    getData()
+  }, [getData]);
+
+  const rowRenderer: ListRowRenderer = ({index, key, parent, style,}) => {
+    const item = agents[index]
+    return (
+      <CellMeasurer
+        key={key}
+        cache={cacheRef.current}
+        parent={parent}
+        rowIndex={index}
+        columnIndex={0}
+      >
+        <div style={style}>
+          <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.code}</span>}
+                extra={<Tag round
+                            color={item.isLocked ? 'danger' : 'success'}>{item.isLocked?t('group.locking'):t('foundation.normal')}</Tag>}
+                key={item.id}>
+            <div className={'text-left'}>
+              <p className={'line-clamp-1 font-normal text-[1.2rem] !mb-2 text-(--primary-color)'}>{item.branchCode}</p>
+              <div>
+                <CardText label={t('group.balance')} value={<><em className={'text-[1.8rem]'}>$</em>
+                  {item.balance}</>} valueStyle={'text-[1.5rem] !text-[#67c23a]'} />
+                <CardText label={t('group.agencyCode')} value={item.code} valueStyle={'!text-(--active-color) !text-[1.2rem]'} />
+                <CardText label={t('group.agencyAddress')} value={item.localAddress} valueStyle={'line-clamp-1'} style={'items-start'} />
+                <CardText label={t('common.routerChannelList')} value={
+                  <Space wrap style={{ '--gap': '4px' }}>
+                    {
+                      item.channelCodes?.map(channel => <Tag color='#2db7f5' key={channel}>{channel}</Tag>)
+                    }
+                  </Space>
+                } style={'items-start'} />
+                <div className={'flex'}>
+                  <label className={'text-[1rem] w-30 inline-block'}>{t('home.proportion')}</label>
+                  <div className={'flex-1 flex flex-col'}>
+                          <span className={'text-amber-500'}>
+                            <em className={'w-30 inline-block'}>{t('base.scaleLimited')}:</em>
+                            {item.scale?.scaleLimited || 0}</span>
+                    <span className={'text-amber-500'}>
+                            <em className={'w-30 inline-block'}>{t('order.queryLimited')}:</em>
+                      {item.scale?.queryLimited || 0}</span>
+                    <span className={'text-red-500'}>
+                            <em className={'w-30 inline-block'}>{t('base.totalQueryTimes')}:</em>
+                      {item.scale?.totalQueryTimes || 0}</span>
+                    <span className={'text-amber-500'}>
+                            <em className={'w-30 inline-block'}>{t('base.totalAddtoTimes')}:</em>
+                      {item.scale?.totalAddtoTimes || 0}</span>
+                    <span className={'text-red-500'}>
+                            <em className={'w-30 inline-block'}>{t('base.availableCounts')}:</em>
+                      {item.scale?.availableCounts || 0}</span>
+                    <span className={'text-amber-500'}>
+                            <em className={'w-30 inline-block'}>{t('base.limitedDayLength')}:</em>
+                      {item.scale?.limitedDayLength || 0}D</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Divider />
+            <div className={'flex justify-end'}>
+              <Space justify={'end'}>
+                <Button shape='rounded' size={'small'} onClick={() => resetHistory(item.id)}>{t('quote.resetVerificationHistory')}</Button>
+                <Button shape='rounded' color={'warning'} size={'small'} onClick={() => navigate(`/group/agentUser/${item.id}`)}>{t('common.routerUserList')}</Button>
+                <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/group/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
+              </Space>
+            </div>
+          </Card>
+        </div>
+      </CellMeasurer>
+    )
+  }
 
   return (
       <section className={'containerMain'}>
@@ -109,60 +181,29 @@ export default function Index() {
             !loading ?
               <PullToRefresh onRefresh={getData}>
                 {
-                  agents.length?agents.map((item) => (
-                    <Card className={'mb-2'} title={<span className={'font-semibold line-clamp-1 text-[1.2rem] text-left break-all'}>{item.code}</span>}
-                          extra={<Tag round
-                                      color={item.isLocked ? 'danger' : 'success'}>{item.isLocked?t('group.locking'):t('foundation.normal')}</Tag>}
-                          key={item.id}>
-                      <div className={'text-left'}>
-                        <p className={'line-clamp-1 font-normal text-[1.2rem] !mb-2 text-(--primary-color)'}>{item.branchCode}</p>
-                        <div>
-                          <CardText label={t('group.balance')} value={<><em className={'text-[1.8rem]'}>$</em>
-                            {item.balance}</>} valueStyle={'text-[1.5rem] !text-[#67c23a]'} />
-                          <CardText label={t('group.agencyCode')} value={item.code} valueStyle={'!text-(--active-color) !text-[1.2rem]'} />
-                          <CardText label={t('group.agencyAddress')} value={item.localAddress} valueStyle={'line-clamp-1'} style={'items-start'} />
-                          <CardText label={t('common.routerChannelList')} value={
-                            <Space wrap style={{ '--gap': '4px' }}>
-                              {
-                                item.channelCodes?.map(channel => <Tag color='#2db7f5' key={channel}>{channel}</Tag>)
-                              }
-                            </Space>
-                          } style={'items-start'} />
-                          <div className={'flex'}>
-                            <label className={'text-[1rem] w-30 inline-block'}>{t('home.proportion')}</label>
-                            <div className={'flex-1 flex flex-col'}>
-                          <span className={'text-amber-500'}>
-                            <em className={'w-30 inline-block'}>{t('base.scaleLimited')}:</em>
-                            {item.scale?.scaleLimited || 0}</span>
-                              <span className={'text-amber-500'}>
-                            <em className={'w-30 inline-block'}>{t('order.queryLimited')}:</em>
-                                {item.scale?.queryLimited || 0}</span>
-                              <span className={'text-red-500'}>
-                            <em className={'w-30 inline-block'}>{t('base.totalQueryTimes')}:</em>
-                                {item.scale?.totalQueryTimes || 0}</span>
-                              <span className={'text-amber-500'}>
-                            <em className={'w-30 inline-block'}>{t('base.totalAddtoTimes')}:</em>
-                                {item.scale?.totalAddtoTimes || 0}</span>
-                              <span className={'text-red-500'}>
-                            <em className={'w-30 inline-block'}>{t('base.availableCounts')}:</em>
-                                {item.scale?.availableCounts || 0}</span>
-                              <span className={'text-amber-500'}>
-                            <em className={'w-30 inline-block'}>{t('base.limitedDayLength')}:</em>
-                                {item.scale?.limitedDayLength || 0}D</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <Divider />
-                      <div className={'flex justify-end'}>
-                        <Space justify={'end'}>
-                          <Button shape='rounded' size={'small'} onClick={() => resetHistory(item.id)}>{t('quote.resetVerificationHistory')}</Button>
-                          <Button shape='rounded' color={'warning'} size={'small'} onClick={() => navigate(`/group/agentUser/${item.id}`)}>{t('common.routerUserList')}</Button>
-                          <Button shape='rounded' color='primary' size={'small'} onClick={() => navigate(`/group/agentDetail/${item.id}`)}>{t('foundation.detail')}</Button>
-                        </Space>
-                      </div>
-                    </Card>
-                  )) : <NoData />
+                  agents.length ?
+                    <WindowScroller>
+                      {({ height, isScrolling, scrollTop, onChildScroll }) => (
+                        <AutoSizer disableHeight>
+                          {({ width }) => (
+                              <List
+                                autoHeight
+                                height={height}
+                                width={width}
+                                scrollTop={scrollTop}
+                                isScrolling={isScrolling}
+                                onScroll={onChildScroll}
+                                rowCount={agents.length}
+                                deferredMeasurementCache={cacheRef.current}
+                                rowHeight={cacheRef.current.rowHeight}
+                                overscanRowCount={8}
+                                rowRenderer={rowRenderer}/>
+                          )}
+                        </AutoSizer>
+                      )}
+                    </WindowScroller>
+                    :
+                    <NoData />
                 }
               </PullToRefresh>
               :

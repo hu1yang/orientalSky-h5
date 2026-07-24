@@ -30,6 +30,7 @@
     "react-i18next": "^17.0.6",
     "react-redux": "^9.2.0",
     "react-router": "^7.14.2",
+    "react-virtualized": "^9.22.6",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/react-virtualized": "^9.22.3",
     "@vitejs/plugin-react": "^6.0.1",
     "cross-env": "^10.1.0",
     "eslint": "^10.2.1",

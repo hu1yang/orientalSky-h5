@@ -98,6 +98,7 @@ export default function BaseNation(){
   }
 
   const resetData = async () => {
+    pageRef.current = 0
     getData(0,true)
   }
 

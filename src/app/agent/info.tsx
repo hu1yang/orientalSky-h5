@@ -409,7 +409,7 @@ export default function AgentInfo() {
               { required: true, message: t('base.contactName') },
               { pattern: /^[a-zA-Z]+\/[a-zA-Z]+$/, message: 'Sure name / Given name' },
             ]}>
-              <Input />
+              <Input placeholder={t('order.contact')} />
             </Form.Item>
             <Form.Item label={t('base.phoneNumber')} name={'phoneNumber'} rules={[
               { required: true, message: t('base.phoneNumber') },
@@ -447,22 +447,22 @@ export default function AgentInfo() {
               </DatePicker>
             </Form.Item>
             <Form.Item label={t('base.voidedFeesAmount')} name={'voidedFeesAmount'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.voidedFeesAmount')} />
             </Form.Item>
             <Form.Item label={t('base.appendFeesAmount')} name={'appendFeesAmount'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.appendFeesAmount')} />
             </Form.Item>
             <Form.Item label={t('base.refundFeesAmount')} name={'refundFeesAmount'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.refundFeesAmount')} />
             </Form.Item>
             <Form.Item label={t('base.changeFeesAmount')} name={'changeFeesAmount'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.voidedFeesAmount')} />
             </Form.Item>
             <Form.Item label={t('base.orderRangeAmount')} name={'orderRangeAmount'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.orderRangeAmount')} />
             </Form.Item>
             <Form.Item label={t('base.payedRangeAmount')} name={'payedRangeAmount'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.payedRangeAmount')} />
             </Form.Item>
           </>
         )
@@ -481,13 +481,13 @@ export default function AgentInfo() {
               </DatePicker>
             </Form.Item>
             <Form.Item label={t('base.unpaidForwardDaysLength')} name={'scaleLimitedDaysLength'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.unpaidForwardDaysLength')} />
             </Form.Item>
             <Form.Item label={t('base.scaleLimited')} name={'scaleLimited'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.scaleLimited')} />
             </Form.Item>
             <Form.Item label={t('base.queryOrQuoteScaleLimited')} name={'scaleLimitedFineByOnce'}>
-              <Input type={'number'} />
+              <Input type={'number'} placeholder={t('base.queryOrQuoteScaleLimited')} />
             </Form.Item>
           </>
         )
@@ -516,12 +516,12 @@ export default function AgentInfo() {
               { required: true, message: t('base.requestUrl') },
               { pattern: /^https?:\/\/.+/, message: 'http/https' },
             ]}>
-              <Input />
+              <Input placeholder={t('base.requestUrl')} />
             </Form.Item>
             <Form.Item label={t('base.timeoutSeconds')} name={'timeoutSeconds'} rules={[
               { required: true, message: t('base.timeoutSeconds') },
             ]}>
-              <Input />
+              <Input placeholder={t('base.timeoutSeconds')} />
             </Form.Item>
           </>
         )
@@ -533,7 +533,7 @@ export default function AgentInfo() {
               { required: true, message: t('group.remoteAddress') },
               { pattern: /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/, message: t('group.sureIpAddress') },
             ]}>
-              <Input />
+              <Input placeholder={t('group.remoteAddress')} />
             </Form.Item>
           </>
         )

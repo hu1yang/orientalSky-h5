@@ -21,6 +21,8 @@ import {
 } from "@/utils/request/group.ts";
 import {AddOutline, FilterOutline} from "antd-mobile-icons";
 import {result} from "@/utils/public.ts";
+import NoData from "@/component/default/noData.tsx";
+import { List as VirtualizedList, AutoSizer, type ListRowRenderer, WindowScroller } from "react-virtualized";
 
 export default function BaseAirport() {
   const {t,i18n} = useTranslation()
@@ -125,6 +127,7 @@ export default function BaseAirport() {
   }
 
   const resetData = async () => {
+    pageRef.current = 0
     getData(0,true)
   }
 
@@ -150,6 +153,56 @@ export default function BaseAirport() {
     }
   }
 
+  const rowRenderer: ListRowRenderer = ({index, key, style}) => {
+    const item = listValue[index]
+    return (
+      <div key={key} style={style}>
+        <SwipeAction
+          ref={swiperRef}
+          closeOnTouchOutside
+          closeOnAction={false}
+          rightActions={
+            [
+              {
+                key: 'edit',
+                text: t('common.edit'),
+                color: 'warning',
+                onClick: () => updateAirport(item)
+              },
+              {
+                key: 'delete',
+                text: t('common.delete'),
+                color: 'danger',
+                onClick: async () => {
+                  try {
+                    const flag = await Dialog.confirm({
+                      content: t('common.delTips'),
+                    })
+                    if(flag){
+                      const response = await deleteGlobalAirportGroup(item.id as string)
+                      if(response.succeed){
+                        setListValue(prevState =>
+                          prevState.filter(a => a.id !== item.id)
+                        )
+                      }
+                    }
+                  } finally {
+                    swiperRef.current?.close()
+                  }
+                }
+              }
+            ]
+          }
+        >
+          <List.Item title={`${item[('country'+lagname) as keyof IGetGlobalAirports]}(${item.countryCode})`} description={`${item[('city'+lagname) as keyof IGetGlobalAirports]}(${item.cityCode})`} extra={`${t('airport.timeZone')}${item.timeZone}`}>
+            {item.airportCode}-{item[('airport'+lagname) as keyof IGetGlobalAirports]}
+          </List.Item>
+        </SwipeAction>
+      </div>
+    )
+  }
+
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -169,66 +222,35 @@ export default function BaseAirport() {
         </Button>
       </div>
       <div className={'p-2'}>
-        {
-          !loading ?
-            <>
-              <PullToRefresh onRefresh={resetData}>
-                <List mode={'card'} style={{margin: 0}}>
-                  {
-                    listValue.map((item: IGetGlobalAirports) => (
-                      <SwipeAction
-                        key={item.id}
-                        ref={swiperRef}
-                        closeOnTouchOutside
-                        closeOnAction={false}
-                        rightActions={
-                          [
-                            {
-                              key: 'edit',
-                              text: t('common.edit'),
-                              color: 'warning',
-                              onClick: () => updateAirport(item)
-                            },
-                            {
-                              key: 'delete',
-                              text: t('common.delete'),
-                              color: 'danger',
-                              onClick: async () => {
-                                try {
-                                  const flag = await Dialog.confirm({
-                                    content: t('common.delTips'),
-                                  })
-                                  if(flag){
-                                    const response = await deleteGlobalAirportGroup(item.id as string)
-                                    if(response.succeed){
-                                      setListValue(prevState =>
-                                        prevState.filter(a => a.id !== item.id)
-                                      )
-                                    }
-                                  }
-                                } finally {
-                                  swiperRef.current?.close()
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      >
-                        <List.Item key={item.id} title={`${item[('country'+lagname) as keyof IGetGlobalAirports]}(${item.countryCode})`} description={`${item[('city'+lagname) as keyof IGetGlobalAirports]}(${item.cityCode})`} extra={`${t('airport.timeZone')}${item.timeZone}`}>{item.airportCode}-{item[('airport'+lagname) as keyof IGetGlobalAirports]}</List.Item>
-                      </SwipeAction>
-                    ))
-                  }
-                </List>
-              </PullToRefresh>
-              {
-                !!listValue.length && (
-                  <InfiniteScroll loadMore={loadMore} hasMore={hasMore}/>
+        <PullToRefresh onRefresh={resetData}>
+          <WindowScroller>
+            {({height, isScrolling, scrollTop}) => (
+              loading ? <Loading /> :
+                (
+                  listValue.length ?
+                    <List mode={'card'} style={{margin: 0}}>
+                      <AutoSizer disableHeight>
+                        {({width}) => (
+                          <VirtualizedList
+                            autoHeight
+                            height={height}
+                            width={width}
+                            scrollTop={scrollTop}
+                            isScrolling={isScrolling}
+                            rowCount={listValue.length}
+                            rowHeight={90}
+                            overscanRowCount={10}
+                            rowRenderer={rowRenderer}
+                          />
+                        )}
+                      </AutoSizer>
+                    </List>
+                    : <NoData />
                 )
-              }
-            </>
-            :
-            <Loading />
-        }
+              )}
+          </WindowScroller>
+          <InfiniteScroll loadMore={loadMore} hasMore={hasMore}/>
+        </PullToRefresh>
       </div>
       <Popup visible={visiblePopSearch} position='right' destroyOnClose onMaskClick={closeFilter}
              bodyStyle={{width: '80vw', backgroundColor: 'var(--bg)'}}>
@@ -249,12 +271,12 @@ export default function BaseAirport() {
           <Form.Item label={t('airport.countryCode')} name={'countryCode'} rules={[
             { min: 2, max: 2, message: t('common.twoTips') },
           ]}>
-            <Input min={2} max={2} />
+            <Input min={2} max={2} placeholder={t('airport.countryCode')} />
           </Form.Item>
           <Form.Item label={t('airport.cityCode')} name={'cityCode'} rules={[
             { min: 3, max: 3, message: t('common.threeTips') },
           ]}>
-            <Input min={3} max={3} />
+            <Input min={3} max={3} placeholder={t('airport.cityCode')} />
           </Form.Item>
         </Form>
       </Popup>
@@ -271,37 +293,37 @@ export default function BaseAirport() {
                 { required: true, message: t('airport.countryCode') },
                 { min: 2, max: 2, message: t('common.twoTips') },
               ]}>
-                <Input min={2} max={2} />
+                <Input min={2} max={2} placeholder={t('airport.countryCode')} />
               </Form.Item>
               <Form.Item label={`${t('airport.countryName')} EN`} name={'countryEName'}>
-                <Input />
+                <Input placeholder={`${t('airport.countryName')} EN`} />
               </Form.Item>
               <Form.Item label={`${t('airport.countryName')} CN`} name={'countryCName'}>
-                <Input />
+                <Input placeholder={`${t('airport.countryName')} CN`} />
               </Form.Item>
               <Form.Item label={`${t('airport.cityName')} EN`} name={'cityEName'}>
-                <Input />
+                <Input placeholder={`${t('airport.countryName')} CN`} />
               </Form.Item>
               <Form.Item label={`${t('airport.cityName')} CN`} name={'cityCName'}>
-                <Input />
+                <Input placeholder={`${t('airport.cityName')} CN`} />
               </Form.Item>
               <Form.Item label={t('airport.cityCode')} name={'cityCode'} rules={[
                 { required: true, message: t('airport.cityCode') },
                 { min: 3, max: 3, message: t('common.threeTips') },
               ]}>
-                <Input min={3} max={3} />
+                <Input min={3} max={3} placeholder={t('airport.cityCode')} />
               </Form.Item>
               <Form.Item label={`${t('airport.airportName')} EN`} name={'airportEName'}>
-                <Input />
+                <Input placeholder={`${t('airport.airportName')} EN`} />
               </Form.Item>
               <Form.Item label={`${t('airport.airportName')} CN`} name={'airportCName'}>
-                <Input />
+                <Input placeholder={`${t('airport.airportName')} CN`} />
               </Form.Item>
               <Form.Item label={t('airport.airportCode')} name={'airportCode'} rules={[
                 { required: true, message: t('airport.cityCode') },
                 { min: 3, max: 3, message: t('common.threeTips') },
               ]}>
-                <Input min={3} max={3} />
+                <Input min={3} max={3} placeholder={t('airport.airportCode')} />
               </Form.Item>
               <Form.Item label={t('airport.timeZone')} name={'timeZone'} rules={[
                 { required: true, message: t('airport.timeZone') },
@@ -317,7 +339,7 @@ export default function BaseAirport() {
                   }
                 }
               ]}>
-                <Input type={'number'} />
+                <Input type={'number'} placeholder={t('airport.timeZone')} />
               </Form.Item>
             </Form>
           </div>

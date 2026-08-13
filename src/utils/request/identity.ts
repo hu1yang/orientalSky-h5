@@ -96,11 +96,14 @@ export const updatePassword = ({userId,newPassword}:{userId:string;newPassword:s
 // 用户更新角色
 export const updateUserRoles = ({userId,newRoleIds}:{userId:string,newRoleIds:string[]}) => axios.patch<CommonResponse,{userId:string;newRoleIds:string[];}>('/identityApi/GroupManager/UpdateUserRoles',{userId,newRoleIds})
 
-// 用户更新公司
-export const updateUserBranchs = ({userId,newBranchIds}:{userId:string,newBranchIds:string[]}) => axios.patch<CommonResponse,{userId:string;newBranchIds:string[];}>('/identityApi/GroupManager/UpdateUserBranchs',{userId,newBranchIds})
+// 追加公司
+export const appendUserBranch = ({userId,newBranchId,newDepartmentIds}:{userId:string,newBranchId:string,newDepartmentIds:string[]}) => axios.patch<CommonResponse,{userId:string,newBranchId:string,newDepartmentIds:string[]}>(`/identityApi/GroupManager/AppendUserBranch`,{userId,newBranchId,newDepartmentIds})
+
+// 删除公司
+export const deleteUserBranch = ({userId,oldBranchId}:{userId:string,oldBranchId:string}) => axios.patch<CommonResponse,{userId:string,oldBranchId:string}>(`/identityApi/GroupManager/DeleteUserBranch`,{userId,oldBranchId})
 
 // 用户更新部门
-export const updateUserDepartments = ({userId,newDepartmentIds}:{userId:string,newDepartmentIds:string[]}) => axios.patch<CommonResponse,{userId:string;newDepartmentIds:string[];}>('/identityApi/GroupManager/UpdateUserDepartments',{userId,newDepartmentIds})
+export const updateUserDepartments = ({userId,branchId,departmentIds}:{userId:string,branchId:string,departmentIds:string[]}) => axios.patch<CommonResponse,{userId:string,branchId:string,departmentIds:string[]}>('/identityApi/GroupManager/UpdateUserDepartments',{userId,branchId,departmentIds})
 
 // 用户登录信息
 export const getLoginInfos = (userId:string,pageNumber:number,pageSize:number) => axios.get<UserLogInfo[]>(`/identityApi/GroupAccount/GetLoginInfos/${userId}/${pageNumber}/${pageSize}`)

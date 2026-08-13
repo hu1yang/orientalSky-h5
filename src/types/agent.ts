@@ -39,7 +39,7 @@ export type TopupSettings = Pick<FeessSetting, 'id'|'agentSettingId'|'isEnabled'
     minServiceFees: number|string;
     maxServiceFees: number|string;
     serviceFeeRate: number|string;
-    paymentCodes: string[]
+    paymentCode: string
     currencyCodes: string[]
 }
 

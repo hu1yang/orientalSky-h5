@@ -40,6 +40,7 @@ export const groupZh = {
         newPassword: '新密码',
         updateRole: '更新角色',
         updateCompany: '更新公司',
+        removeCompany: '移除公司',
         updateDepartment: '更新部门',
 
         realName: '真实姓名',
@@ -217,7 +218,7 @@ export const groupEn = {
         updatedTime: 'Updated Time',
         createdTime: 'Created Time',
         user: 'User',
-        userAdd: 'Add New User',
+        userAdd: 'Create user',
         addDepartment: 'Add Department',
 
         userId: 'User ID',
@@ -229,6 +230,7 @@ export const groupEn = {
         newPassword: 'New Password',
         updateRole: 'Update Role',
         updateCompany: 'Update Company',
+        removeCompany: 'Remove Company',
         updateDepartment: 'Update Department',
 
         realName: 'Real Name',
@@ -413,6 +415,7 @@ export const groupRu = {
         newPassword: 'Новый пароль',
         updateRole: 'Обновить роль',
         updateCompany: 'Обновить компанию',
+        removeCompany: 'Удалить компанию',
         updateDepartment: 'Обновить отдел',
 
         realName: 'Настоящее имя',

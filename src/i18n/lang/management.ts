@@ -203,6 +203,8 @@ export const managementZh = {
         AddAgentPaymentAsync:'添加余额变动申请',
         UpdateAgentPaymentAsync:'更新余额变动申请',
         CancelAgentPaymentAsync:'取消余额变动申请',
+        AppendUserBranchAsync:'隶属公司追加',
+        DeleteUserBranchAsync:'隶属公司删除',
     }
 }
 
@@ -411,6 +413,8 @@ export const managementEn = {
         AddAgentPaymentAsync:'Add balance change application',
         UpdateAgentPaymentAsync:'Update balance change application',
         CancelAgentPaymentAsync:'Cancel balance change application',
+        AppendUserBranchAsync:'Increase the company',
+        DeleteUserBranchAsync:'Delete company',
     }
 }
 
@@ -648,5 +652,7 @@ export const managementRu = {
         AddAgentPaymentAsync:'Добавить заявку на изменение баланса',
         UpdateAgentPaymentAsync:'Обновление заявки на изменение баланса',
         CancelAgentPaymentAsync:'Отменить заявку на изменение баланса',
+        AppendUserBranchAsync:'увеличение компании',
+        DeleteUserBranchAsync:'Удалить компанию',
     }
 }

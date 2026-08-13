@@ -210,7 +210,7 @@ export default function AgentInfo() {
               minServiceFees: detail.minServiceFees,
               maxServiceFees: detail.maxServiceFees,
               serviceFeeRate: detail.serviceFeeRate,
-              paymentCodes: detail.paymentCodes,
+              paymentCode: detail.paymentCode,
               currencyCodes: detail.currencyCodes,
             })
           }else{
@@ -566,11 +566,11 @@ export default function AgentInfo() {
             <Form.Item label={t('base.serviceFeeRate')} name={'serviceFeeRate'}>
               <Input type={'number'} />
             </Form.Item>
-            <Form.Item label={t('base.paymentCodes')} name={'paymentCodes'}>
+            <Form.Item label={t('base.paymentCodes')} name={'paymentCode'}>
               <DefaultSelect options={channelPayed.map(item => ({
                 label: item.paymentName,
-                value: item.id,
-              }))} multiple={true} placeholder={t('base.paymentCodes')} />
+                value: item.paymentCode,
+              }))} multiple={false} placeholder={t('base.paymentCodes')} />
             </Form.Item>
             <Form.Item label={t('foundation.currency')} name={'currencyCodes'}>
               <DefaultSelect options={exchangeRates.map(item => ({
@@ -718,10 +718,10 @@ export default function AgentInfo() {
                           <CardText label={t('base.serviceFeeRate')} value={topupSetting.serviceFeeRate} />
                         </Grid.Item>
                         <Grid.Item>
-                          <CardText label={t('base.paymentCodes')} value={topupSetting.paymentCodes.join(',')} valueStyle={'break-all'} style={'items-start'} />
+                          <CardText label={t('base.paymentCodes')} value={topupSetting.paymentCode} valueStyle={'break-all text-(--price-color)!'} style={'items-start'} />
                         </Grid.Item>
                         <Grid.Item>
-                          <CardText label={t('foundation.currency')} value={topupSetting.currencyCodes.join(',')} labelStyle={'w-[50px]'} valueStyle={'break-all'} style={'items-start'} />
+                          <CardText label={t('foundation.currency')} value={topupSetting.currencyCodes?.join(',')} labelStyle={'w-[50px]'} valueStyle={'break-all'} style={'items-start'} />
                         </Grid.Item>
                       </Grid>
                     ))

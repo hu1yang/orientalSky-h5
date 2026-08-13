@@ -21,13 +21,14 @@ import {
   Toast
 } from "antd-mobile";
 import {
+  appendUserBranch,
   createUser,
-  deleteUser,
+  deleteUser, deleteUserBranch,
   getAuthorizableRouting, getAuthorizedRouting,
   getDepartments, getLoginInfos,
   getPermissionRoles,
   getUserEntitiesGroup, updatePassword,
-  updateUserBranchs, updateUserDepartments,
+  updateUserDepartments,
   updateUserRoles, updateUserRoutings,
 } from "@/utils/request/identity.ts";
 
@@ -40,7 +41,7 @@ import MobileField from "@/component/form/mobileField.tsx";
 import {AddOutline} from "antd-mobile-icons";
 import type {GroupAssemblyData} from "@/types/agent.ts";
 import type {
-  AssemblyData,
+  AssemblyData, BranchAgents,
   Department, IUserForm,
   Role,
   UserLogInfo,
@@ -50,7 +51,7 @@ import type {
 export default function User() {
   const {branchId} = useParams()
   const {t} = useTranslation()
-  const {branchAgents,branchMore} = useSelector((state: RootState) => state.baseInfo);
+  const {branchAgents} = useSelector((state: RootState) => state.baseInfo);
 
   const [keyword, setKeyword] = useState('')
   const [loading, setLoading] = useState(true)
@@ -66,12 +67,14 @@ export default function User() {
   })
   const [userVisible, setUserVisible] = useState(false)
   const [buttonLoading, setButtonLoading] = useState(false)
-  const [typeForm, setTypeForm] = useState<'role' | 'branch' | 'department' | 'permissions' | 'password'>('role')
+  const [typeForm, setTypeForm] = useState<'role' | 'branch' | 'department' | 'permissions' | 'password' | 'removeBranch'>('role')
   const [roleValue, setRoleValue] = useState<Role[]>([])
   const [departmentValue, setDepartmentValue] = useState<Department[]>([])
   const [routesValue, setRoutesValue] = useState<(AssemblyData|GroupAssemblyData)[]>([])
   const [searchText, setSearchText] = useState('')
   const [userForm] = Form.useForm()
+
+  const [companyDisabled, setCompanyDisabled] = useState<BranchAgents[]>([])
 
   const logRef = useRef<{
     showLog: (logList: UserLogInfo[]) => void
@@ -161,12 +164,6 @@ export default function User() {
     const response = await getDepartments(id)
     if(response.length){
       setDepartmentValue(response)
-    }else{
-      Toast.show({
-        icon: 'fail',
-        content: t('common.noPermissions'),
-      })
-      closeUserVisible()
     }
   }
 
@@ -199,44 +196,36 @@ export default function User() {
           </Form.Item>
         )
       case 'branch':
+      case 'removeBranch':
         return (
-          <Form.Item label={t('group.updateCompany')} name={'newBranchIds'} rules={[
-            {required: true, message: t('group.updateCompany')},
-          ]}>
-            <Selector
-              columns={3}
-              multiple
-              options={branchMore.map(item => ({
-                label: item.code,
-                value: item.id,
-              }))}
-            />
-          </Form.Item>
+          <>
+            <Form.Item label={typeForm === 'branch' ?t('group.updateCompany'):t('group.removeCompany')} name={'newBranchId'} rules={[
+              {required: true, message: typeForm === 'branch' ?t('group.updateCompany'):t('group.removeCompany')},
+            ]}>
+              {
+                companyDisabled.length ?
+                  <Selector
+                    columns={3}
+                    options={companyDisabled.map(item => ({
+                      label: item.branch.code,
+                      value: item.branch.id,
+                    }))}
+                  />
+                  :
+                  'No Data'
+              }
+            </Form.Item>
+          </>
         )
       case 'department':
         return (
           <>
-            {
-              !branchId && (
-                <Form.Item label={t('group.updateCompany')} name={'newBranchIds'} rules={[
-                  {required: true, message: t('group.updateCompany')},
-                ]}>
-                  <Selector
-                    columns={3}
-                    multiple
-                    options={branchMore.map(item => ({
-                      label: item.code,
-                      value: item.id,
-                    }))}
-                  />
-                </Form.Item>
-              )
-            }
-            {
-              !!departmentValue.length && (
-                <Form.Item label={t('group.updateDepartment')} name={'newDepartmentIds'} rules={[
-                  {required: true, message: t('group.updateDepartment')},
-                ]}>
+            <Form.Item hidden name={'branchId'} initialValue={branchId} />
+            <Form.Item label={t('group.updateDepartment')} name={'departmentIds'} rules={[
+              {required: true, message: t('group.updateDepartment')},
+            ]}>
+              {
+                departmentValue.length ?
                   <Selector
                     columns={3}
                     multiple
@@ -245,9 +234,10 @@ export default function User() {
                       value: item.id,
                     }))}
                   />
-                </Form.Item>
-              )
-            }
+                  :
+                  'No Data'
+              }
+            </Form.Item>
           </>
         )
       case 'permissions':
@@ -291,7 +281,6 @@ export default function User() {
       case 'password':
         return (
           <>
-            <h4 className={'text-center my-4'}>{t('group.updatePassword')}</h4>
             <Form.Item label={t('group.newPassword')} name={'newPassword'} rules={[
               {required: true, message: t('group.newPassword')},
               {
@@ -308,8 +297,10 @@ export default function User() {
 
   const finishForm = async (val: {
     userId:string
+    branchId:string
     newRoleIds:string[]
-    newDepartmentIds:string[]
+    departmentIds:string[]
+    newBranchId:string[]
     newBranchIds:string[]
     newPassword:string
     permissions:string[]
@@ -326,10 +317,20 @@ export default function User() {
           response = await updateUserRoles(form)
           break
         case 'branch':
-          response = await updateUserBranchs(form as {userId:string,newBranchIds:string[]})
+          response = await appendUserBranch({
+            userId: form.userId,
+            newBranchId: val.newBranchId.toString(),
+            newDepartmentIds: []
+          })
+          break
+        case 'removeBranch':
+          response = await deleteUserBranch({
+            userId: form.userId,
+            oldBranchId: val.newBranchId.toString()
+          })
           break
         case 'department':
-          response = await updateUserDepartments(form)
+          response = await updateUserDepartments(form as {userId:string,branchId:string,departmentIds:string[]})
           break
         case 'permissions': {
           const formV = routesValue.map(routes => {
@@ -364,7 +365,7 @@ export default function User() {
     }
   }
 
-  const updateUser = (item: UserResponse, type: 'role' | 'branch' | 'department' | 'permissions' | 'password') => {
+  const updateUser = (item: UserResponse, type: 'role' | 'branch' | 'department' | 'permissions' | 'password' | 'removeBranch') => {
     setTypeForm(type)
     userForm.setFieldValue('userId', item.user.id)
     switch (type) {
@@ -375,13 +376,16 @@ export default function User() {
         getRoleValue()
         break
       case 'branch':
-        userForm.setFieldsValue({
-          newBranchIds: item.branchs?.map(a => a.id)
-        })
-        break
+        { const companys = branchAgents.filter(ba => !(item.branchs!.map(a => a.id)).includes(ba.branch.id))
+        setCompanyDisabled(companys)
+        break }
+      case 'removeBranch':
+        { const company = branchAgents.filter(ba => (item.branchs!.map(a => a.id)).includes(ba.branch.id))
+        setCompanyDisabled(company)
+        break }
       case 'department':
         userForm.setFieldsValue({
-          newDepartmentIds: item.departments?.map(a => a.id)
+          departmentIds: item.departments?.map(a => a.id)
         })
         if (branchId) {
           getDepartmentValue(branchId)
@@ -398,12 +402,30 @@ export default function User() {
     setUserVisible(true)
   }
 
+  const updateTitle = useMemo(() => {
+    switch (typeForm){
+      case 'password':
+        return t('group.updatePassword')
+      case 'branch':
+        return t('group.updateCompany')
+      case 'role':
+        return t('group.updateRole')
+      case 'department':
+        return t('group.updateDepartment')
+      case 'removeBranch':
+        return t('group.removeCompany')
+      case 'permissions':
+        return t('group.updatePermissions')
+    }
+  },[typeForm])
+
   const closeUserVisible = () => {
     setUserVisible(false)
     setSearchText('')
     setRoutesValue([])
     setButtonLoading(false)
     setTypeForm('role')
+    setCompanyDisabled([])
     userForm.resetFields()
   }
 
@@ -509,6 +531,11 @@ export default function User() {
                       <Popover.Menu
                         actions={[
                           {key: 'branch', text: t('group.updateCompany'), onClick: () => updateUser(item, 'branch')},
+                          {
+                            key: 'department',
+                            text: t('group.removeCompany'),
+                            onClick: () => updateUser(item, 'removeBranch')
+                          },
                           {key: 'role', text: t('group.updateRole'), onClick: () => updateUser(item, 'role')},
                           {
                             key: 'department',
@@ -540,6 +567,9 @@ export default function User() {
         }
       </div>
       <Popup visible={userVisible} destroyOnClose position='bottom' onMaskClick={closeUserVisible}>
+        <div className={'p-3 my-2 text-center'}>
+          <span className={'text-[1.4rem] mb-20'}>{updateTitle}</span>
+        </div>
         <Form form={userForm} layout='vertical' onFinish={finishForm} footer={
           <Button block type='submit' color='primary' size='middle' loading={buttonLoading}>
             {t('common.submit')}

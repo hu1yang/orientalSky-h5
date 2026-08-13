@@ -558,6 +558,10 @@ export const orderZh = {
 
         rawData: '原始数据',
         newData: '新数据',
+
+
+        dep: '出发地',
+        arr: '目的地',
     }
 }
 
@@ -568,7 +572,7 @@ export const orderEn = {
         departureAirport: 'DEP Airport',
         arrivingAtTheAirport: 'ARR Airport',
         airlineCompany: 'Airlines',
-        flightNumber: 'Flt No.',
+        flightNumber: 'Flight No.',
         searchNamePleace: 'Pax Name',
         salesStartDate: 'Sales Start',
         salesEndDate: 'Sales End',
@@ -690,7 +694,7 @@ export const orderEn = {
         appendix:'Appendix',
         accountCode:'Credentials',
 
-        contact:'Contact Person',
+        contact:'Contact Name',
         contactNumber:'Contact No.',
         mail:'Email',
         scaleSetting:'Agent Query Ratio Settings',
@@ -741,7 +745,7 @@ export const orderEn = {
         quantity: 'QTY',
         cabinCode: 'Cabin',
         sortingId:'Sort',
-        cabinName: 'Cabin Name',
+        cabinName: 'Fare Brand',
         cabinLevel: 'Cabin Level',
         stopAirport: 'Stopover',
         stopTime: 'Stop Duration',
@@ -772,12 +776,12 @@ export const orderEn = {
         title: 'Title',
         linkedNumber: 'Linked Order',
         resultType: 'Result Type',
-        contacts: 'Contact Info',
+        contacts: 'Contact Information',
         expirationTime: 'Expiry Time',
         orderDetail:'Order Details',
-        refundDetail:'Refund Details',
-        changeDetail:'Change Details',
-        auxiliaryDetail:'Ancillary Details',
+        refundDetail:'Refund Order',
+        changeDetail:'Change Order',
+        auxiliaryDetail:'Ancillary Order',
         sourceRate:'Source Exchange Rate',
         targetRate:'Target Exchange Rate',
 
@@ -972,8 +976,8 @@ export const orderEn = {
         agentFees: 'Agent Fees',
         policy: 'Policy',
         profit: 'Profit',
-        settlementUnitPrice: 'Net Unit Price',
-        totalSettlementPrice: 'Total Net Price',
+        settlementUnitPrice: 'Price Per Person',
+        totalSettlementPrice: 'Total Price',
         originalInformation: 'Original Info',
         originalticketInfo: 'Original Ticket Info',
         acquiring: 'Acquiring',
@@ -993,7 +997,7 @@ export const orderEn = {
         noNumber: 'No PNR',
         advancedSearch: 'Search',
         basicfreightrate: 'Base Fare',
-        cabinSeat: 'Cabin/Seat',
+        cabinSeat: 'Booking Class',
         isDel: 'Delete',
         notifyType: 'Notification Type',
         isVisible: 'Visible to Agent',
@@ -1098,7 +1102,7 @@ export const orderEn = {
         departed:'departed',
         arrived:'arrived',
         delayed:'Delayed',
-        open:'Pending use',
+        open:'Open',
         flown:'Used',
         void:'Voided',
         exchanged:'Exchanged',
@@ -1116,6 +1120,9 @@ export const orderEn = {
 
         rawData: 'raw data',
         newData: 'new data',
+
+        dep: 'Origin',
+        arr: 'Destination',
     },
 }
 
@@ -1666,5 +1673,8 @@ export const orderRu = {
         auxiliaryRejectTips: 'Отклонить ли данное вспомогательное предложение?',
         amountRejectTips: 'Отклонить ли эту сумму?',
 
+
+        dep: 'Пункт отправления',
+        arr: 'Пункт назначения',
     }
 }

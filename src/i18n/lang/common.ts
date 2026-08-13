@@ -374,7 +374,7 @@ export const commonEn = {
         routerError:'Error',
         routerUserList:'User List',
         routerConfigurationInformation:'Configuration Info',
-        routerPaymentRecords:'Transcation Records',
+        routerPaymentRecords:'Transaction Records',
         routerBasicConfiguration:'Basic Settings',
         routerCorporateBanking:'Bank Details',
         routerBalance:'Account Balance',

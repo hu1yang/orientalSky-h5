@@ -261,7 +261,9 @@ export default function AgentUser (){
             ]}>
               <Input placeholder={t('group.loginPassword')} type={'password'} />
             </Form.Item>
-            <Form.Item label={t('group.role')} name={'roleIds'}>
+            <Form.Item label={t('group.role')} name={'roleIds'} rules={[
+              {required: true, message: t('group.role')},
+            ]}>
               <Checkbox.Group>
                 <Space direction='horizontal' wrap>
                   {

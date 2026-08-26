@@ -4,13 +4,14 @@ import dayjs from "dayjs";
 import DatePicker from "@/component/Date/datePicker.tsx"
 import {useTranslation} from "react-i18next";
 
-import {Card, Grid, Loading, PullToRefresh, Radio, Segmented, Selector, Space} from "antd-mobile";
+import {Card, Grid, Loading, PullToRefresh, Radio, Selector, Space} from "antd-mobile";
 
 import {getDashboardTodayGroup, getDashboardTotalGroup} from "@/utils/request/group.ts";
 import {getCssVar} from "@/utils/public.ts";
 import type {DashboardTotal} from "@/types/group.ts";
 
 import Charts from "@/component/dashboard/chart.tsx"
+import "./dashboard.css"
 
 interface ICounts {
   totalSegments:number
@@ -28,6 +29,7 @@ interface IBaseOption {
   barColor: { offset: number, color: string }[],
   lineColor: string,
   type?: 'default'|'branch'
+  hideTitle?: boolean
 }
 
 const topArr = [
@@ -38,6 +40,13 @@ const topArr = [
   {label:'Top 40',value:'40'},
   {label:'Top 50',value:'50'},
 ]
+
+const cardTitle = (icon: string, label: string) => (
+  <span className="dashboard-card-title">
+    <i className={`iconfont ${icon}`} aria-hidden="true" />
+    <span>{label}</span>
+  </span>
+)
 
 function pluckFields<T extends Record<string, any>>(arr: T[], fields: string[]) {
   const result: Record<string, any[]> = {}
@@ -57,8 +66,6 @@ function pluckFields<T extends Record<string, any>>(arr: T[], fields: string[]) 
 }
 
 const primaryColor = getCssVar('--active-color')
-const priceColor = getCssVar('--price-color')
-
 export default function Home(){
   const location = useLocation()
   const {pathname} = location
@@ -126,8 +133,9 @@ export default function Home(){
         xData:newHour,
         barData:amountTotalAmountHour,
         lineData:amountTotalSegmentsHour,
-        barColor: [{offset: 0, color: '#4F208B'},{offset: 1, color: '#9E99C7'}],
-        lineColor:primaryColor
+        barColor: [{offset: 0, color: '#6f5dd1'},{offset: 1, color: '#b9afe9'}],
+        lineColor:primaryColor,
+        hideTitle:true
       },'default')
     }
     if(dateChartsRef.current){
@@ -151,8 +159,9 @@ export default function Home(){
         xData:amountData,
         barData:amountTotalAmount,
         lineData:amountTotalSegments,
-        barColor:[{offset: 0, color: '#4F208B'},{offset: 1, color: '#9E99C7'}],
-        lineColor:primaryColor
+        barColor:[{offset: 0, color: '#6f5dd1'},{offset: 1, color: '#b9afe9'}],
+        lineColor:primaryColor,
+        hideTitle:true
       },'default')
     }
     if(airlineChartsRef.current){
@@ -170,8 +179,9 @@ export default function Home(){
         xData:channelName,
         barData:channelTotalAmount,
         lineData:channelTotalSegments,
-        barColor:[{offset: 0, color: '#1B6428'},{offset: 1, color: '#73C476'}],
-        lineColor:primaryColor
+        barColor:[{offset: 0, color: '#2f9b78'},{offset: 1, color: '#91d8c0'}],
+        lineColor:primaryColor,
+        hideTitle:true
       },'default')
     }
     if(agentChartsRef.current){
@@ -190,8 +200,9 @@ export default function Home(){
         xData:agentCode,
         barData:agentTotalAmount,
         lineData:agentTotalSegments,
-        barColor: [{offset: 0, color: priceColor}],
-        lineColor:primaryColor
+        barColor: [{offset: 0, color: '#e77c58'},{offset: 1, color: '#f3b39c'}],
+        lineColor:primaryColor,
+        hideTitle:true
       },'default')
     }
   }
@@ -219,8 +230,9 @@ export default function Home(){
         xData:flightCode,
         barData:flightTotalAmount,
         lineData:flightTotalSegments,
-        barColor:[{offset: 0, color: '#174A91'},{offset: 1, color: '#68ADD6'}],
-        lineColor:primaryColor
+        barColor:[{offset: 0, color: '#3d82bd'},{offset: 1, color: '#91c9e8'}],
+        lineColor:primaryColor,
+        hideTitle:true
       },'default')
     }
   }
@@ -230,11 +242,6 @@ export default function Home(){
       setLocalTime(date)
     }
   },[])
-
-
-  const removeCanvas = () => {
-    console.log('Uninstall canvas')
-  }
 
   const getData = async () => {
     try{
@@ -293,78 +300,89 @@ export default function Home(){
   },[localTime,isTravelDateTime])
 
   useEffect(() => {
+    if (loading) return
+
     setCanvas()
-    return () => {
-      removeCanvas()
-    }
-  }, [dataValue]);
+    changeCanvas()
+  }, [loading, dataValue, tops, typesModel])
 
   useEffect(() => {
     changeCanvas()
   }, [tops,typesModel,dataValue.flights]);
 
   return (
-    <div>
-      {
-        !loading ?
-          <PullToRefresh onRefresh={getData}>
+    <div className="p-2 dashboard-page">
+      {loading && (
+        <div className="dashboard-loading">
+          <Loading />
+        </div>
+      )}
+      {localTime && (
+        <PullToRefresh onRefresh={getData}>
             <Grid columns={2} gap={8}>
               <Grid.Item span={2}>
-                <Card title={t('home.totalTransaction')} extra={
+                <Card className="dashboard-card dashboard-summary" title={cardTitle('icon-tongji', t('home.totalTransaction'))} extra={
                   pathname !== '/' && (
-                    <Segmented block options={[
-                      {label:t('common.orderDate'),value:0},
-                      {label:t('common.departureDate'),value:1},
-                    ]} value={isTravelDateTime ? 1 : 0} onChange={(val) => setIsTravelDateTime(!!val)} />
+                    <div className="dashboard-date-mode" role="group" aria-label={t('home.timeZone')}>
+                      <button
+                        type="button"
+                        className={!isTravelDateTime ? 'is-active' : ''}
+                        aria-pressed={!isTravelDateTime}
+                        onClick={() => setIsTravelDateTime(false)}
+                      >
+                        {t('common.orderDate')}
+                      </button>
+                      <button
+                        type="button"
+                        className={isTravelDateTime ? 'is-active' : ''}
+                        aria-pressed={isTravelDateTime}
+                        onClick={() => setIsTravelDateTime(true)}
+                      >
+                        {t('common.departureDate')}
+                      </button>
+                    </div>
                   )
                 }>
-                  <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
+                  <i className="iconfont icon-plane-trip-international dashboard-summary__watermark" aria-hidden="true" />
+                  <div className="dashboard-summary__content">
+                  <span className="dashboard-summary__amount">$
                     {(() => {
                       const totalAmount = dataValue.counts.totalAmount ?? 0;
                       const [intPart] = totalAmount.toLocaleString().split('.');
                       return intPart
                     })()}
                   </span>
-                  </div>
-                </Card>
-              </Grid.Item>
-              <Grid.Item span={2}>
-                <Card title={t('home.discountAmount')}>
-                  <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>$
-                    {(() => {
-                      const totalProfit = dataValue.counts.totalProfit ?? 0;
-                      const [intPart] = totalProfit.toLocaleString().split('.');
-                      return intPart
-                    })()}
-                  </span>
+                    <div className="dashboard-summary__profit">
+                      <span className="dashboard-summary__label">{t('home.discountAmount')}</span>
+                      <strong className="dashboard-summary__value">${(dataValue.counts.totalProfit ?? 0).toLocaleString()}</strong>
+                    </div>
                   </div>
                 </Card>
               </Grid.Item>
               <Grid.Item span={1}>
-                <Card title={t('home.ticketing')}>
-                  <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>
+                <Card className="dashboard-card dashboard-metric" title={cardTitle('icon-chupiao', t('home.ticketing'))}>
+                  <div>
+                  <span className="dashboard-metric__value">
                     {dataValue.counts.totalOrders.toLocaleString()}
                   </span>
                   </div>
                 </Card>
               </Grid.Item>
               <Grid.Item span={1}>
-                <Card title={t('home.segment')}>
-                  <div className={'flex justify-start'}>
-                  <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>{
+                <Card className="dashboard-card dashboard-metric dashboard-metric--segments" title={cardTitle('icon-hangban', t('home.segment'))}>
+                  <div>
+                  <span className="dashboard-metric__value">{
                     dataValue.counts.totalSegments.toLocaleString()
                   }</span>
                   </div>
                 </Card>
               </Grid.Item>
               <Grid.Item span={2}>
-                <Card title={
-                  pathname === '/'
-                    ? t('home.todayTotalTurnover')
-                    : t('home.totalTurnover')
+                <Card className="dashboard-card dashboard-chart-card" title={
+                  cardTitle(
+                    'icon-a-tongjishujuquxianzhishu',
+                    pathname === '/' ? t('home.todayTotalTurnover') : t('home.totalTurnover')
+                  )
                 } extra={
                   pathname === '/' ?
                     <DatePicker value={localTime as Date} changeDate={changeLocalTime} selectionModeValue={'single'} />:
@@ -376,17 +394,17 @@ export default function Home(){
                 </Card>
               </Grid.Item>
               <Grid.Item span={2}>
-                <Card title={t('home.agent')}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-person', t('home.agent'))}>
                   <Charts ref={agentChartsRef} />
                 </Card>
               </Grid.Item>
               <Grid.Item span={2}>
-                <Card title={t('home.airline')}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-hangban-', t('home.airline'))}>
                   <Charts ref={airlineChartsRef} />
                 </Card>
               </Grid.Item>
               <Grid.Item span={2}>
-                <Card title={t('order.sequence')}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-liebiao_o', t('order.sequence'))}>
                   <Radio.Group value={typesModel} onChange={v => setTypesModel(v as 'totalAmount'|'totalSegments')}>
                     <Space direction='horizontal'>
                       {
@@ -406,6 +424,7 @@ export default function Home(){
                     value={[tops]}
                     style={{
                       '--padding': '4px 8px',
+                      '--border-radius':'1rem'
                     }}
                     onChange={v => {
                       if (v.length) {
@@ -418,10 +437,8 @@ export default function Home(){
                 </Card>
               </Grid.Item>
             </Grid>
-          </PullToRefresh>
-          :
-          <Loading />
-      }
+        </PullToRefresh>
+      )}
     </div>
   )
 }

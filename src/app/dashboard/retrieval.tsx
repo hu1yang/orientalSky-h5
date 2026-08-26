@@ -10,6 +10,7 @@ import {getCssVar} from "@/utils/public.ts";
 
 import DatePicker from "@/component/Date/datePicker.tsx"
 import Charts from "@/component/dashboard/chart.tsx"
+import "./dashboard.css"
 
 
 
@@ -22,6 +23,7 @@ interface IBaseOption {
   barColor: { offset: number, color: string }[],
   lineColor: string,
   type?: 'default'|'branch'
+  hideTitle?: boolean
 }
 
 function pluckFields<T extends Record<string, any>>(arr: T[], fields: string[]) {
@@ -41,6 +43,13 @@ function pluckFields<T extends Record<string, any>>(arr: T[], fields: string[]) 
   return result
 }
 const primaryColor = getCssVar('--active-color')
+
+const cardTitle = (icon: string, label: string) => (
+  <span className="dashboard-card-title">
+    <i className={`iconfont ${icon}`} aria-hidden="true" />
+    <span>{label}</span>
+  </span>
+)
 
 
 export default function Retrieval(){
@@ -117,9 +126,10 @@ export default function Retrieval(){
           xData:date,
           barData:[dateRealdTimes,dateCacheTimes,dateQueryTimes],
           lineData:dateOrderTimes,
-          barColor: [{offset: 0, color: 'rgb(149, 212, 117)'},{offset: 1, color: 'rgb(238, 190, 119)'},{offset: 2, color: 'rgb(248, 152, 152)'}],
+          barColor: [{offset: 0, color: '#6f5dd1'},{offset: 1, color: '#f0ae57'},{offset: 2, color: '#e77c74'}],
           lineColor:primaryColor,
-          type:'default'
+          type:'default',
+          hideTitle:true
         },'retrieval'
       )
 
@@ -144,9 +154,10 @@ export default function Retrieval(){
           xData:agentCode,
           barData:[agentsRealdTimes, agentsCacheTimes, agentsQueryTimes],
           lineData:agentsOrderTimes,
-          barColor: [{offset: 0, color: 'rgb(149, 212, 117)'},{offset: 1, color: 'rgb(238, 190, 119)'},{offset: 2, color: 'rgb(248, 152, 152)'}],
+          barColor: [{offset: 0, color: '#6f5dd1'},{offset: 1, color: '#f0ae57'},{offset: 2, color: '#e77c74'}],
           lineColor:primaryColor,
-          type:'default'
+          type:'default',
+          hideTitle:true
         },'retrieval'
       )
     }
@@ -170,9 +181,10 @@ export default function Retrieval(){
           xData:branchCode,
           barData:[branchesRealdTimes, branchesCacheTimes, branchesQueryTimes],
           lineData:branchesOrderTimes,
-          barColor: [{offset: 0, color: 'rgb(149, 212, 117)'},{offset: 1, color: 'rgb(238, 190, 119)'},{offset: 2, color: 'rgb(248, 152, 152)'}],
+          barColor: [{offset: 0, color: '#6f5dd1'},{offset: 1, color: '#f0ae57'},{offset: 2, color: '#e77c74'}],
           lineColor:primaryColor,
-          type:'branch'
+          type:'branch',
+          hideTitle:true
         },'retrieval'
       )
     }
@@ -200,9 +212,10 @@ export default function Retrieval(){
             xData:channelName,
             barData:[channelNameQueryTimes],
             lineData:channelNameOrderTimes,
-            barColor: [{offset: 0, color: 'rgb(149, 212, 117)'}],
+            barColor: [{offset: 0, color: '#6f5dd1'}],
             lineColor:primaryColor,
-            type:'branch'
+            type:'branch',
+            hideTitle:true
           },'retrieval'
         )
       }
@@ -218,9 +231,10 @@ export default function Retrieval(){
             xData:cDatesDate,
             barData:[cDatesQueryTimes],
             lineData:cDatesOrderTimes,
-            barColor: [{offset: 0, color: 'rgb(149, 212, 117)'}],
+            barColor: [{offset: 0, color: '#6f5dd1'}],
             lineColor:primaryColor,
-            type:'default'
+            type:'default',
+            hideTitle:true
           },'retrieval'
         )
       }
@@ -249,66 +263,77 @@ export default function Retrieval(){
   },[localTime])
 
   useEffect(() => {
+    if (loading) return
+
     setCanvas()
-  }, [dataValue]);
+  }, [loading, dataValue])
 
 
   return (
-    <div>
-      {
-        !loading ?
-          <PullToRefresh onRefresh={getData}>
+    <div className="dashboard-page retrieval-page">
+      {loading && (
+        <div className="dashboard-loading">
+          <Loading />
+        </div>
+      )}
+      <PullToRefresh onRefresh={getData}>
             <Grid columns={2} gap={8}>
               <Grid.Item span={2}>
-                <Card title={t('home.totalQuery')}>
-                  <div className={'flex justify-start'}>
-                    <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.queryTimes.toLocaleString()}</span>
-                  </div>
-                </Card>
-              </Grid.Item>
-              <Grid.Item span={2}>
-                <Card title={t('home.totalBookings')}>
-                  <div className={'flex justify-start'}>
-                    <span className={'text-left font-bold text-[3rem]/[3rem] text-(--price-color)'}>{dataValue.times.orderTimes.toLocaleString()}</span>
-                  </div>
-                </Card>
-              </Grid.Item>
-              <Grid.Item span={1}>
-                <Card title={t('home.realTimeQuery')}>
-                  <div className={'flex justify-start'}>
-                    <span className={'text-left font-bold text-[2rem]/[2rem] text-[#eebe77]'}>{dataValue.times.realdTimes.toLocaleString()}</span>
+                <Card className="dashboard-card dashboard-summary" title={cardTitle('icon-tongji', t('home.totalQuery'))}>
+                  <i className="iconfont icon-a-tongjishujuquxianzhishu dashboard-summary__watermark" aria-hidden="true" />
+                  <div className="dashboard-summary__content">
+                    <span className="dashboard-summary__amount">{dataValue.times.queryTimes.toLocaleString()}</span>
+                    <div className="dashboard-summary__profit">
+                      <span className="dashboard-summary__label">{t('home.totalBookings')}</span>
+                      <strong className="dashboard-summary__value">{dataValue.times.orderTimes.toLocaleString()}</strong>
+                    </div>
                   </div>
                 </Card>
               </Grid.Item>
               <Grid.Item span={1}>
-                <Card title={t('home.cacheTimeQuery')}>
-                  <div className={'flex justify-start'}>
-                    <span className={'text-left font-bold text-[2rem]/[2rem] text-[#5cadff]'}>{dataValue.times.cacheTimes.toLocaleString()}</span>
+                <Card className="dashboard-card dashboard-metric dashboard-metric--realtime" title={cardTitle('icon-a-tongjishujuquxianzhishu', t('home.realTimeQuery'))}>
+                  <div>
+                    <span className="dashboard-metric__value">{dataValue.times.realdTimes.toLocaleString()}</span>
+                  </div>
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={1}>
+                <Card className="dashboard-card dashboard-metric dashboard-metric--cache" title={cardTitle('icon-liebiao_o', t('home.cacheTimeQuery'))}>
+                  <div>
+                    <span className="dashboard-metric__value">{dataValue.times.cacheTimes.toLocaleString()}</span>
                   </div>
                 </Card>
               </Grid.Item>
               <Grid.Item span={2}>
-                <Card title={t('group.agency')} extra={
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-calendar', t('group.agency'))} extra={
                   <DatePicker value={localTime as [Date, Date]} changeDate={changeLocalTime} selectionModeValue={'range'} />
                 }>
                   <Charts ref={dateChartsRef} />
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-person', t('home.agent'))}>
                   <Charts ref={agentChartsRef} />
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-company', t('order.company_name'))}>
                   <Charts ref={groupChartsRef} />
                 </Card>
               </Grid.Item>
-
               <Grid.Item span={2}>
-                <Card title={t('common.routerChannels')}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-hangban-', t('common.routerChannels'))}>
                   <Charts ref={airlineChartsAmtRef} />
+                </Card>
+              </Grid.Item>
+              <Grid.Item span={2}>
+                <Card className="dashboard-card dashboard-chart-card" title={cardTitle('icon-calendar1', t('order.date'))}>
                   <Charts ref={cDateChartsRef} />
                 </Card>
               </Grid.Item>
 
             </Grid>
-          </PullToRefresh>
-          :
-          <Loading />
-      }
+      </PullToRefresh>
     </div>
   )
 }

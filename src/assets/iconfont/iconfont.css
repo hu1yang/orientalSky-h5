@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5176536 */
-  src: url('iconfont.woff2?t=1782379488430') format('woff2'),
-       url('iconfont.woff?t=1782379488430') format('woff'),
-       url('iconfont.ttf?t=1782379488430') format('truetype');
+  src: url('iconfont.woff2?t=1787722584109') format('woff2'),
+       url('iconfont.woff?t=1787722584109') format('woff'),
+       url('iconfont.ttf?t=1787722584109') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-calendar:before {
+  content: "\e6bf";
+}
+
+.icon-calendar1:before {
+  content: "\e74b";
+}
+
+.icon-tongji:before {
+  content: "\e605";
+}
+
+.icon-hangban-:before {
+  content: "\e678";
+}
+
+.icon-hangban:before {
+  content: "\e69e";
+}
+
+.icon-chupiao:before {
+  content: "\e61d";
+}
+
+.icon-yufukuan:before {
+  content: "\e665";
+}
+
+.icon-chupiao1:before {
+  content: "\e603";
+}
+
+.icon-a-tongjishujuquxianzhishu:before {
+  content: "\e63d";
+}
+
+.icon-chupiao2:before {
+  content: "\e689";
 }
 
 .icon-huilv01:before {

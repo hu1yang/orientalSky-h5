@@ -1,0 +1,207 @@
+.dashboard-page {
+  position: relative;
+}
+
+.dashboard-loading {
+  position: absolute;
+  inset: 0 0.6rem auto;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 18rem;
+  border-radius: 1.3rem;
+  background: rgba(241, 243, 247, .78);
+  backdrop-filter: blur(0.25rem);
+}
+
+.dashboard-card.adm-card {
+  overflow: hidden;
+  border: 1px solid rgba(226, 230, 239, 0.8);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0.417rem 1.5rem rgba(43, 51, 73, 0.055);
+}
+
+.dashboard-card .adm-card-header {
+  padding: 1.16rem 1.16rem 0.83rem;
+  border-bottom: 0;
+}
+
+.dashboard-card .adm-card-header-title {
+  color: #20283a;
+  font-size: 1.08rem;
+  font-weight: 650;
+}
+
+.dashboard-card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.66rem;
+}
+
+.dashboard-card-title > .iconfont {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  color: #6757c7;
+  background: rgba(103, 87, 199, .1);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.dashboard-card .adm-card-body {
+  padding: 0 1.167rem 1.167rem;
+}
+
+.dashboard-summary.adm-card {
+  position: relative;
+  color: #fff;
+  border: 0;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(255,255,255,.18), transparent 32%),
+    linear-gradient(135deg, #5142a6 0%, #6957ca 55%, #8779dc 100%);
+  box-shadow: 0 1rem 2.167rem rgba(84, 67, 166, .22);
+}
+
+.dashboard-summary .adm-card-header-title,
+.dashboard-summary .adm-card-body {
+  color: #fff;
+}
+
+.dashboard-summary .adm-card-header-title {
+  opacity: .82;
+}
+
+.dashboard-summary .dashboard-card-title > .iconfont {
+  color: #fff;
+  background: rgba(255,255,255,.14);
+}
+
+.dashboard-date-mode {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 0.83rem;
+  background: rgba(255, 255, 255, .1);
+  backdrop-filter: blur(0.5rem);
+}
+
+.dashboard-date-mode button {
+  min-height: 2.25rem;
+  padding: 0.33rem 0.75rem;
+  border: 0;
+  border-radius: 0.58rem;
+  color: rgba(255, 255, 255, .72);
+  background: transparent;
+  font: inherit;
+  font-size: 0.91rem;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .18s ease, background-color .18s ease, box-shadow .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dashboard-date-mode button.is-active {
+  color: #5142a6;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 0.16rem 0.66rem rgba(28, 20, 72, .16);
+}
+
+.dashboard-date-mode button:active {
+  transform: scale(.97);
+}
+
+.dashboard-date-mode button:focus-visible {
+  outline: 0.16rem solid rgba(255, 255, 255, .9);
+  outline-offset: 0.16rem;
+}
+
+.dashboard-summary__watermark {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1rem;
+  color: rgba(255,255,255,.1);
+  font-size: 5.66rem;
+  line-height: 1;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+.dashboard-summary__content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.dashboard-summary__amount {
+  font-size: clamp(2.58rem, 9vw, 3.83rem);
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: -0.133rem;
+}
+
+.dashboard-summary__profit {
+  flex: 0 0 auto;
+  padding-left: 1.33rem;
+  border-left: 1px solid rgba(255,255,255,.24);
+}
+
+.dashboard-summary__label {
+  display: block;
+  margin-bottom: 0.41rem;
+  color: rgba(255,255,255,.7);
+  font-size: 0.833rem;
+}
+
+.dashboard-summary__value {
+  font-size: 1.58rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dashboard-metric .adm-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3.667rem;
+}
+
+.dashboard-metric__value {
+  color: #20283a;
+  font-size: 2.16rem;
+  font-weight: 740;
+  line-height: 1;
+  letter-spacing: -0.042rem;
+}
+
+.dashboard-chart-card .adm-card-body {
+  padding: 0.66rem;
+}
+
+.dashboard-chart-card .adm-card-header {
+  border-bottom: 1px solid #edf0f5;
+}
+
+.retrieval-page .dashboard-summary.adm-card {
+  background:
+    radial-gradient(circle at 92% 10%, rgba(255,255,255,.18), transparent 32%),
+    linear-gradient(135deg, #3c5f9f 0%, #547cc0 55%, #7398d2 100%);
+  box-shadow: 0 1rem 2.167rem rgba(60, 95, 159, .22);
+}
+
+.dashboard-chart {
+  width: 100%;
+  height: 27.5rem;
+}
+
+
+@media (min-width: 40rem) {
+  .dashboard-page { padding-inline: 1rem; }
+  .dashboard-chart { height: 32.5rem; }
+}
